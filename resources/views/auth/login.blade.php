@@ -54,6 +54,9 @@
         <h1 class="text-2xl font-semibold text-blue-800 mb-6">Sign In</h1>
       </div>
 
+    <!-- Validation Errors -->
+    <x-validation-errors class="mb-4" />
+
       <!-- Login Form -->
       <form method="POST" action="{{ route('login') }}">
         @csrf
