@@ -6,9 +6,21 @@
   <title>HES Vault Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    /* Smooth transition for sidebar width */
-    .transition-width {
+    /* Sidebar Styles */
+    #sidebar {
       transition: width 0.3s ease;
+    }
+    /* Hide text when sidebar is collapsed */
+    #sidebar.collapsed .sidebar-text {
+      display: none;
+    }
+    /* Center icons when sidebar is collapsed */
+    #sidebar.collapsed a {
+      justify-content: center;
+    }
+    /* Adjust main content margin when sidebar is collapsed */
+    #mainContent {
+      transition: margin-left 0.3s ease;
     }
   </style>
 </head>
@@ -36,26 +48,28 @@
   <div class="flex">
     <!-- Sidebar -->
     <aside id="sidebar" class="transition-width w-64 bg-gray-200 p-6 h-screen fixed lg:relative lg:block">
+    <div class="bg-white rounded p-2">  
       <nav class="space-y-4">
-        <a href="#" class="flex items-center space-x-2 text-gray-700">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M3 4h18v2H3V4zm0 6h18v2H3v-2zm0 6h18v2H3v-2z"></path>
-          </svg>
-          <span>Item List</span>
-        </a>
-        <a href="#" class="flex items-center space-x-2 text-gray-700">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M5 3a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h14v4H5V5zm0 6h14v8H5v-8z"></path>
-          </svg>
-          <span>Rent Request</span>
-        </a>
-        <a href="#" class="flex items-center space-x-2 text-white bg-gradient-to-r from-blue-500 to-purple-500 p-2 rounded-lg">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M3 3h18v18H3V3zm16 16V5H5v14h14z"></path>
-          </svg>
-          <span>History</span>
-        </a>
-      </nav>
+          <a href="#" class="flex items-center space-x-2 text-gray-700">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M3 4h18v2H3V4zm0 6h18v2H3v-2zm0 6h18v2H3v-2z"></path>
+            </svg>
+            <span class="sidebar-text">Item List</span>
+          </a>
+          <a href="#" class="flex items-center space-x-2 text-gray-700">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M5 3a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h14v4H5V5zm0 6h14v8H5v-8z"></path>
+            </svg>
+            <span class="sidebar-text">Rent Request</span>
+          </a>
+          <a href="#" class="flex items-center space-x-2 text-white bg-gradient-to-r from-blue-500 to-purple-500 p-2 rounded-lg">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M3 3h18v18H3V3zm16 16V5H5v14h14z"></path>
+            </svg>
+            <span class="sidebar-text">History</span>
+          </a>
+        </nav>
+    </div>
     </aside>
 
     <!-- Main Content -->
@@ -136,6 +150,7 @@
     sidebarToggle.addEventListener('click', () => {
       sidebar.classList.toggle('w-64');
       sidebar.classList.toggle('w-20'); // Reduced width when collapsed
+      sidebar.classList.toggle('collapsed');
       mainContent.classList.toggle('ml-64');
       mainContent.classList.toggle('ml-20');
     });
