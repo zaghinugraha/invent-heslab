@@ -53,7 +53,7 @@
     <!-- Header -->
     <header class="flex items-center justify-between px-6 py-4 bg-white shadow-md">
       <div class="flex items-center space-x-9">
-          <img src="images/logo_text.png" alt="HES Vault Logo" class="h-8">
+          <img src="{{ asset('images/logo_text.png') }}" alt="HES Vault Logo" class="h-8">
         <button id="sidebarToggle" class="text-gray-600 focus:outline-none">
           <img id="menu-icon" src="{{ asset('svg/menu-hambuger-svgrepo-com.svg') }}" class="w-5 h-5 text-gray-400" alt="Menu">
         </button>
@@ -68,7 +68,7 @@
           <span class="absolute top-0 right-0 inline-block w-4 h-4 bg-red-600 text-white text-xs font-semibold rounded-full text-center">3</span>
         </button>
         <!-- poto propil user -->
-        <img src="images/profil.png" alt="User Avatar" class="w-8 h-8 rounded-full border border-gray-300">
+        <img src="{{ asset('images/profil.png') }}" alt="User Avatar" class="w-8 h-8 rounded-full border border-gray-300">
       </div>
     </header>
 

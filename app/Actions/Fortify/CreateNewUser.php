@@ -34,11 +34,24 @@ class CreateNewUser implements CreatesNewUsers
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
             ]), function (User $user) {
-                $this->createTeam($user);
+                $this->assignToRegularTeam($user);
             });
         });
     }
 
+
+    protected function assignToRegularTeam(User $user): void
+    {
+        $regularTeam = Team::firstOrCreate([
+            'name' => 'Regular',
+        ], [
+            'user_id' => $user->id,
+            'personal_team' => false,
+        ]);
+
+        $user->teams()->attach($regularTeam, ['role' => 'member']);
+        $user->switchTeam($regularTeam);
+    }
     /**
      * Create a personal team for the user.
      */
