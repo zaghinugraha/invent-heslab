@@ -19,7 +19,7 @@ return new class extends Migration
                     $table->string('code')->unique()->nullable();
                     $table->integer('quantity');
                     $table->integer('buying_price')->comment('Buying Price');
-                    $table->integer('selling_price')->comment('Selling Price');
+                    $table->integer('rent_price')->comment('Rent Price');
                     $table->integer('quantity_alert');
                     $table->integer('tax')->nullable();
                     $table->tinyInteger('tax_type')->nullable();
