@@ -53,10 +53,10 @@
     }
   </style>
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen" x-data="{ confirmLogout : false, propil : false, addTeam : false, newItem : false }">
+<body class="bg-gray-100 flex flex-col min-h-screen" x-data="{ confirmLogout : false, propil : false, addTeam : false, newItem : false, showNotifications : false }">
   <div class="flex flex-col flex-grow">
     <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4 bg-white shadow-md">
+    <header class="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4 bg-white shadow-md z-10">
       <div class="flex items-center space-x-9">
           <img src="{{ asset('images/logo_text.png') }}" alt="HES Vault Logo" class="h-8">
         <button id="sidebarToggle" class="text-gray-600 focus:outline-none">
@@ -64,7 +64,7 @@
         </button>
       </div>
       <div class="flex items-center space-x-4">
-        <button class="relative">
+        <button class="relative" @click="showNotifications = !showNotifications">
         <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
         <path d="M5.6 9.45798V8.4C5.6 4.86538 8.46538 2 12 2C15.5346 2 18.4 4.86537 18.4 8.4V9.45798C18.4 11.7583 19.0649 14.0096 20.3146 15.9409L21 17H3L3.68539 15.9408C4.93512 14.0096 5.6 11.7583 5.6 9.45798Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M11 20.8889V20.8889C11.5344 21.4827 12.4656 21.4827 13 20.8889V20.8889" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -87,6 +87,22 @@
       @yield('sidebar')
 
       @yield('modals')
+
+
+      <!-- Notifications Modal -->
+      <div x-show="showNotifications" @click.away="showNotifications = false" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-20">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 mb-8">
+          <h2 class="text-xl font-bold gradient-text mb-4">Notifications</h2>
+          <ul>
+            <li class="mb-2">Notification 1: Your item has been approved.</li>
+            <li class="mb-2">Notification 2: Your item is due for return tomorrow.</li>
+            <li class="mb-2">Notification 3: A new item has been added to the inventory.</li>
+          </ul>
+          <div class="flex justify-end">
+            <button type="button" @click="showNotifications = false" class="bg-gray-500 text-white px-4 py-2 rounded">Close</button>
+          </div>
+        </div>
+      </div>
 
       <!-- Logout Confirmation Modal -->
       <div x-show="confirmLogout" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">

@@ -156,4 +156,12 @@ return [
         ]),
     ],
 
+    'login' => [
+        'controller' => AuthenticatedSessionController::class,
+    ],
+
+    'register' => [
+        'controller' => RegisteredUserController::class,
+    ],
+
 ];

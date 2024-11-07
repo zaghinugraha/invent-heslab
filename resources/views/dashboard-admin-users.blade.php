@@ -7,7 +7,7 @@
 @section('description', 'Ingfo siapa jadi adming!')
 
 @section('sidebar')
-<aside id="sidebar" class="transition-width w-64 bg-gray-200 h-full fixed top-16 bottom-16 lg:relative lg:block p-2">
+<aside id="sidebar" class="transition-width w-64 bg-gray-200 h-full fixed top-16 bottom-16 lg:relative lg:h-screen p-2">
   <div class="bg-white rounded p-2">
     <nav class="space-y-2 bg-white rounded p-2">
       <a href="{{ route('dashboard-admin-items') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
