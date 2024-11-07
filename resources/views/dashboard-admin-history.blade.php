@@ -7,10 +7,10 @@
 @section('description', 'Ini adalah daftar barang-barang yang sudah kamu pinjam. Gunakan kolom pencarian untuk menemukan catatan tertentu, atau navigasikan halaman untuk melihat riwayat lebih lanjut.')
 
 @section('sidebar')
-<aside id="sidebar" class="transition-width w-64 bg-gray-200 h-screen fixed lg:relative lg:block p-2">
+<aside id="sidebar" class="transition-width w-64 bg-gray-200 h-full fixed top-16 bottom-16 lg:relative lg:h-screen p-2">
   <div class="bg-white rounded p-2">
     <nav class="space-y-2 bg-white rounded p-2">
-      <a href="#" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
+      <a href="{{ route('dashboard-admin-items') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <line x1="5" y1="7" x2="19" y2="7" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <line x1="5" y1="12" x2="19" y2="12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -47,13 +47,32 @@
 @endsection
 
 @section('content')
-<div class="flex justify-end mb-4">
-  <input type="text" placeholder="Search" class="w-1/3 px-4 py-2 border rounded-l-lg focus:outline-none" />
-  <button class="bg-gray-300 px-4 py-2 rounded-r-lg">
-    <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M21.707 20.293l-6.388-6.388A7.455 7.455 0 0018 10.5a7.5 7.5 0 10-7.5 7.5c1.8 0 3.464-.63 4.904-1.681l6.388 6.388a1 1 0 001.415-1.414zM10.5 16a5.5 5.5 0 110-11 5.5 5.5 0 010 11z"></path>
-    </svg>
-  </button>
+
+<div class="space-y-4 w-full mx-auto">
+  <!-- Status Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 w-full mx-auto">
+    <!-- Rejected Card -->
+    <div class="text-center rounded-lg shadow-lg overflow-hidden">
+      <div class="bg-red-500 text-white font-semibold py-2">Rejected</div>
+      <div class="bg-white py-4 text-2xl font-bold text-black">0</div>
+    </div>
+
+    <!-- Returned Card -->
+    <div class="text-center rounded-lg shadow-lg overflow-hidden">
+      <div class="bg-blue-500 text-white font-semibold py-2">Returned</div>
+      <div class="bg-white py-4 text-2xl font-bold text-black">0</div>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="w-full flex justify-end pb-2">
+    <input type="text" placeholder="Search" class="w-1/3 px-4 py-2 border rounded-l-lg focus:outline-none" />
+    <button class="bg-gray-300 px-4 py-2 rounded-r-lg">
+      <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M21.707 20.293l-6.388-6.388A7.455 7.455 0 0018 10.5a7.5 7.5 0 10-7.5 7.5c1.8 0 3.464-.63 4.904-1.681l6.388 6.388a1 1 0 001.415-1.414zM10.5 16a5.5 5.5 0 110-11 5.5 5.5 0 010 11z"></path>
+      </svg>
+    </button>
+  </div>
 </div>
 
 <!-- Table -->
@@ -68,6 +87,7 @@
         <th class="px-4 py-2 border">Price</th>
         <th class="px-4 py-2 border">Rent Date</th>
         <th class="px-4 py-2 border">Return Date</th>
+        <th class="px-4 py-2 border">Status</th>
         <!-- Additional headers -->
       </tr>
     </thead>
@@ -80,6 +100,9 @@
         <td class="px-4 py-2 border">Rp 12.000</td>
         <td class="px-4 py-2 border">13/10/2024</td>
         <td class="px-4 py-2 border">18/10/2024</td>
+        <td class="px-4 py-2 border">
+            <span class="inline-block px-2 py-1 text-white rounded bg-red-500">Rejected</span>
+          </td>
         <!-- Additional cells -->
       </tr>
       <!-- Repeat for other rows -->

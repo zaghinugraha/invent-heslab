@@ -7,10 +7,10 @@
 @section('description', 'Ingfo siapa jadi adming!')
 
 @section('sidebar')
-<aside id="sidebar" class="transition-width w-64 bg-gray-200 h-screen fixed lg:relative lg:block p-2">
+<aside id="sidebar" class="transition-width w-64 bg-gray-200 h-full fixed top-16 bottom-16 lg:relative lg:block p-2">
   <div class="bg-white rounded p-2">
     <nav class="space-y-2 bg-white rounded p-2">
-      <a href="#" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
+      <a href="{{ route('dashboard-admin-items') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <line x1="5" y1="7" x2="19" y2="7" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <line x1="5" y1="12" x2="19" y2="12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

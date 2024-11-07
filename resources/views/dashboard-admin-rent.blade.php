@@ -7,10 +7,10 @@
 @section('description', 'ACC PEMINJAMAN BWANG!')
 
 @section('sidebar')
-<aside id="sidebar" class="transition-width w-64 bg-gray-200 h-screen fixed lg:relative lg:block p-2">
+<aside id="sidebar" class="transition-width w-64 bg-gray-200 h-full fixed top-16 bottom-16 lg:relative lg:block p-2">
   <div class="bg-white rounded p-2">
     <nav class="space-y-2 bg-white rounded p-2">
-      <a href="#" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
+      <a href="{{ route('dashboard-admin-items') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <line x1="5" y1="7" x2="19" y2="7" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <line x1="5" y1="12" x2="19" y2="12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -49,29 +49,25 @@
 @section('content')
 <div class="flex flex-col items-center">
   <!-- Status Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 w-full">
-    <!-- Approved Card -->
-    <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-      <div class="bg-green-500 text-white font-semibold py-2">On Loan</div>
-      <div class="bg-white py-4 text-2xl font-bold text-black">0</div>
-    </div>
+  <div class="space-y-4 mb-8 w-full mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 w-full mx-auto">
+      <!-- On loan Card -->
+      <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-green-500 text-white font-semibold py-2">On Rent</div>
+        <div class="bg-white py-4 text-2xl font-bold text-black">0</div>
+      </div>
 
-    <!-- Rejected Card -->
-    <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-      <div class="bg-red-500 text-white font-semibold py-2">Overdue</div>
-      <div class="bg-white py-4 text-2xl font-bold text-black">0</div>
-    </div>
+      <!-- Overdue Card -->
+      <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-red-500 text-white font-semibold py-2">Overdue</div>
+        <div class="bg-white py-4 text-2xl font-bold text-black">0</div>
+      </div>
 
-    <!-- Waiting Card -->
-    <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-      <div class="bg-yellow-500 text-white font-semibold py-2">Waiting</div>
-      <div class="bg-white py-4 text-2xl font-bold text-black">0</div>
-    </div>
-
-    <!-- Returned Card -->
-    <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-      <div class="bg-blue-500 text-white font-semibold py-2">Returned</div>
-      <div class="bg-white py-4 text-2xl font-bold text-black">0</div>
+      <!-- Waiting Card -->
+      <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-yellow-500 text-white font-semibold py-2">Waiting</div>
+        <div class="bg-white py-4 text-2xl font-bold text-black">0</div>
+      </div>
     </div>
   </div>
 

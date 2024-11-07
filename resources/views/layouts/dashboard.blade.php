@@ -11,7 +11,11 @@
     #sidebar {
       transition: width 0.3s ease;
     }
-
+    .gradient-text {
+      background: linear-gradient(to right, #4f46e5, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
     /* Hide text and adjust icon size when sidebar is collapsed */
     #sidebar.collapsed .sidebar-text {
       display: none;
@@ -49,10 +53,10 @@
     }
   </style>
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen" x-data="{ confirmLogout : false, propil : false, addTeam : false }">
+<body class="bg-gray-100 flex flex-col min-h-screen" x-data="{ confirmLogout : false, propil : false, addTeam : false, newItem : false }">
   <div class="flex flex-col flex-grow">
     <!-- Header -->
-    <header class="flex items-center justify-between px-6 py-4 bg-white shadow-md">
+    <header class="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4 bg-white shadow-md">
       <div class="flex items-center space-x-9">
           <img src="{{ asset('images/logo_text.png') }}" alt="HES Vault Logo" class="h-8">
         <button id="sidebarToggle" class="text-gray-600 focus:outline-none">
@@ -101,7 +105,7 @@
 
       <!-- Main Content -->
       <main id="mainContent" class="flex-1 ml-64 lg:ml-0 p-8 transition-width">
-        <div class="bg-white p-6 rounded-lg shadow-md">
+        <div class="bg-white p-6 rounded-lg shadow-md my-10">
           <h2 class="text-2xl font-bold text-blue-600 mb-4">@yield('heading')</h2>
           <p class="text-gray-600 mb-4">
             Selamat datang di halaman <span class="font-bold">@yield('headingDesc')</span>!

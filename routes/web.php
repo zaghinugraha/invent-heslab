@@ -18,6 +18,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         return view('dashboard-admin-rent');
     })->name('dashboard-admin-rent');
 
+    Route::get('/admin/items', function () {
+        return view('dashboard-admin-items');
+    })->name('dashboard-admin-items');
+
     Route::get('/admin/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users/{user}/promote', [UserController::class, 'promote'])->name('users.promote');
     Route::post('/users/{user}/demote', [UserController::class, 'demote'])->name('users.demote');
