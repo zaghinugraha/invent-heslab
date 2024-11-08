@@ -17,6 +17,6 @@ class CheckAdminTeam
             return $next($request);
         }
 
-        return redirect('/dashboard-reg-items');
+        return redirect('/reg/items');
     }
 }

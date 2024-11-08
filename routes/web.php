@@ -5,31 +5,19 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\RedirectController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
-
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register');
-
-
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-Route::post('/register', [RegisteredUserController::class, 'store']);
-
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-
+    Route::get('/dashboard', [RedirectController::class, 'index'])->name('dashboard');
     Route::get('/reg/items', function () {
         return view('dashboard-reg-items');
     })->name('dashboard-reg-items');
 
     Route::middleware(['check.admin.team'])->group(function () {
-
         Route::get('/admin/history', function () {
             return view('dashboard-admin-history');
         })->name('dashboard-admin-history');
