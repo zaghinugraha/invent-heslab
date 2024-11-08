@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.dashboard-reg')
 
 @section('title', 'Item List')
 
@@ -25,7 +25,7 @@
           <path d="M9 10H15" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M9 14H10" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <span class="sidebar-text">Rent Request</span>
+        <span class="sidebar-text">Rent Status</span>
       </a>
       <a href="{{ route('dashboard-admin-history') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,85 +34,17 @@
         </svg>
         <span class="sidebar-text ml-3">History</span>
       </a>
-      <a href="{{ route('users.index') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
-        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="7" r="4" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M4 21V17C4 15.8954 4.89543 15 6 15H18C19.1046 15 20 15.8954 20 17V21" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span class="sidebar-text ml-3">Manage Users</span>
-      </a>
     </nav>
   </div>
 </aside>
 @endsection
 
-@section('modals')
-<div x-show="newItem" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-  <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 mb-8">
-    <h2 class="text-xl font-bold gradient-text mb-4">Add New Item</h2>
-    <!-- nanti disini tambahin aksi nambah item -->
-    <form>
-      <!-- Form fields for adding item -->
-      <div class="mb-4">
-        <label class="block text-gray-700">Item Name</label>
-        <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700">Brand</label>
-        <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700">Price</label>
-        <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700">Stock</label>
-        <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700">Picture URL</label>
-        <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
-      </div>
-      <div class="flex space-x-4 mb-4">
-        <div class="w-1/2">
-          <label class="block text-gray-700">Source</label>
-          <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
-        </div>
-        <div class="w-1/2">
-          <label class="block text-gray-700">Date Arrived</label>
-          <input type="date" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
-        </div>
-      </div>
-      <div class="flex justify-end">
-        <button type="button" @click="newItem = false" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Add Item</button>
-      </div>
-    </form>
-  </div>
-</div>
-@endsection
-
 @section('content')
 
 <div class="space-y-4 mb-8 w-full mx-auto">
-  <!-- Status Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 w-full mx-auto">
-    <!-- Maintenance Card -->
-    <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-      <div class="bg-red-500 text-white font-semibold py-2">Need Maintenance</div>
-      <div class="bg-white py-4 text-2xl font-bold text-black">0</div>
-    </div>
-
-    <!-- Low on Stock Card -->
-    <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-      <div class="bg-yellow-600 text-white font-semibold py-2">Low on Stock</div>
-      <div class="bg-white py-4 text-2xl font-bold text-black">0</div>
-    </div>
-  </div>
-
-  <!-- Search Bar and Add Item Button -->
+  <!-- Search Bar and Filter Button -->
   <div class="w-full flex justify-end space-x-2">
-    <div class="flex w-1/3">
+    <div class="flex w-full">
       <input type="text" placeholder="Search" class="w-full px-4 py-2 border rounded-l-lg focus:outline-none" />
       <button class="bg-gray-300 px-4 py-2 rounded-r-lg">
         <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
@@ -120,55 +52,37 @@
         </svg>
       </button>
     </div>
-    <button @click="newItem = true" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-      Add Item
+    <button class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
+      Filter
     </button>
   </div>
 </div>
 
-<!-- Table -->
-<div class="overflow-x-auto rounded-lg">
-  <table class="min-w-full table-auto border">
-    <thead>
-      <tr class="bg-blue-600 text-white">
-        <th class="px-4 py-2 border">No</th>
-        <th class="px-4 py-2 border">Name</th>
-        <th class="px-4 py-2 border">Brand</th>
-        <th class="px-4 py-2 border">Price</th>
-        <th class="px-4 py-2 border">Stock</th>
-        <th class="px-4 py-2 border">Picture</th>
-        <th class="px-4 py-2 border">Source</th>
-        <th class="px-4 py-2 border">Date Arrived</th>
-        <th class="px-4 py-2 border">Last Maintained</th>
-        <th class="px-4 py-2 border">Action</th>
-        <!-- Additional headers -->
-      </tr>
-    </thead>
-    <tbody class="bg-white divide-y divide-gray-200">
-      <tr class="hover:bg-gray-50 text-center">
-        <td class="px-4 py-2 border">1</td>
-        <td class="px-4 py-2 border">Sensor DHT11</td>
-        <td class="px-4 py-2 border">DF Robot</td>
-        <td class="px-4 py-2 border">Rp 11.000</td>
-        <td class="px-4 py-2 border">11</td>
-        <td class="px-4 py-2 border">
-          <a href="#" class=" underline text-blue-500">Picture</a>
-        </td>
-        <td class="px-4 py-2 border">Pak Faris</td>
-        <td class="px-4 py-2 border">18/10/1995</td>
-        <td class="px-4 py-2 border">20/12/1995</td>
-        <td class="px-4 py-2 border">
-            <div class="flex justify-center space-x-2">
-              <button class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
-              <button class="w-24 text-center bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
+<!-- Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
+    @for ($i = 0; $i < 9; $i++)
+        <div class="border border-gray-300 rounded-lg p-4 hover:shadow-lg relative">
+            <!-- Dummy Image (You can replace with actual images if you have) -->
+            <img src="https://digiwarestore.com/11109-large_default/dht11-module-temperature-humidity-sensor-temperatur-kelembaban-for-arduino-with-led-297030.jpg" alt="Sensor Image" class="w-full h-32 object-cover rounded-md mb-4">
+            
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-gray-800 font-semibold">Sensor {{ $i + 1 }}</h3>
+                <button class="text-gray-500 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                    </svg>
+                </button>
             </div>
-          </td>
-        <!-- Additional cells -->
-      </tr>
-      <!-- Repeat for other rows -->
-    </tbody>
-  </table>
+
+            <!-- Dummy Price -->
+            <p class="text-gray-600">Rp. 13,000</p>
+
+            <!-- Static Availability Badge -->
+            <span class="absolute top-4 right-4 bg-green-100 text-green-600 text-xs font-semibold px-2 py-1 rounded-full">Available</span>
+        </div>
+    @endfor
 </div>
+
 
 <!-- Pagination -->
 <div class="mt-4 flex justify-center">
