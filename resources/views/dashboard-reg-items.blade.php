@@ -59,7 +59,7 @@
 </div>
 
 <!-- Grid -->
-<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
     @for ($i = 0; $i < 9; $i++)
         <div class="border border-gray-300 rounded-lg p-4 hover:shadow-lg relative">
             <!-- Dummy Image (You can replace with actual images if you have) -->
@@ -67,18 +67,18 @@
             
             <div class="flex justify-between items-center mb-2">
                 <h3 class="text-gray-800 font-semibold">Sensor {{ $i + 1 }}</h3>
-                <button class="text-gray-500 hover:text-gray-800">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                    </svg>
-                </button>
+                <span class="bg-green-100 text-green-600 text-xs font-semibold px-2 py-1 rounded-full">Available</span>
             </div>
 
             <!-- Dummy Price -->
             <p class="text-gray-600">Rp. 13,000</p>
 
             <!-- Static Availability Badge -->
-            <span class="absolute top-4 right-4 bg-green-100 text-green-600 text-xs font-semibold px-2 py-1 rounded-full">Available</span>
+            <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+              <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
         </div>
     @endfor
 </div>
