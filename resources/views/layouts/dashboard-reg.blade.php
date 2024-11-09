@@ -133,6 +133,13 @@
       <main id="mainContent" class="flex-1 ml-64 lg:ml-0 p-8 transition-width">
         <div class="bg-white p-6 rounded-lg shadow-md my-10">
           <h2 class="text-2xl font-bold text-blue-600 mb-4">@yield('heading')</h2>
+          <!-- Breadcrumb Section -->
+          @if(View::hasSection('breadcrumb'))
+          <nav class="bg-white border-b pb-3">
+              @yield('breadcrumb')
+          </nav>
+          @endif
+          @if(View::hasSection('headingDesc'))
           <p class="text-gray-600 mb-4">
             Selamat datang di halaman <span class="font-bold">@yield('headingDesc')</span>!
           </p>
@@ -140,7 +147,7 @@
             @yield('description')
           </p>
           <hr class="mb-4">
-
+          @endif
           @yield('content')
         </div>
       </main>
