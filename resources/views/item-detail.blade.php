@@ -7,7 +7,7 @@
 <aside id="sidebar" class="transition-width w-64 h-full fixed top-16 bottom-16 lg:relative lg:h-screen p-2">
   <div class="bg-white rounded p-2">
     <nav class="space-y-2 bg-white rounded p-2">
-      <a href="{{ route('dashboard-admin-items') }}" class="flex items-center space-x-2 text-white bg-gradient-to-r from-blue-500 to-purple-500 p-2 rounded">
+      <a href="{{ route('dashboard-reg-items') }}" class="flex items-center space-x-2 text-white bg-gradient-to-r from-blue-500 to-purple-500 p-2 rounded">
         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <line x1="5" y1="7" x2="19" y2="7" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <line x1="5" y1="12" x2="19" y2="12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -15,7 +15,7 @@
         </svg>
         <span class="sidebar-text">Item List</span>
       </a>
-      <a href="{{ route('dashboard-admin-rent') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
+      <a href="{{ route('dashboard-reg-rent') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M18 2H6C5.44772 2 5 2.44772 5 3V22L7.5 20L9.5 22L12 20L14.5 22L16.5 20L19 22V3C19 2.44772 18.5523 2 18 2Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M9 6H15" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -24,7 +24,7 @@
         </svg>
         <span class="sidebar-text">Rent Status</span>
       </a>
-      <a href="{{ route('dashboard-admin-history') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
+      <a href="{{ route('dashboard-reg-history') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="12" cy="12" r="10" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M12 6V12L16 16" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -66,8 +66,9 @@
         </div>
         
         <!-- Price -->
-        <p class="text-xl text-gray-700 font-semibold mt-2">{{ $item['price'] }}</p>
+        <p class="text-xl text-gray-700 font-semibold mt-2">Rp. {{ number_format($item['price'], 0, ',', '.') }}</p>
         
+        <!-- vvv ini belum work vvv -->
         <!-- Quantity Selector and Buttons -->
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 mt-4">
             <!-- Quantity Selector -->
@@ -96,17 +97,10 @@
 
         <!-- Specification Content -->
         <div id="specification-content" class="transition-all duration-300 ease-in-out opacity-100 max-h-full overflow-hidden">
-            <p class="text-gray-600 mt-4">
-                {{ $item['description'] }}
-            </p>
+            {!! $item['description'] !!}
 
-            <ul class="text-gray-600 mt-2 list-disc list-inside space-y-1">
-                <li>Humidity measuring range: 20%-95% (0 degrees -> 50 degrees) Humidity measurement error: +/-5%</li>
-                <li>Temperature measurement range: 0 degrees -> 50 degrees temperature measurement error: +/- 2 degrees</li>
-                <li>Operating voltage 3.3V-5V</li>
-                <li>Output Type Digital Output</li>
-                <li>With fixed bolt hole for easy installation</li>
-                <li>Small plates PCB size: 3.2cm x 1.4cm</li>
+            <ul class="mt-2 list-disc list-inside space-y-1">
+                {!! $item['specification'] !!}
             </ul>
         </div>
 

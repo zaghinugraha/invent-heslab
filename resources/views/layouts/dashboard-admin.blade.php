@@ -51,9 +51,51 @@
       left: 0;
       width: 100%;
     }
+    
+    .preview-image {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translate(10px, 10px);
+    }
+    .group:hover .preview-image {
+      display: block;
+    }
   </style>
 </head>
 <body class="bg-gray-100 flex flex-col min-h-screen" x-data="{ confirmLogout : false, propil : false, addTeam : false, newItem : false, showNotifications : false }">
+
+  @yield('modals')
+  <!-- Notifications Modal -->
+  <div x-show="showNotifications" @click.away="showNotifications = false" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 mb-8">
+      <h2 class="text-xl font-bold gradient-text mb-4">Notifications</h2>
+      <ul>
+        <li class="mb-2">Notification 1: Your item has been approved.</li>
+        <li class="mb-2">Notification 2: Your item is due for return tomorrow.</li>
+        <li class="mb-2">Notification 3: A new item has been added to the inventory.</li>
+      </ul>
+      <div class="flex justify-end">
+        <button type="button" @click="showNotifications = false" class="bg-gray-500 text-white px-4 py-2 rounded">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logout Confirmation Modal -->
+  <div x-show="confirmLogout" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+      <h2 class="text-xl font-bold mb-4">Confirm Logout</h2>
+      <p class="mb-4">Are you sure you want to log out?</p>
+      <div class="flex justify-end">
+        <button type="button" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded" @click="confirmLogout = false">Cancel</button>
+        <form method="POST" action="{{ route('logout') }}">
+          @csrf
+          <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Log Out</button>
+        </form>
+      </div>
+    </div>
+  </div>
   <div class="flex flex-col flex-grow">
     <!-- Header -->
     <header class="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4 bg-white shadow-md z-10">
@@ -85,39 +127,6 @@
     <div class="flex">
       <!-- Sidebar -->
       @yield('sidebar')
-
-      @yield('modals')
-
-
-      <!-- Notifications Modal -->
-      <div x-show="showNotifications" @click.away="showNotifications = false" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-20">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 mb-8">
-          <h2 class="text-xl font-bold gradient-text mb-4">Notifications</h2>
-          <ul>
-            <li class="mb-2">Notification 1: Your item has been approved.</li>
-            <li class="mb-2">Notification 2: Your item is due for return tomorrow.</li>
-            <li class="mb-2">Notification 3: A new item has been added to the inventory.</li>
-          </ul>
-          <div class="flex justify-end">
-            <button type="button" @click="showNotifications = false" class="bg-gray-500 text-white px-4 py-2 rounded">Close</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Logout Confirmation Modal -->
-      <div x-show="confirmLogout" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
-          <h2 class="text-xl font-bold mb-4">Confirm Logout</h2>
-          <p class="mb-4">Are you sure you want to log out?</p>
-          <div class="flex justify-end">
-            <button type="button" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded" @click="confirmLogout = false">Cancel</button>
-            <form method="POST" action="{{ route('logout') }}">
-              @csrf
-              <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Log Out</button>
-            </form>
-          </div>
-        </div>
-      </div>
 
       <!-- Main Content -->
       <main id="mainContent" class="flex-1 ml-64 lg:ml-0 p-8 transition-width">
