@@ -1,8 +1,8 @@
 @extends('layouts.dashboard-reg')
 
-@section('title', $item['name'])
+@section('title', $product['name'])
 
-@section('heading', $item['name'])
+@section('heading', $product['name'])
 @section('sidebar')
 <aside id="sidebar" class="transition-width w-64 h-full fixed top-16 bottom-16 lg:relative lg:h-screen p-2">
   <div class="bg-white rounded p-2">
@@ -40,7 +40,7 @@
 <ol class="flex text-sm text-gray-500">
     <li><a href="{{ route('dashboard-reg-items') }}" class="hover:underline">Item List</a></li>
     <li class="mx-2">/</li>
-    <li class="font-bold">{{ $item['name'] }}</li>
+    <li class="font-bold">{{ $product['name'] }}</li>
 </ol>
 @endsection
 
@@ -48,27 +48,26 @@
 <div class="max-w-5xl mx-auto p-6 flex flex-col lg:flex-row gap-6">
     <div class="w-full lg:w-1/3">
         <div class="border border-gray-300 rounded-lg overflow-hidden mb-4">
-            <img src="{{ $item['image'] }}" alt="Product Image" class="w-full h-64 object-cover">
+            <img src="{{ asset('storage/' . $product->product_image) }}" alt="{{ $product->name }}" class="w-full h-32 object-cover rounded-md mb-4">
         </div>
     <!-- Thumbnail Images -->
         <div class="flex gap-2 overflow-x-auto">
-            <img src="{{ $item['image'] }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
-            <img src="{{ $item['image'] }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
-            <img src="{{ $item['image'] }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
-            <img src="{{ $item['image'] }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
+            <img src="{{ $product['image'] }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
+            <img src="{{ $product['image'] }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
+            <img src="{{ $product['image'] }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
+            <img src="{{ $product['image'] }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
         </div>
     </div>
     <div class="w-full lg:w-2/3">
         <!-- Product Title and Stock -->
         <div class="flex flex-col sm:flex-row justify-between items-start">
-            <h1 class="text-2xl font-bold text-gray-800">{{ $item['name'] }}</h1>
-            <span class="text-sm text-gray-500 mt-2 sm:mt-0">Stock: <span class="font-semibold text-gray-800">20</span></span>
+            <h1 class="text-2xl font-bold text-gray-800">{{ $product['name'] }}</h1>
+            <span class="text-sm text-gray-500 mt-2 sm:mt-0">Stock: <span class="font-semibold text-gray-800">{{$product->quantity}}</span></span>
         </div>
-        
+
         <!-- Price -->
-        <p class="text-xl text-gray-700 font-semibold mt-2">Rp. {{ number_format($item['price'], 0, ',', '.') }}</p>
-        
-        <!-- vvv ini belum work vvv -->
+        <p class="text-xl text-gray-700 font-semibold mt-2">Rp{{ number_format($product['price'], 0, ',', '.') }},-</p>
+
         <!-- Quantity Selector and Buttons -->
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 mt-4">
             <!-- Quantity Selector -->
@@ -77,14 +76,14 @@
                 <input type="text" value="2" class="w-12 text-center border-0 focus:outline-none">
                 <button class="px-3 py-1 text-gray-700">+</button>
             </div>
-            
+
             <!-- Buttons -->
             <div class="flex gap-2 mt-2 sm:mt-0">
                 <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to Cart</button>
                 <button class="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50">Rent Now</button>
             </div>
         </div>
-        
+
         <!-- Tabs (Specification and Maintenance) -->
         <div class="flex gap-4 mt-6 border-b border-gray-200">
             <button onclick="showTab('specification')" id="specification-tab" class="text-blue-600 font-semibold pb-2 border-b-2 border-blue-600">
@@ -97,10 +96,18 @@
 
         <!-- Specification Content -->
         <div id="specification-content" class="transition-all duration-300 ease-in-out opacity-100 max-h-full overflow-hidden">
-            {!! $item['description'] !!}
+            <p class="text-gray-600 mt-4">
+                {{ $product['notes'] }}
+            </p>
 
-            <ul class="mt-2 list-disc list-inside space-y-1">
-                {!! $item['specification'] !!}
+            <ul class="text-gray-600 mt-2 list-disc list-inside space-y-1">
+                {!! $product['specification'] !!}
+{{--                <li>Humidity measuring range: 20%-95% (0 degrees -> 50 degrees) Humidity measurement error: +/-5%</li>--}}
+{{--                <li>Temperature measurement range: 0 degrees -> 50 degrees temperature measurement error: +/- 2 degrees</li>--}}
+{{--                <li>Operating voltage 3.3V-5V</li>--}}
+{{--                <li>Output Type Digital Output</li>--}}
+{{--                <li>With fixed bolt hole for easy installation</li>--}}
+{{--                <li>Small plates PCB size: 3.2cm x 1.4cm</li>--}}
             </ul>
         </div>
 

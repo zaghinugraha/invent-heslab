@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\Product\ProductController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,7 +26,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
 
 
-    Route::get('/reg/items/{id}', [ItemController::class, 'show'])->name('items.show');
+//    Routes for product
+    Route::get('/reg/items', [ProductController::class, 'user_dashboard'])->name('dashboard-reg-items');
+    Route::get('/products/{id}', [ProductController::class, 'showByID'])->name('products.showByID');
+
 
     Route::middleware(['check.admin.team'])->group(function () {
         Route::get('/admin/history', function () {
