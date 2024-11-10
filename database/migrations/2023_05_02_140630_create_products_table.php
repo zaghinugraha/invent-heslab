@@ -28,13 +28,13 @@ return new class extends Migration
             $table->longText('specification')->nullable();
             $table->string('source');
             $table->date('dateArrival')->nullable();
-            $table->binary('product_image')->nullable();
 
             $table->foreignIdFor(\App\Models\Category::class)
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();
         });
+        DB::statement("ALTER TABLE products ADD product_image MEDIUMBLOB");
     }
 
     /**
