@@ -31,6 +31,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/admin/items', [ProductController::class, 'admin_dashboard'])->name('dashboard-admin-items');
     Route::get('/products/{id}', [ProductController::class, 'showByID'])->name('products.showByID');
     Route::get('/product/image/{uuid}', [ProductController::class, 'getImage'])->name('product.image');
+    Route::get('/carttest', function () {
+        return view('cart');
+    })->name('carttest');
 
 
     Route::middleware(['check.admin.team'])->group(function () {
