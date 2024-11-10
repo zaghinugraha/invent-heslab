@@ -75,7 +75,19 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-//        dd($request->all());
+
+        /**
+         * Handle specification input
+         */
+
+        $specifications = explode("\n", $request->specification);
+
+        // Buat list HTML
+        $htmlSpecification = '';
+        foreach ($specifications as $spec) {
+            $htmlSpecification .= '<li>' . e(trim($spec)) . '</li>';
+        }
+
         /**
          * Handle upload image
          */
@@ -89,7 +101,6 @@ class ProductController extends Controller
                 'table' => 'products',
                 'field' => 'code',
                 'length' => 4,
-                'specification'=> $request->specification,
                 'prefix' => 'PC'
             ]),
 
@@ -99,6 +110,7 @@ class ProductController extends Controller
             'quantity'          => $request->quantity,
             'quantity_alert'    => $request->quantity_alert,
             'notes'             => $request->notes,
+            'specification'     => $htmlSpecification,
             'price'             => $request->price,
             'brand'             => $request->brand,
             'source'            => $request->source,
@@ -156,6 +168,10 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->quantity_alert = $request->quantity_alert;
         $product->notes = $request->notes;
+        $product->source = $request->source;
+        $product->specification = $request->specification;
+        $product->dateArrival = $request->dateArrival;
+        $product->brand = $request->brand;
         $product->product_image = $image;
         $product->save();
 
