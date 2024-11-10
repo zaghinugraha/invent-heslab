@@ -23,6 +23,7 @@ class Product extends Model
         'notes',
         'brand',
         'source',
+        'dateArrival',
         'price',
         'product_image',
         'category_id',

@@ -36,7 +36,7 @@ class ProductController extends Controller
         $products = Product::with('category')->paginate(10);
 
         //also get the categories
-        
+
         $categories = Category::where("user_id", auth()->id())->get(['id', 'name']);
 
         return view('dashboard-admin-items', [
@@ -101,6 +101,7 @@ class ProductController extends Controller
             'price'             => $request->price,
             'brand'             => $request->brand,
             'source'            => $request->source,
+            'dateArrival'       => $request->dateArrival,
             'user_id'           => auth()->id(),
             'slug'              => Str::slug($request->name, '-'),
             'uuid'              => Str::uuid()
