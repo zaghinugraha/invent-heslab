@@ -31,9 +31,23 @@ class ProductController extends Controller
         return view('item-detail', compact('product')); // Kirim data ke view
     }
 
-    public function admin_dashboard()
+    public function admin_dashboard(Request $request)
     {
-        $products = Product::with('category')->paginate(10);
+        $query = Product::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('brand', 'LIKE', "%{$search}%")
+                ->orWhere('source', 'LIKE', "%{$search}%")
+                ->orWhereHas('category', function($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%");
+                });
+            });
+        }
+
+        $products = $query->with('category')->paginate(10);
 
         //also get the categories
 

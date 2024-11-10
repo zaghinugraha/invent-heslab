@@ -219,16 +219,16 @@
 
   <!-- Search Bar and Add Item Button -->
   <div class="w-full flex justify-end space-x-2">
-    <div class="flex w-1/3">
-      <input type="text" placeholder="Search" class="w-full px-4 py-2 border rounded-l-lg focus:outline-none" />
-      <button class="bg-gray-300 px-4 py-2 rounded-r-lg">
-        <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M21.707 20.293l-6.388-6.388A7.455 7.455 0 0018 10.5a7.5 7.5 0 10-7.5 7.5c1.8 0 3.464-.63 4.904-1.681l6.388 6.388a1 1 0 001.415-1.414zM10.5 16a5.5 5.5 0 110-11 5.5 5.5 0 010 11z"></path>
-        </svg>
-      </button>
-    </div>
+    <form action="{{ route('dashboard-admin-items') }}" method="GET" class="flex w-1/3">
+        <input type="text" name="search" placeholder="Search" class="w-full px-4 py-2 border rounded-l-lg focus:outline-none" value="{{ request()->query('search') }}" />
+        <button type="submit" class="bg-gray-300 px-4 py-2 rounded-r-lg">
+            <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M21.707 20.293l-6.388-6.388A7.455 7.455 0 0018 10.5a7.5 7.5 0 10-7.5 7.5c1.8 0 3.464-.63 4.904-1.681l6.388 6.388a1 1 0 001.415-1.414zM10.5 16a5.5 5.5 0 110-11 5.5 5.5 0 010 11z"></path>
+            </svg>
+        </button>
+    </form>
     <button @click="newItem = true" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-      Add Item
+        Add Item
     </button>
   </div>
 </div>
