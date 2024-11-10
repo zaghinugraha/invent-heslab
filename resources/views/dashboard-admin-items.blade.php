@@ -47,47 +47,69 @@
 @endsection
 
 @section('modals')
-  <div x-show="newItem" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 mb-8">
-      <h2 class="text-xl font-bold gradient-text mb-4">Add New Item</h2>
-      <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <div class="mb-4">
-          <label class="block text-gray-700">Item Name</label>
-          <input type="text" name="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700">Category</label>
-          <input type="number" name="category_id" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700">Price</label>
-          <input type="number" name="price" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700">Quantity</label>
-          <input type="number" name="quantity" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700">Alert Quantity</label>
-          <input type="number" name="quantity_alert" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700">Notes</label>
-          <textarea name="notes" class="w-full px-4 py-2 border rounded-lg focus:outline-none"></textarea>
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700">Product Image</label>
-          <input type="file" name="product_image" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
-        </div>
-        <div class="flex justify-end">
-          <button type="button" @click="newItem = false" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-          <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Add Item</button>
-        </div>
-      </form>
-    </div>
+<div x-show="newItem" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50" x-init="$watch('newItem', value => document.body.classList.toggle('overflow-hidden', value))">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 mb-8 max-h-full overflow-y-auto">
+    <h2 class="text-xl font-bold gradient-text mb-4">Add New Item</h2>
+    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+      @csrf
+      <!-- Item Name -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Item Name</label>
+        <input type="text" name="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+      </div>
+      <!-- Category -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Category</label>
+        <select name="category_id" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required>
+          <option value="">Select Category</option>
+          @foreach($categories as $category)
+            <option value="{{ $category->id }}">{{ $category->name }}</option>
+          @endforeach
+        </select>
+      </div>
+      <!-- Price -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Price</label>
+        <input type="number" name="price" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+      </div>
+      <!-- Quantity -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Quantity</label>
+        <input type="number" name="quantity" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+      </div>
+      <!-- Alert Quantity -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Alert Quantity</label>
+        <input type="number" name="quantity_alert" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+      </div>
+      <!-- Source -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Source</label>
+        <input type="text" name="source" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+      </div>
+      <!-- Specification -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Specification</label>
+        <textarea name="specification" class="w-full px-4 py-2 border rounded-lg focus:outline-none"></textarea>
+      </div>
+      <!-- Notes -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Notes</label>
+        <textarea name="notes" class="w-full px-4 py-2 border rounded-lg focus:outline-none"></textarea>
+      </div>
+      <!-- Product Image -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Product Image</label>
+        <input type="file" name="product_image" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
+      </div>
+      <!-- Form Buttons -->
+      <div class="flex justify-end">
+        <button type="button" @click="newItem = false" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Add Item</button>
+      </div>
+    </form>
   </div>
-
+</div>
 @endsection
 
 @section('content')
@@ -129,9 +151,10 @@
   <table class="min-w-full table-auto border">
     <thead>
       <tr class="bg-blue-600 text-white">
-        <th class="px-4 py-2 border">No</th>
+        <th class="px-4 py-2 border">ID</th>
         <th class="px-4 py-2 border">Name</th>
         <th class="px-4 py-2 border">Brand</th>
+        <th class="px-4 py-2 border">Category</th>
         <th class="px-4 py-2 border">Price</th>
         <th class="px-4 py-2 border">Stock</th>
         <th class="px-4 py-2 border">Picture</th>
@@ -144,9 +167,10 @@
     @foreach($products as $product)
       <tbody class="bg-white divide-y divide-gray-200">
       <tr class="hover:bg-gray-50 text-center">
-        <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
+        <td class="px-4 py-2 border">{{ $product['id'] }}</td>
         <td class="px-4 py-2 border">{{ $product['name'] }}</td>
         <td class="px-4 py-2 border">brand</td>
+        <td class="px-4 py-2 border">{{ $product->category->name ?? 'No Category' }}</td>
         <td class="px-4 py-2 border">{{ number_format($product['price'], 0, ',', '.') }}</td>
         <td class="px-4 py-2 border">{{ $product['quantity'] }}</td>
         <td class="px-4 py-2 border relative group">

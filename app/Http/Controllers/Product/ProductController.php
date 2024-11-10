@@ -33,10 +33,15 @@ class ProductController extends Controller
 
     public function admin_dashboard()
     {
-        $products = Product::paginate(10);
+        $products = Product::with('category')->paginate(10);
+
+        //also get the categories
+        
+        $categories = Category::where("user_id", auth()->id())->get(['id', 'name']);
 
         return view('dashboard-admin-items', [
             'products' => $products,
+            'categories' => $categories,
         ]);
     }
 
