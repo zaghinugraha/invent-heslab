@@ -14,18 +14,18 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->timestamps();
             $table->id();
-            $table->uuid()->nullable();
+            $table->uuid();
             $table->foreignId("user_id")->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('slug');
             $table->string('code');
-            $table->decimal('price');
+            $table->integer('price');
             //$table->string('product_barcode_symbology')->nullable();
             $table->integer('quantity');
             $table->integer('quantity_alert');
             $table->text('notes')->nullable();
             $table->longText('specification')->nullable();
-
+            $table->string('source');
             $table->binary('product_image')->nullable();
 
             $table->foreignIdFor(\App\Models\Category::class)

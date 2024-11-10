@@ -14,9 +14,6 @@ return new class extends Migration
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignIdFor(\App\Models\Supplier::class)
-                ->constrained();
-
             $table->string('date'); // old: purchase_date
             $table->string('purchase_no'); // old: purchase_no
 
