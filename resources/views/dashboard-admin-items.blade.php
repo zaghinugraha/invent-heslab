@@ -6,52 +6,6 @@
 @section('headingDesc', 'Item List')
 @section('description', 'Ini adalah daftar barang yang tersedia untuk disewa. Anda dapat menggunakan bilah pencarian untuk menemukan barang tertentu, atau menavigasi halaman untuk melihat lebih banyak barang.')
 
-@section('modals')
-<div x-show="newItem" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
-  <div class="bg-white p-4 rounded-lg shadow-lg w-full md:w-1/3 h-auto max-h-[78vh] overflow-y-auto">
-    <h2 class="text-xl font-bold gradient-text mb-4">Add New Item</h2>
-    <!-- nanti disini tambahin aksi nambah item -->
-    <form>
-      <!-- Form fields for adding item -->
-      <div class="mb-4">
-        <label class="block text-gray-700">Item Name</label>
-        <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700">Brand</label>
-        <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700">Price</label>
-        <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700">Stock</label>
-        <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700">Picture URL</label>
-        <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
-      </div>
-      <div class="flex space-x-4 mb-4">
-        <div class="w-1/2">
-          <label class="block text-gray-700">Source</label>
-          <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
-        </div>
-        <div class="w-1/2">
-          <label class="block text-gray-700">Date Arrived</label>
-          <input type="date" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
-        </div>
-      </div>
-      <div class="flex justify-end">
-        <button type="button" @click="newItem = false" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Add Item</button>
-      </div>
-    </form>
-  </div>
-</div>
-@endsection
-
 @section('sidebar')
 <aside id="sidebar" class="transition-width w-64 h-full fixed top-16 bottom-16 lg:relative lg:h-screen p-2">
   <div class="bg-white rounded p-2">
@@ -90,6 +44,50 @@
     </nav>
   </div>
 </aside>
+@endsection
+
+@section('modals')
+  <div x-show="newItem" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 mb-8">
+      <h2 class="text-xl font-bold gradient-text mb-4">Add New Item</h2>
+      <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="mb-4">
+          <label class="block text-gray-700">Item Name</label>
+          <input type="text" name="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700">Category</label>
+          <input type="number" name="category_id" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700">Price</label>
+          <input type="number" name="price" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700">Quantity</label>
+          <input type="number" name="quantity" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700">Alert Quantity</label>
+          <input type="number" name="quantity_alert" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700">Notes</label>
+          <textarea name="notes" class="w-full px-4 py-2 border rounded-lg focus:outline-none"></textarea>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700">Product Image</label>
+          <input type="file" name="product_image" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
+        </div>
+        <div class="flex justify-end">
+          <button type="button" @click="newItem = false" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+          <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Add Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 @endsection
 
 @section('content')
@@ -141,38 +139,41 @@
         <th class="px-4 py-2 border">Date Arrived</th>
         <th class="px-4 py-2 border">Last Maintained</th>
         <th class="px-4 py-2 border">Action</th>
+        <!-- Additional headers -->
       </tr>
     </thead>
-    <tbody class="bg-white divide-y divide-gray-200">
-      @foreach ($items as $item)
+    @foreach($products as $product)
+      <tbody class="bg-white divide-y divide-gray-200">
       <tr class="hover:bg-gray-50 text-center">
-        <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
-        <td class="px-4 py-2 border">{{ $item['name'] }}</td>
-        <td class="px-4 py-2 border">{{ $item['brand'] }}</td>
-        <td class="px-4 py-2 border">Rp {{ number_format($item['price'], 0, ',', '.') }}</td>
-        <td class="px-4 py-2 border">{{ $item['stock'] }}</td>
-        <td class="px-4 py-2 border relative group">
-          <a href="{{ $item['image'] }}" class="underline text-blue-500" target="_blank">Picture</a>
-          <div class="hidden group-hover:block absolute z-10 bg-white border border-gray-300 p-1 rounded preview-image w-max">
-            <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}" class="w-32 h-32 object-cover rounded">
-          </div>
+        <td class="px-4 py-2 border">{{ $product->id }}</td>
+        <td class="px-4 py-2 border">{{ $product->name }}</td>
+        <td class="px-4 py-2 border"></td>
+        <td class="px-4 py-2 border">{{ $product->price }}</td>
+        <td class="px-4 py-2 border">{{ $product->quantity }}</td>
+        <td class="px-4 py-2 border">
+          <a href="#" class=" underline text-blue-500">Picture</a>
         </td>
-        <td class="px-4 py-2 border">{{ $item['source'] }}</td>
-        <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($item['date_arrived'])->format('d/m/Y') }}</td>
-        <td ss="px-4 py-2 border">{{ \Carbon\Carbon::parse($item['last_maintained'])->format('d/m/Y') }}</td>
+        <td class="px-4 py-2 border"></td>
+        <td class="px-4 py-2 border">{{ $product->created_at }}</td>
+        <td class="px-4 py-2 border"></td>
         <td class="px-4 py-2 border">
           <div class="flex justify-center space-x-2">
             <button class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
             <button class="w-24 text-center bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
           </div>
         </td>
+        <!-- Additional cells -->
       </tr>
-      @endforeach
-    </tbody>
+      <!-- Repeat for other rows -->
+      </tbody>
+    @endforeach
+
   </table>
 </div>
 
 <!-- Pagination -->
+{{ $products->links() }}
+
 <div class="mt-4 flex justify-center">
   <nav class="inline-flex -space-x-px">
     <a href="#" class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100">Previous</a>
