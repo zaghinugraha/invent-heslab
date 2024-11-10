@@ -169,7 +169,7 @@
       <tr class="hover:bg-gray-50 text-center">
         <td class="px-4 py-2 border">{{ $product['id'] }}</td>
         <td class="px-4 py-2 border">{{ $product['name'] }}</td>
-        <td class="px-4 py-2 border">brand</td>
+        <td class="px-4 py-2 border">{{ $product['brand'] }}</td>
         <td class="px-4 py-2 border">{{ $product->category->name ?? 'No Category' }}</td>
         <td class="px-4 py-2 border">{{ number_format($product['price'], 0, ',', '.') }}</td>
         <td class="px-4 py-2 border">{{ $product['quantity'] }}</td>
@@ -179,13 +179,17 @@
             <img src="{{ $product['product_image'] }}" alt="{{ $product['name'] }}" class="w-32 h-32 object-cover rounded">
           </div>
         </td>
-        <td class="px-4 py-2 border">source</td>
-        <td class="px-4 py-2 border">tanggal masuk barang</td>
+        <td class="px-4 py-2 border">{{ $product['source'] }}</td>
+        <td class="px-4 py-2 border">{{ $product['dateArrival'] }}</td>
         <td ss="px-4 py-2 border">tanggal last maintained</td>
         <td class="px-4 py-2 border">
           <div class="flex justify-center space-x-2">
-            <button class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
-            <button class="w-24 text-center bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
+            <a class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600" href="{{ 'products.destroy', $product->uuid }}">Edit</a>
+              <form action="{{ route('products.destroy', $product->uuid) }}" method="POST" style="display: inline;">
+                  @csrf
+                  @method('DELETE')
+                  <button class="w-24 text-center bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
+              </form>
           </div>
         </td>
       </tr>

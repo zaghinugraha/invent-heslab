@@ -75,6 +75,7 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
+//        dd($request->all());
         /**
          * Handle upload image
          */
@@ -95,16 +96,16 @@ class ProductController extends Controller
             'name'              => $request->name,
             'category_id'       => $request->category_id,
             'quantity'          => $request->quantity,
-            'price'             => $request->price,
             'quantity_alert'    => $request->quantity_alert,
             'notes'             => $request->notes,
-            "user_id" => auth()->id(),
-            "slug" => Str::slug($request->name, '-'),
-//            "uuid" => Str::uuid()
+            'price'             => $request->price,
+            'brand'             => $request->brand,
+            'source'            => $request->source,
+            'user_id'           => auth()->id(),
+            'slug'              => Str::slug($request->name, '-'),
+            'uuid'              => Str::uuid()
         ]);
-
-
-        return to_route('products.index')->with('success', 'Product has been created!');
+        return to_route('dashboard-admin-items')->with('success', 'Product has been created!');
     }
 
     public function show($uuid)
@@ -150,6 +151,7 @@ class ProductController extends Controller
         $product->slug = Str::slug($request->name, '-');
         $product->category_id = $request->category_id;
         $product->quantity = $request->quantity;
+        $product->price = $request->price;
         $product->quantity_alert = $request->quantity_alert;
         $product->notes = $request->notes;
         $product->product_image = $image;
@@ -169,15 +171,16 @@ class ProductController extends Controller
          */
         if ($product->product_image) {
             // check if image exists in our file system
-            if (file_exists(ProductController . phppublic_path('storage/') . $product->product_image)) {
-                unlink(ProductController . phppublic_path('storage/') . $product->product_image);
+            if ($product->product_image && file_exists(public_path('storage/' . $product->product_image))) {
+                unlink(public_path('storage/' . $product->product_image));
             }
+
         }
 
         $product->delete();
 
         return redirect()
-            ->route('products.index')
+            ->route('dashboard-admin-items')
             ->with('success', 'Product has been deleted!');
     }
 }
