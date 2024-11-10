@@ -139,35 +139,34 @@
         <th class="px-4 py-2 border">Date Arrived</th>
         <th class="px-4 py-2 border">Last Maintained</th>
         <th class="px-4 py-2 border">Action</th>
-        <!-- Additional headers -->
       </tr>
     </thead>
     @foreach($products as $product)
       <tbody class="bg-white divide-y divide-gray-200">
       <tr class="hover:bg-gray-50 text-center">
-        <td class="px-4 py-2 border">{{ $product->id }}</td>
-        <td class="px-4 py-2 border">{{ $product->name }}</td>
-        <td class="px-4 py-2 border"></td>
-        <td class="px-4 py-2 border">{{ $product->price }}</td>
-        <td class="px-4 py-2 border">{{ $product->quantity }}</td>
-        <td class="px-4 py-2 border">
-          <a href="#" class=" underline text-blue-500">Picture</a>
+        <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
+        <td class="px-4 py-2 border">{{ $product['name'] }}</td>
+        <td class="px-4 py-2 border">brand</td>
+        <td class="px-4 py-2 border">{{ number_format($product['price'], 0, ',', '.') }}</td>
+        <td class="px-4 py-2 border">{{ $product['quantity'] }}</td>
+        <td class="px-4 py-2 border relative group">
+          <a href="{{ $product['product_image'] }}" class="underline text-blue-500" target="_blank">Picture</a>
+          <div class="hidden group-hover:block absolute z-10 bg-white border border-gray-300 p-1 rounded preview-image w-max">
+            <img src="{{ $product['product_image'] }}" alt="{{ $product['name'] }}" class="w-32 h-32 object-cover rounded">
+          </div>
         </td>
-        <td class="px-4 py-2 border"></td>
-        <td class="px-4 py-2 border">{{ $product->created_at }}</td>
-        <td class="px-4 py-2 border"></td>
+        <td class="px-4 py-2 border">source</td>
+        <td class="px-4 py-2 border">tanggal masuk barang</td>
+        <td ss="px-4 py-2 border">tanggal last maintained</td>
         <td class="px-4 py-2 border">
           <div class="flex justify-center space-x-2">
             <button class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
             <button class="w-24 text-center bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
           </div>
         </td>
-        <!-- Additional cells -->
       </tr>
-      <!-- Repeat for other rows -->
-      </tbody>
-    @endforeach
-
+      @endforeach
+    </tbody>
   </table>
 </div>
 
