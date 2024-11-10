@@ -6,6 +6,7 @@ use App\Models\Product;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
@@ -23,6 +24,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Microcontroller: Tensilica Xtensa LX6</li><li>Clock Speed: 240 MHz</li>',
                 'category_id' => 1,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Light Sensor',
@@ -35,6 +38,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Type: Photodiode</li><li>Wavelength: 400-700 nm</li>',
                 'category_id' => 2,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Temperature Sensor',
@@ -47,6 +52,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Type: Thermistor</li><li>Range: -55°C to 125°C</li>',
                 'category_id' => 2,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Arduino Uno R3',
@@ -59,6 +66,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Microcontroller: ATmega328P</li><li>Clock Speed: 16 MHz</li>',
                 'category_id' => 1,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Cable',
@@ -71,6 +80,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Length: 1 meter</li><li>Type: Copper</li>',
                 'category_id' => 4,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Raspberry Pi 4',
@@ -83,6 +94,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Processor: Broadcom BCM2711, quad-core Cortex-A72 (ARM v8) 64-bit SoC @ 1.5GHz</li><li>Power: 5V DC via USB-C connector (minimum 3A)</li>',
                 'category_id' => 1,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Gyroscope Sensor',
@@ -95,6 +108,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Type: MEMS</li><li>Range: ±250°/s</li>',
                 'category_id' => 2,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Ultrasonic Sensor',
@@ -107,6 +122,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Operating Voltage: 5V</li><li>Min Range: 2cm</li>',
                 'category_id' => 2,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Jumper Wires',
@@ -119,6 +136,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Length: 20 cm</li><li>Connector Type: Dupont</li>',
                 'category_id' => 4,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'NodeMCU ESP8266',
@@ -131,6 +150,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Microcontroller: ESP8266</li><li>Wi-Fi: 802.11 b/g/n</li>',
                 'category_id' => 1,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Humidity Sensor',
@@ -143,6 +164,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Range: 20%-95%</li><li>Accuracy: ±5%</li>',
                 'category_id' => 2,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Breadboard',
@@ -155,6 +178,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Material: ABS Plastic</li><li>Distribution Strip: 200 tie points</li>',
                 'category_id' => 3,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Micro USB Cable',
@@ -167,6 +192,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Length: 1 meter</li><li>Connector: Micro USB</li>',
                 'category_id' => 4,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'DHT11 Temperature and Humidity Sensor',
@@ -179,6 +206,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Temperature Range: 0-50°C</li><li>Humidity Range: 20%-90%</li>',
                 'category_id' => 2,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Ethernet Shield for Arduino',
@@ -191,6 +220,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Controller: W5100</li><li>Speed: 10/100Mb</li>',
                 'category_id' => 1,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'MQ-2 Gas Sensor',
@@ -203,6 +234,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Detection Range: 300-10000 ppm</li><li>Voltage: 5V</li>',
                 'category_id' => 2,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'DC Motor',
@@ -215,6 +248,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Voltage: 6-12V</li><li>Speed: 3000 RPM</li>',
                 'category_id' => 3,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'USB to Serial Adapter',
@@ -227,6 +262,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Chipset: FT232RL</li><li>Baud Rate: 300-921600 bps</li>',
                 'category_id' => 3,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'LDR (Light Dependent Resistor)',
@@ -239,6 +276,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Resistance: 10-20kΩ (in light)</li><li>Resistance: 1MΩ (in dark)</li>',
                 'category_id' => 2,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Relay Module 5V',
@@ -251,6 +290,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Voltage: 5V</li><li>Current: 10A</li>',
                 'category_id' => 3,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Jumper Cables',
@@ -263,6 +304,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Length: 20 cm</li><li>Connector Type: Dupont</li>',
                 'category_id' => 4,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Bluetooth Module HC-05',
@@ -275,6 +318,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Bluetooth Protocol: Bluetooth 2.0+EDR</li><li>Range: 10 meters</li>',
                 'category_id' => 1,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'Software IDE for Arduino',
@@ -287,6 +332,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Platform: Windows, Mac, Linux</li><li>Language: C/C++</li>',
                 'category_id' => 5,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'USB Cable for Arduino',
@@ -299,6 +346,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Length: 1 meter</li><li>Connector: USB Type A to B</li>',
                 'category_id' => 4,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ],
             [
                 'name' => 'FTDI Module',
@@ -311,6 +360,8 @@ class ProductSeeder extends Seeder
                 'specification' => '<li>Chipset: FT232RL</li><li>Baud Rate: 300-921600 bps</li>',
                 'category_id' => 3,
                 'user_id' => 1,
+                'uuid' => Str::uuid(),
+                'source' => collect(['private', 'university', 'company'])->random(),
             ]
         ]);
 
