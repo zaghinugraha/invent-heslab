@@ -39,9 +39,12 @@ class ProductController extends Controller
 
         $categories = Category::where("user_id", auth()->id())->get(['id', 'name']);
 
+        $lowStockCount = Product::whereColumn('quantity', '<=', 'quantity_alert')->count();
+
         return view('dashboard-admin-items', [
             'products' => $products,
             'categories' => $categories,
+            'lowStockCount' => $lowStockCount
         ]);
     }
 

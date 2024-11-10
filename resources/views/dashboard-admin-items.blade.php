@@ -213,7 +213,7 @@
     <!-- Low on Stock Card -->
     <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
       <div class="bg-yellow-600 text-white font-semibold py-2">Low on Stock</div>
-      <div class="bg-white py-4 text-2xl font-bold text-black">0</div>
+      <div class="bg-white py-4 text-2xl font-bold text-black">{{ $lowStockCount }}</div>
     </div>
   </div>
 
@@ -259,9 +259,37 @@
         <td class="px-4 py-2 border">{{ $product['brand'] }}</td>
         <td class="px-4 py-2 border">{{ $product->category->name ?? 'No Category' }}</td>
         <td class="px-4 py-2 border">{{ number_format($product['price'], 0, ',', '.') }}</td>
-        <td class="px-4 py-2 border">{{ $product['quantity'] }}</td>
-        <td class="px-4 py-2 border relative group">
-          <a href="{{ route('product.image', $product->uuid) }}" class="underline text-blue-500" target="_blank">Picture</a>
+        <td class="px-4 py-2 border text-center"
+            style="
+                @php
+                    $maxQuantity = $products->max('quantity');
+                    $minQuantity = $products->min('quantity');
+                    $quantityAlert = $product->quantity_alert;
+
+                    if ($product->quantity > $quantityAlert) {
+                        // Quantities above the alert level (yellow to green)
+                        $percentage = ($product->quantity - $quantityAlert) / ($maxQuantity - $quantityAlert);
+                        $hue = intval(60 + ($percentage * 60)); // Hue from 60 (yellow) to 120 (green)
+                    } elseif ($product->quantity < $quantityAlert) {
+                        // Quantities below the alert level (yellow to red)
+                        $percentage = ($quantityAlert - $product->quantity) / ($quantityAlert - $minQuantity);
+                        $hue = intval(60 - ($percentage * 60)); // Hue from 60 (yellow) to 0 (red)
+                    } else {
+                        // Quantity equals alert level
+                        $hue = 60; // Yellow
+                    }
+                    $color = 'hsl(' . $hue . ', 90%, 50%)';
+                @endphp
+                background-color: {{ $color }};
+            ">
+            {{ $product->quantity }}
+        </td>
+        <td class="px-4 py-2 border relative group justify-center items-center">
+          <svg class="w-7 h-7 m-auto" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="8" r="2" stroke="#1C274C" stroke-width="1.5"/>
+          <path d="M2 12.5001L3.75159 10.9675C4.66286 10.1702 6.03628 10.2159 6.89249 11.0721L11.1822 15.3618C11.8694 16.0491 12.9512 16.1428 13.7464 15.5839L14.0446 15.3744C15.1888 14.5702 16.7369 14.6634 17.7765 15.599L21 18.5001" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
           <div class="hidden group-hover:block absolute z-10 bg-white border border-gray-300 p-1 rounded preview-image w-max">
               <img src="{{ route('product.image', $product->uuid) }}" alt="{{ $product['name'] }}" class="w-32 h-32 object-cover rounded">
           </div>
