@@ -67,6 +67,17 @@
           @endforeach
         </select>
       </div>
+      <!-- Brand -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Brand</label>
+        <input type="text" name="brand" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+      </div>
+
+      <!-- Date Arrived -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Date Arrived</label>
+        <input type="date" name="dateArrival" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+      </div>
       <!-- Price -->
       <div class="mb-4">
         <label class="block text-gray-700">Price</label>

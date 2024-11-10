@@ -30,6 +30,7 @@ class StoreProductRequest extends FormRequest
             'quantity'          => 'required|integer',
             'brand'             => 'required|string',
             'source'            => 'required|string',
+            'dateArrival'       => 'required|date',
             'price'             => 'required|integer|min:0',
             'quantity_alert'    => 'required|integer',
             'notes'             => 'nullable|max:1000',

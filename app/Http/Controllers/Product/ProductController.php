@@ -89,6 +89,7 @@ class ProductController extends Controller
                 'table' => 'products',
                 'field' => 'code',
                 'length' => 4,
+                'specification'=> $request->specification,
                 'prefix' => 'PC'
             ]),
 
