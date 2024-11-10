@@ -66,7 +66,7 @@
         <a href="{{ route('products.showByID', $product->id) }}" class="block">
             <div class="border border-gray-300 rounded-lg p-4 hover:shadow-lg relative">
                 <!-- Existing card content -->
-                <img src="{{ asset('storage/').$product->product_image }}" alt="{{ $product->name }}" class="w-full h-32 object-cover rounded-md mb-4">
+                <img src="{{ route('product.image', $product->uuid) }}" alt="{{ $product->name }}" class="w-full h-32 object-cover rounded-md mb-4">
                 <div class="flex justify-between items-center mb-2">
                     <h3 class="text-gray-800 font-semibold">{{ $product->name }}</h3>
                     <span class="bg-green-100 text-green-600 text-xs font-semibold px-2 py-1 rounded-full">Available</span>
