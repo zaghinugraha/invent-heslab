@@ -46,14 +46,14 @@
 <div class="space-y-4 mb-8 w-full mx-auto">
   <!-- Search Bar and Filter Button -->
   <div class="w-full flex justify-end space-x-2">
-    <div class="flex w-full">
-      <input type="text" placeholder="Search" class="w-full px-4 py-2 border rounded-l-lg focus:outline-none" />
-      <button class="bg-gray-300 px-4 py-2 rounded-r-lg">
+    <form class="flex w-full" action="{{ route('dashboard-reg-items') }}" method="GET">
+      <input type="text" name="search" placeholder="Search" class="w-full px-4 py-2 border rounded-l-lg focus:outline-none" value="{{ request()->query('search') }}"/>
+      <button type="submit" class="bg-gray-300 px-4 py-2 rounded-r-lg">
         <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
           <path d="M21.707 20.293l-6.388-6.388A7.455 7.455 0 0018 10.5a7.5 7.5 0 10-7.5 7.5c1.8 0 3.464-.63 4.904-1.681l6.388 6.388a1 1 0 001.415-1.414zM10.5 16a5.5 5.5 0 110-11 5.5 5.5 0 010 11z"></path>
         </svg>
       </button>
-    </div>
+  </form>
     <button class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
       Filter
     </button>

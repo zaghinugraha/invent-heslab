@@ -62,9 +62,23 @@ class ProductController extends Controller
         ]);
     }
 
-    public function user_dashboard()
+    public function user_dashboard(Request $request)
     {
-        $products = Product::paginate(9);
+        $query = Product::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('brand', 'LIKE', "%{$search}%")
+                ->orWhere('source', 'LIKE', "%{$search}%")
+                ->orWhereHas('category', function($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%");
+                });
+            });
+        }
+
+        $products = $query->paginate(9);
 
         return view('dashboard-reg-items', [
             'products' => $products,
