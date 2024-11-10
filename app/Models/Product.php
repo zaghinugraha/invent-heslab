@@ -21,12 +21,16 @@ class Product extends Model
         'quantity',
         'quantity_alert',
         'notes',
+        'brand',
+        'source',
+        'price',
         'product_image',
         'category_id',
         'created_at',
         'updated_at',
-        "user_id",
-        "uuid"
+        'user_id',
+        'uuid',
+        'specification'
     ];
 
     protected $casts = [
