@@ -91,9 +91,11 @@ class ProductController extends Controller
         /**
          * Handle upload image
          */
-        $image = "";
         if ($request->hasFile('product_image')) {
-            $image = $request->file('product_image')->store('products', 'public');
+            $imageFile = $request->file('product_image');
+            $imageData = file_get_contents($imageFile->getRealPath());
+        } else {
+            $imageData = null;
         }
 
         Product::create([
@@ -101,6 +103,8 @@ class ProductController extends Controller
                 'table' => 'products',
                 'field' => 'code',
                 'length' => 4,
+                'product_image' => $imageData,
+                'specification'=> $request->specification,
                 'prefix' => 'PC'
             ]),
 
@@ -200,5 +204,17 @@ class ProductController extends Controller
         return redirect()
             ->route('dashboard-admin-items')
             ->with('success', 'Product has been deleted!');
+    }
+
+    public function getImage($uuid)
+    {
+        $product = Product::where('uuid', $uuid)->firstOrFail();
+
+        $imageData = $product->product_image; // Assuming this is the BLOB field
+        $mimeType = 'image/png'; // Adjust this according to the actual image MIME type
+
+        return response($imageData)
+        ->header('Content-Type', $mimeType)
+        ->header('Cache-Control', 'public, max-age=604800');
     }
 }

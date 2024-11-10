@@ -30,7 +30,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/reg/items', [ProductController::class, 'user_dashboard'])->name('dashboard-reg-items');
     Route::get('/admin/items', [ProductController::class, 'admin_dashboard'])->name('dashboard-admin-items');
     Route::get('/products/{id}', [ProductController::class, 'showByID'])->name('products.showByID');
-
+    Route::get('/product/image/{uuid}', [ProductController::class, 'getImage'])->name('product.image');
 
 
     Route::middleware(['check.admin.team'])->group(function () {
