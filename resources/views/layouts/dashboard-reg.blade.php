@@ -115,7 +115,7 @@
       </div>
 
       <!-- Logout Confirmation Modal -->
-      <div x-show="confirmLogout" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
+      <div x-show="confirmLogout" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
         <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
           <h2 class="text-xl font-bold mb-4">Confirm Logout</h2>
           <p class="mb-4">Are you sure you want to log out?</p>

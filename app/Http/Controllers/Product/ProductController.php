@@ -108,7 +108,7 @@ class ProductController extends Controller
                 'prefix' => 'PC'
             ]),
 
-            'product_image'     => $image,
+            'product_image'     => $imageData,
             'name'              => $request->name,
             'category_id'       => $request->category_id,
             'quantity'          => $request->quantity,
