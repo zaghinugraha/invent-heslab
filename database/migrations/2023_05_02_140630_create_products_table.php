@@ -23,9 +23,11 @@ return new class extends Migration
             //$table->string('product_barcode_symbology')->nullable();
             $table->integer('quantity');
             $table->integer('quantity_alert');
+            $table->string('brand');
             $table->text('notes')->nullable();
             $table->longText('specification')->nullable();
             $table->string('source');
+            $table->date('dateArrival')->nullable();
             $table->binary('product_image')->nullable();
 
             $table->foreignIdFor(\App\Models\Category::class)
