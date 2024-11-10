@@ -1,3 +1,5 @@
+{{--@class(\App\Models\Product::$product)--}}
+
 @extends('layouts.dashboard-reg')
 
 @section('title', 'Item List')
@@ -60,34 +62,39 @@
 
 <!-- Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-    @for ($i = 0; $i < 9; $i++)
-        <a href="{{ route('items.show', ['id' => $i + 1]) }}" class="block">
+    @foreach($products as $product)
+        <a href="{{ route('products.showByID', $product->id) }}" class="block">
             <div class="border border-gray-300 rounded-lg p-4 hover:shadow-lg relative">
                 <!-- Existing card content -->
-                <img src="https://digiwarestore.com/11109-large_default/dht11-module-temperature-humidity-sensor-temperatur-kelembaban-for-arduino-with-led-297030.jpg" alt="Sensor Image" class="w-full h-32 object-cover rounded-md mb-4">
+                <img src="{{ asset('').$product->product_image }}" alt="{{ $product->name }}" class="w-full h-32 object-cover rounded-md mb-4">
                 <div class="flex justify-between items-center mb-2">
-                    <h3 class="text-gray-800 font-semibold">Sensor {{ $i + 1 }}</h3>
+                    <h3 class="text-gray-800 font-semibold">{{ $product->name }}</h3>
                     <span class="bg-green-100 text-green-600 text-xs font-semibold px-2 py-1 rounded-full">Available</span>
                 </div>
-                <p class="text-gray-600">Rp. 13,000</p>
+                <p class="text-gray-600">Rp{{ number_format($product['price'], 0, ',', '.') }},-</p>
                 <!-- Other content -->
             </div>
         </a>
-    @endfor
+    @endforeach
 </div>
 
 
 <!-- Pagination -->
-<div class="mt-4 flex justify-center">
-  <nav class="inline-flex -space-x-px">
-    <a href="#" class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100">Previous</a>
-    <a href="#" class="px-3 py-2 leading-tight text-white bg-blue-600 border border-gray-300 hover:bg-blue-700">1</a>
-    <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">2</a>
-    <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">3</a>
-    <span class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300">...</span>
-    <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">67</a>
-    <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">68</a>
-    <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100">Next</a>
-  </nav>
-</div>
+
+{{ $products->links() }}
+
+
+
+{{--<div class="mt-4 flex justify-center">--}}
+{{--  <nav class="inline-flex -space-x-px">--}}
+{{--    <a href="#" class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100">Previous</a>--}}
+{{--    <a href="#" class="px-3 py-2 leading-tight text-white bg-blue-600 border border-gray-300 hover:bg-blue-700">1</a>--}}
+{{--    <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">2</a>--}}
+{{--    <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">3</a>--}}
+{{--    <span class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300">...</span>--}}
+{{--    <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">67</a>--}}
+{{--    <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">68</a>--}}
+{{--    <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100">Next</a>--}}
+{{--  </nav>--}}
+{{--</div>--}}
 @endsection
