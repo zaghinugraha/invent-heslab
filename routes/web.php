@@ -32,6 +32,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/products/{id}', [ProductController::class, 'showByID'])->name('products.showByID');
 
 
+
     Route::middleware(['check.admin.team'])->group(function () {
         Route::get('/admin/history', function () {
             return view('dashboard-admin-history');
@@ -43,7 +44,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
         Route::get('/admin/items', [ItemController::class, 'showAllAdmin'])->name('dashboard-admin-items');
         Route::get('/admin/items', [ProductController::class, 'admin_dashboard'])->name('dashboard-admin-items');
-        Route::post('admin/items', [ProductController::class, 'store'])->name('products.store');
+        Route::resource('/products', ProductController::class);
 
         Route::get('/admin/users', [UserController::class, 'index'])->name('users.index');
         Route::post('/users/{user}/promote', [UserController::class, 'promote'])->name('users.promote');
