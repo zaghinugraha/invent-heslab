@@ -121,6 +121,82 @@
     </form>
   </div>
 </div>
+
+<div x-show="editItem" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50" x-init="$watch('editItem', value => document.body.classList.toggle('overflow-hidden', value))">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 mb-8 max-h-full overflow-y-auto">
+    <h2 class="text-xl font-bold gradient-text mb-4">Edit (nama item)</h2>
+    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+      @csrf
+      <!-- get all informasi item masukin ke dalam inputannya -->
+      <!-- Item Name -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Item Name</label>
+        <input type="text" name="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+      </div>
+      <!-- Category -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Category</label>
+        <select name="category_id" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required>
+          <option value="">Select Category</option>
+          @foreach($categories as $category)
+            <option value="{{ $category->id }}">{{ $category->name }}</option>
+          @endforeach
+        </select>
+      </div>
+      <!-- Brand -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Brand</label>
+        <input type="text" name="brand" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+      </div>
+
+      <!-- Date Arrived -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Date Arrived</label>
+        <input type="date" name="dateArrival" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+      </div>
+      <!-- Price -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Price</label>
+        <input type="number" name="price" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+      </div>
+      <!-- Quantity -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Quantity</label>
+        <input type="number" name="quantity" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+      </div>
+      <!-- Alert Quantity -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Alert Quantity</label>
+        <input type="number" name="quantity_alert" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+      </div>
+      <!-- Source -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Source</label>
+        <input type="text" name="source" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+      </div>
+      <!-- Specification -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Specification</label>
+        <textarea name="specification" class="w-full px-4 py-2 border rounded-lg focus:outline-none"></textarea>
+      </div>
+      <!-- Notes -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Notes</label>
+        <textarea name="notes" class="w-full px-4 py-2 border rounded-lg focus:outline-none"></textarea>
+      </div>
+      <!-- Product Image -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Product Image</label>
+        <input type="file" name="product_image" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
+      </div>
+      <!-- Form Buttons -->
+      <div class="flex justify-end">
+        <button type="button" @click="editItem = false" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Add Item</button>
+      </div>
+    </form>
+  </div>
+</div>
 @endsection
 
 @section('content')
@@ -185,9 +261,9 @@
         <td class="px-4 py-2 border">{{ number_format($product['price'], 0, ',', '.') }}</td>
         <td class="px-4 py-2 border">{{ $product['quantity'] }}</td>
         <td class="px-4 py-2 border relative group">
-          <a href="{{ $product['product_image'] }}" class="underline text-blue-500" target="_blank">Picture</a>
+          <a href="{{ route('product.image', $product->uuid) }}" class="underline text-blue-500" target="_blank">Picture</a>
           <div class="hidden group-hover:block absolute z-10 bg-white border border-gray-300 p-1 rounded preview-image w-max">
-            <img src="{{ $product['product_image'] }}" alt="{{ $product['name'] }}" class="w-32 h-32 object-cover rounded">
+              <img src="{{ route('product.image', $product->uuid) }}" alt="{{ $product['name'] }}" class="w-32 h-32 object-cover rounded">
           </div>
         </td>
         <td class="px-4 py-2 border">{{ $product['source'] }}</td>
@@ -195,7 +271,7 @@
         <td ss="px-4 py-2 border">tanggal last maintained</td>
         <td class="px-4 py-2 border">
           <div class="flex justify-center space-x-2">
-            <a class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600" href="{{ 'products.destroy', $product->uuid }}">Edit</a>
+            <a class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600" @click = "editItem = true">Edit</a>
               <form action="{{ route('products.destroy', $product->uuid) }}" method="POST" style="display: inline;">
                   @csrf
                   @method('DELETE')
