@@ -20,6 +20,11 @@ class ProductSeeder extends Seeder
                 'quantity_alert' => 10,
                 'price' =>200000,
                 'notes' => 'ini adalah esp32 skibidi',
+                'specification' =>'<ul>
+                                    <li> ram 8gb </li>
+                                    <li> rtx 4090 </li>
+                                    <li> etcc </li>
+                                   </ul>',
                 'category_id' => 1,
                 'user_id'=>1,
 //                'uuid'=>Str::uuid()

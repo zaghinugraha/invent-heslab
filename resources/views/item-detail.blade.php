@@ -101,7 +101,7 @@
             </p>
 
             <ul class="text-gray-600 mt-2 list-disc list-inside space-y-1">
-
+                {!! $product['specification'] !!}
 {{--                <li>Humidity measuring range: 20%-95% (0 degrees -> 50 degrees) Humidity measurement error: +/-5%</li>--}}
 {{--                <li>Temperature measurement range: 0 degrees -> 50 degrees temperature measurement error: +/- 2 degrees</li>--}}
 {{--                <li>Operating voltage 3.3V-5V</li>--}}

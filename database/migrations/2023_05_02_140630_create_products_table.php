@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->integer('quantity_alert');
             $table->text('notes')->nullable();
+            $table->longText('specification')->nullable();
 
             $table->binary('product_image')->nullable();
 
