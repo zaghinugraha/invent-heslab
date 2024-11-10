@@ -131,7 +131,7 @@
   <table class="min-w-full table-auto border">
     <thead>
       <tr class="bg-blue-600 text-white">
-        <th class="px-4 py-2 border">No</th>
+        <th class="px-4 py-2 border">ID</th>
         <th class="px-4 py-2 border">Name</th>
         <th class="px-4 py-2 border">Brand</th>
         <th class="px-4 py-2 border">Price</th>
