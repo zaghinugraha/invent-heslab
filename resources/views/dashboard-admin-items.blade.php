@@ -6,49 +6,9 @@
 @section('headingDesc', 'Item List')
 @section('description', 'Ini adalah daftar barang yang tersedia untuk disewa. Anda dapat menggunakan bilah pencarian untuk menemukan barang tertentu, atau menavigasi halaman untuk melihat lebih banyak barang.')
 
-@section('sidebar')
-<aside id="sidebar" class="transition-width w-64 h-full fixed top-16 bottom-16 lg:relative lg:h-screen p-2">
-  <div class="bg-white rounded p-2">
-    <nav class="space-y-2 bg-white rounded p-2">
-      <a href="{{ route('dashboard-admin-items') }}" class="flex items-center space-x-2 text-white bg-gradient-to-r from-blue-500 to-purple-500 p-2 rounded">
-        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <line x1="5" y1="7" x2="19" y2="7" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <line x1="5" y1="12" x2="19" y2="12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <line x1="5" y1="17" x2="19" y2="17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span class="sidebar-text">Item List</span>
-      </a>
-      <a href="{{ route('dashboard-admin-rent') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
-        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18 2H6C5.44772 2 5 2.44772 5 3V22L7.5 20L9.5 22L12 20L14.5 22L16.5 20L19 22V3C19 2.44772 18.5523 2 18 2Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M9 6H15" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M9 10H15" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M9 14H10" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span class="sidebar-text">Rent Request</span>
-      </a>
-      <a href="{{ route('dashboard-admin-history') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
-        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="10" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M12 6V12L16 16" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span class="sidebar-text ml-3">History</span>
-      </a>
-      <a href="{{ route('users.index') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
-        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="7" r="4" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M4 21V17C4 15.8954 4.89543 15 6 15H18C19.1046 15 20 15.8954 20 17V21" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span class="sidebar-text ml-3">Manage Users</span>
-      </a>
-    </nav>
-  </div>
-</aside>
-@endsection
-
 @section('modals')
-<div x-show="newItem" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-  <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 mb-8">
+<div x-show="newItem" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+  <div class="bg-white p-4 rounded-lg shadow-lg w-full md:w-1/3 h-auto max-h-[78vh] overflow-y-auto">
     <h2 class="text-xl font-bold gradient-text mb-4">Add New Item</h2>
     <!-- nanti disini tambahin aksi nambah item -->
     <form>
@@ -90,6 +50,46 @@
     </form>
   </div>
 </div>
+@endsection
+
+@section('sidebar')
+<aside id="sidebar" class="transition-width w-64 h-full fixed top-16 bottom-16 lg:relative lg:h-screen p-2">
+  <div class="bg-white rounded p-2">
+    <nav class="space-y-2 bg-white rounded p-2">
+      <a href="{{ route('dashboard-admin-items') }}" class="flex items-center space-x-2 text-white bg-gradient-to-r from-blue-500 to-purple-500 p-2 rounded">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <line x1="5" y1="7" x2="19" y2="7" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="5" y1="12" x2="19" y2="12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="5" y1="17" x2="19" y2="17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="sidebar-text">Item List</span>
+      </a>
+      <a href="{{ route('dashboard-admin-rent') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 2H6C5.44772 2 5 2.44772 5 3V22L7.5 20L9.5 22L12 20L14.5 22L16.5 20L19 22V3C19 2.44772 18.5523 2 18 2Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 6H15" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 10H15" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 14H10" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="sidebar-text">Rent Request</span>
+      </a>
+      <a href="{{ route('dashboard-admin-history') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 6V12L16 16" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="sidebar-text ml-3">History</span>
+      </a>
+      <a href="{{ route('users.index') }}" class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="7" r="4" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4 21V17C4 15.8954 4.89543 15 6 15H18C19.1046 15 20 15.8954 20 17V21" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="sidebar-text ml-3">Manage Users</span>
+      </a>
+    </nav>
+  </div>
+</aside>
 @endsection
 
 @section('content')
@@ -141,31 +141,33 @@
         <th class="px-4 py-2 border">Date Arrived</th>
         <th class="px-4 py-2 border">Last Maintained</th>
         <th class="px-4 py-2 border">Action</th>
-        <!-- Additional headers -->
       </tr>
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
+      @foreach ($items as $item)
       <tr class="hover:bg-gray-50 text-center">
-        <td class="px-4 py-2 border">1</td>
-        <td class="px-4 py-2 border">Sensor DHT11</td>
-        <td class="px-4 py-2 border">DF Robot</td>
-        <td class="px-4 py-2 border">Rp 11.000</td>
-        <td class="px-4 py-2 border">11</td>
-        <td class="px-4 py-2 border">
-          <a href="#" class=" underline text-blue-500">Picture</a>
+        <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
+        <td class="px-4 py-2 border">{{ $item['name'] }}</td>
+        <td class="px-4 py-2 border">{{ $item['brand'] }}</td>
+        <td class="px-4 py-2 border">Rp {{ number_format($item['price'], 0, ',', '.') }}</td>
+        <td class="px-4 py-2 border">{{ $item['stock'] }}</td>
+        <td class="px-4 py-2 border relative group">
+          <a href="{{ $item['image'] }}" class="underline text-blue-500" target="_blank">Picture</a>
+          <div class="hidden group-hover:block absolute z-10 bg-white border border-gray-300 p-1 rounded preview-image w-max">
+            <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}" class="w-32 h-32 object-cover rounded">
+          </div>
         </td>
-        <td class="px-4 py-2 border">Pak Faris</td>
-        <td class="px-4 py-2 border">18/10/1995</td>
-        <td class="px-4 py-2 border">20/12/1995</td>
+        <td class="px-4 py-2 border">{{ $item['source'] }}</td>
+        <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($item['date_arrived'])->format('d/m/Y') }}</td>
+        <td ss="px-4 py-2 border">{{ \Carbon\Carbon::parse($item['last_maintained'])->format('d/m/Y') }}</td>
         <td class="px-4 py-2 border">
-            <div class="flex justify-center space-x-2">
-              <button class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
-              <button class="w-24 text-center bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
-            </div>
-          </td>
-        <!-- Additional cells -->
+          <div class="flex justify-center space-x-2">
+            <button class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>
+            <button class="w-24 text-center bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
+          </div>
+        </td>
       </tr>
-      <!-- Repeat for other rows -->
+      @endforeach
     </tbody>
   </table>
 </div>
