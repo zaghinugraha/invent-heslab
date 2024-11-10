@@ -144,22 +144,22 @@
       </tr>
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
-      @foreach ($items as $item)
+      @foreach ($products as $product)
       <tr class="hover:bg-gray-50 text-center">
         <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
-        <td class="px-4 py-2 border">{{ $item['name'] }}</td>
-        <td class="px-4 py-2 border">{{ $item['brand'] }}</td>
-        <td class="px-4 py-2 border">Rp {{ number_format($item['price'], 0, ',', '.') }}</td>
-        <td class="px-4 py-2 border">{{ $item['stock'] }}</td>
+        <td class="px-4 py-2 border">{{ $product['name'] }}</td>
+        <td class="px-4 py-2 border">brand</td>
+        <td class="px-4 py-2 border">{{ number_format($product['price'], 0, ',', '.') }}</td>
+        <td class="px-4 py-2 border">{{ $product['quantity'] }}</td>
         <td class="px-4 py-2 border relative group">
-          <a href="{{ $item['image'] }}" class="underline text-blue-500" target="_blank">Picture</a>
+          <a href="{{ $product['product_image'] }}" class="underline text-blue-500" target="_blank">Picture</a>
           <div class="hidden group-hover:block absolute z-10 bg-white border border-gray-300 p-1 rounded preview-image w-max">
-            <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}" class="w-32 h-32 object-cover rounded">
+            <img src="{{ $product['product_image'] }}" alt="{{ $product['name'] }}" class="w-32 h-32 object-cover rounded">
           </div>
         </td>
-        <td class="px-4 py-2 border">{{ $item['source'] }}</td>
-        <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($item['date_arrived'])->format('d/m/Y') }}</td>
-        <td ss="px-4 py-2 border">{{ \Carbon\Carbon::parse($item['last_maintained'])->format('d/m/Y') }}</td>
+        <td class="px-4 py-2 border">source</td>
+        <td class="px-4 py-2 border">tanggal masuk barang</td>
+        <td ss="px-4 py-2 border">tanggal last maintained</td>
         <td class="px-4 py-2 border">
           <div class="flex justify-center space-x-2">
             <button class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</button>

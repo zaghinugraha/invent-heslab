@@ -3,8 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TeamController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\Product\ProductController;
@@ -40,7 +38,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             return view('dashboard-admin-rent');
         })->name('dashboard-admin-rent');
 
-        Route::get('/admin/items', [ItemController::class, 'showAllAdmin'])->name('dashboard-admin-items');
+        Route::get('/admin/items', [ProductController::class, 'admin_dashboard'])->name('dashboard-admin-items');
         Route::get('/admin/users', [UserController::class, 'index'])->name('users.index');
         Route::post('/users/{user}/promote', [UserController::class, 'promote'])->name('users.promote');
         Route::post('/users/{user}/demote', [UserController::class, 'demote'])->name('users.demote');
