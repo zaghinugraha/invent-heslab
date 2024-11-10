@@ -48,14 +48,14 @@
 <div class="max-w-5xl mx-auto p-6 flex flex-col lg:flex-row gap-6">
     <div class="w-full lg:w-1/3">
         <div class="border border-gray-300 rounded-lg overflow-hidden mb-4">
-            <img src="{{ asset('storage/' . $product->product_image) }}" alt="{{ $product->name }}" class="w-full h-32 object-cover rounded-md mb-4">
+            <img src="{{ route('product.image', $product->uuid) }}" alt="{{ $product->name }}" class="w-full h-32 object-cover rounded-md mb-4">
         </div>
     <!-- Thumbnail Images -->
         <div class="flex gap-2 overflow-x-auto">
-            <img src="{{ $product['image'] }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
-            <img src="{{ $product['image'] }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
-            <img src="{{ $product['image'] }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
-            <img src="{{ $product['image'] }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
+            <img src="{{ route('product.image', $product->uuid) }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
+            <img src="{{ route('product.image', $product->uuid) }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
+            <img src="{{ route('product.image', $product->uuid) }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
+            <img src="{{ route('product.image', $product->uuid) }}" alt="Thumbnail" class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
         </div>
     </div>
     <div class="w-full lg:w-2/3">
