@@ -18,31 +18,36 @@ class CategorySeeder extends Seeder
                 'id'    => 1,
                 'name'  => 'Mainboard',
                 'slug'  => 'mainboard',
-                'created_at' => now()
+                'created_at' => now(),
+                'user_id' => 1
             ],
             [
                 'id'    => 2,
                 'name'  => 'Sensor',
                 'slug'  => 'sensor',
-                'created_at' => now()
+                'created_at' => now(),
+                'user_id' => 1
             ],
             [
                 'id'    => 3,
                 'name'  => 'Miscellaneous',
                 'slug'  => 'misc',
-                'created_at' => now()
+                'created_at' => now(),
+                'user_id' => 1
             ],
             [
                 'id'    => 4,
                 'name'  => 'Cables',
                 'slug'  => 'cables',
-                'created_at' => now()
+                'created_at' => now(),
+                'user_id' => 1
             ],
             [
                 'id'    => 5,
                 'name'  => 'Software',
                 'slug'  => 'software',
-                'created_at' => now()
+                'created_at' => now(),
+                'user_id' => 1
             ]
         ]);
 
