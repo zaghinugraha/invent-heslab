@@ -15,6 +15,7 @@ use Str;
 
 class ProductController extends Controller
 {
+
     public function index()
     {
         $products = Product::where("user_id", auth()->id())->count();
@@ -181,22 +182,36 @@ class ProductController extends Controller
         ]);
     }
 
-
     public function update(UpdateProductRequest $request, $uuid)
     {
+        
         $product = Product::where("uuid", $uuid)->firstOrFail();
-        $product->update($request->except('product_image'));
 
-        $image = $product->product_image;
+        // Update other fields except 'product_image' and 'specification'
+        $product->update($request->except(['product_image', 'specification']));
+
+        // Handle the product image (if applicable)
         if ($request->hasFile('product_image')) {
-            // Delete Old Photo
-            if ($product->product_image && file_exists(public_path('storage/' . $product->product_image))) {
-                unlink(public_path('storage/' . $product->product_image));
-            }
-            $image = $request->file('product_image')->store('products', 'public');
+            $imageFile = $request->file('product_image');
+            $imageData = file_get_contents($imageFile->getRealPath());
+            $product->product_image = $imageData;
         }
 
+        // Process the specification field
+        if ($request->has('specification')) {
+            $specifications = explode("\n", $request->input('specification'));
+            // Create HTML list
+            $htmlSpecification = '';
+            foreach ($specifications as $spec) {
+                $spec = trim($spec);
+                if ($spec !== '') {
+                    $htmlSpecification .= '<li>' . e($spec) . '</li>';
+                }
+            }
+            $product->specification = $htmlSpecification;
+        }
 
+        // Update remaining fields
         $product->name = $request->name;
         $product->slug = Str::slug($request->name, '-');
         $product->category_id = $request->category_id;
@@ -205,12 +220,11 @@ class ProductController extends Controller
         $product->quantity_alert = $request->quantity_alert;
         $product->notes = $request->notes;
         $product->source = $request->source;
-        $product->specification = $request->specification;
         $product->dateArrival = $request->dateArrival;
         $product->brand = $request->brand;
-        $product->product_image = $image;
-        $product->save();
 
+        // Save the product with the updated data
+        $product->save();
 
         return redirect()
             ->route('dashboard-admin-items')
