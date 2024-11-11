@@ -154,7 +154,7 @@
             <!-- Date Arrived -->
             <div class="mb-4">
                 <label class="block text-gray-700">Date Arrived</label>
-                <input type="date" name="dateArrival" x-model="selectedProduct.dateArrived" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+                <input type="date" name="dateArrival" x-model="selectedProduct.dateArrival" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
             </div>
             <!-- Price -->
             <div class="mb-4">
@@ -179,7 +179,7 @@
             <!-- Specification -->
             <div class="mb-4">
                 <label class="block text-gray-700">Specification</label>
-                <textarea name="specification" x-model="selectedProduct.specification" class="w-full px-4 py-2 border rounded-lg focus:outline-none"></textarea>
+                <textarea name="specification" x-model="selectedProduct.specification_plain" class="w-full px-4 py-2 border rounded-lg focus:outline-none"></textarea>
             </div>
             <!-- Notes -->
             <div class="mb-4">

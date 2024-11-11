@@ -13,6 +13,7 @@ class Product extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+    protected $appends = ['specification_plain'];
 
     public $fillable = [
         'name',
@@ -65,4 +66,18 @@ class Product extends Model
     }
 
     
+    public function getSpecificationPlainAttribute()
+    {
+        // Convert the HTML list to plain text with newlines
+        $html = $this->specification;
+        if ($html) {
+            // Replace closing </li> tags with newlines
+            $text = str_replace('</li>', "\n", $html);
+            // Remove any remaining <li> or other HTML tags
+            $text = strip_tags($text);
+            // Trim any extra whitespace
+            return trim($text);
+        }
+        return '';
+    }
 }
