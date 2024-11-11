@@ -51,6 +51,7 @@ class ProductController extends Controller
 
         //also get the categories
 
+        // Image encoding
         $categories = Category::where("user_id", auth()->id())->get(['id', 'name']);
 
         $lowStockCount = Product::whereColumn('quantity', '<', 'quantity_alert')->count();
