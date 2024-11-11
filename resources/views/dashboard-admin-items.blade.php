@@ -189,7 +189,8 @@
             <!-- Product Image -->
             <div class="mb-4">
                 <label class="block text-gray-700">Product Image</label>
-                <input type="file" name="product_image" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
+                // tadi belum ada xmodel coba cek lagi
+                <input type="file" x-model="selectedProduct.image" name="product_image" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
             </div>
             <!-- Form Buttons -->
             <div class="flex justify-end">
@@ -308,7 +309,16 @@
         <td ss="px-4 py-2 border">tanggal last maintained</td>
         <td class="px-4 py-2 border">
           <div class="flex justify-center space-x-2">
-            <button class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600" @click="editItem = true; selectedProduct = {{ $product->makeHidden('product_image')->toJson() }}">Edit</button>
+              @php
+                  $productData = $product->toArray();
+                  array_walk_recursive($productData, function (&$item) {
+                      if (is_string($item)) {
+                          $item = mb_convert_encoding($item, 'UTF-8', 'UTF-8');
+                      }
+                  });
+                  $productJson = json_encode($productData);
+              @endphp
+            <button class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600" @click="editItem = true; selectedProduct = JSON.parse(atob('{{ base64_encode($productJson) }}'))">Edit</button>
               <form action="{{ route('products.destroy', $product->uuid) }}" method="POST" style="display: inline;">
                   @csrf
                   @method('DELETE')
