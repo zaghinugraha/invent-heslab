@@ -301,7 +301,7 @@
         <td ss="px-4 py-2 border">tanggal last maintained</td>
         <td class="px-4 py-2 border">
           <div class="flex justify-center space-x-2">
-            <button class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600" @click="editItem = true; selectedProduct = {{ $product->toJson() }}">Edit</button>
+            <button class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600" @click="editItem = true; selectedProduct = {{ $product->makeHidden('product_image')->toJson() }}">Edit</button>
               <form action="{{ route('products.destroy', $product->uuid) }}" method="POST" style="display: inline;">
                   @csrf
                   @method('DELETE')
