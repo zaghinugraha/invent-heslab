@@ -64,7 +64,7 @@
     }
   </style>
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen" x-data="{ confirmLogout : false, propil : false, addTeam : false, newItem : false, showNotifications : false, editItem : false }">
+<body class="bg-gray-100 flex flex-col min-h-screen" x-data="{ confirmLogout : false, propil : false, addTeam : false, newItem : false, showNotifications : false, editItem : null, selectedProduct : {} }">
 
   @yield('modals')
   <!-- Notifications Modal -->
