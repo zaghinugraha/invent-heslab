@@ -187,13 +187,11 @@ class ProductController extends Controller
         
         $product = Product::where("uuid", $uuid)->firstOrFail();
 
-        // Update other fields except 'product_image' and 'specification'
-        $product->update($request->except(['product_image', 'specification']));
-
         // Handle the product image (if applicable)
         if ($request->hasFile('product_image')) {
             $imageFile = $request->file('product_image');
             $imageData = file_get_contents($imageFile->getRealPath());
+            $product->product_image = $imageData;
         }
 
         // Process the specification field
@@ -221,7 +219,6 @@ class ProductController extends Controller
         $product->source = $request->source;
         $product->dateArrival = $request->dateArrival;
         $product->brand = $request->brand;
-        $product->product_image = $imageData;
 
         // Save the product with the updated data
         $product->save();
@@ -255,11 +252,18 @@ class ProductController extends Controller
     public function getImage($uuid)
     {
         $product = Product::where('uuid', $uuid)->firstOrFail();
+        $imageData = $product->product_image;
 
-        $imageData = $product->product_image; // Assuming this is the BLOB field
-        $mimeType = 'image/png'; // Adjust this according to the actual image MIME type
+        if ($imageData) {
+            // Detect the MIME type
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
+            $mimeType = $finfo->buffer($imageData);
 
-        return response($imageData)
-        ->header('Content-Type', $mimeType);
+            return response($imageData)
+                ->header('Content-Type', $mimeType);
+        } else {
+            // If there's no image, you can return a placeholder or a 404
+            abort(404);
+        }
     }
 }
