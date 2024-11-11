@@ -34,6 +34,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/carttest', function () {
         return view('cart');
     })->name('carttest');
+    Route::resource('/products', ProductController::class);
+
 
 
     Route::middleware(['check.admin.team'])->group(function () {

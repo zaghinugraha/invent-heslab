@@ -176,10 +176,10 @@ class ProductController extends Controller
         $product = Product::where("uuid", $uuid)->firstOrFail();
         return view('products.edit', [
             'categories' => Category::where("user_id", auth()->id())->get(),
-            'units' => Unit::where("user_id", auth()->id())->get(),
             'product' => $product
         ]);
     }
+
 
     public function update(UpdateProductRequest $request, $uuid)
     {
@@ -188,13 +188,13 @@ class ProductController extends Controller
 
         $image = $product->product_image;
         if ($request->hasFile('product_image')) {
-
             // Delete Old Photo
-            if ($product->product_image) {
-                unlink(ProductController . phppublic_path('storage/') . $product->product_image);
+            if ($product->product_image && file_exists(public_path('storage/' . $product->product_image))) {
+                unlink(public_path('storage/' . $product->product_image));
             }
             $image = $request->file('product_image')->store('products', 'public');
         }
+
 
         $product->name = $request->name;
         $product->slug = Str::slug($request->name, '-');
@@ -212,7 +212,7 @@ class ProductController extends Controller
 
 
         return redirect()
-            ->route('products.index')
+            ->route('dashboard-admin-items')
             ->with('success', 'Product has been updated!');
     }
 
