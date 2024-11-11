@@ -189,8 +189,7 @@
             <!-- Product Image -->
             <div class="mb-4">
                 <label class="block text-gray-700">Product Image</label>
-                // tadi belum ada xmodel coba cek lagi
-                <input type="file" x-model="selectedProduct.image" name="product_image" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
+                <input type="file" name="product_image" class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
             </div>
             <!-- Form Buttons -->
             <div class="flex justify-end">

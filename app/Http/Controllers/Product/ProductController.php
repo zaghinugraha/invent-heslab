@@ -194,7 +194,6 @@ class ProductController extends Controller
         if ($request->hasFile('product_image')) {
             $imageFile = $request->file('product_image');
             $imageData = file_get_contents($imageFile->getRealPath());
-            $product->product_image = $imageData;
         }
 
         // Process the specification field
@@ -222,6 +221,7 @@ class ProductController extends Controller
         $product->source = $request->source;
         $product->dateArrival = $request->dateArrival;
         $product->brand = $request->brand;
+        $product->product_image = $imageData;
 
         // Save the product with the updated data
         $product->save();
@@ -260,7 +260,6 @@ class ProductController extends Controller
         $mimeType = 'image/png'; // Adjust this according to the actual image MIME type
 
         return response($imageData)
-        ->header('Content-Type', $mimeType)
-        ->header('Cache-Control', 'public, max-age=604800');
+        ->header('Content-Type', $mimeType);
     }
 }
