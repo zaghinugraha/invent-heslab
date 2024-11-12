@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\Product\ProductController;
+use App\Http\Controllers\CategoryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,7 +27,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
 
 
-//    Routes for product
+    //    Routes for product
     Route::get('/reg/items', [ProductController::class, 'user_dashboard'])->name('dashboard-reg-items');
     Route::get('/admin/items', [ProductController::class, 'admin_dashboard'])->name('dashboard-admin-items');
     Route::get('/products/{id}', [ProductController::class, 'showByID'])->name('products.showByID');
@@ -50,6 +51,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/admin/items', [ItemController::class, 'showAllAdmin'])->name('dashboard-admin-items');
         Route::get('/admin/items', [ProductController::class, 'admin_dashboard'])->name('dashboard-admin-items');
         Route::resource('/products', ProductController::class);
+
+        Route::resource('/categories', CategoryController::class);
 
         Route::get('/admin/users', [UserController::class, 'index'])->name('users.index');
         Route::post('/users/{user}/promote', [UserController::class, 'promote'])->name('users.promote');

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', 'HES Vault Dashboard')</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
   <style>
     /* Sidebar Styles */
@@ -64,8 +65,21 @@
     }
   </style>
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen" x-data="{ confirmLogout : false, propil : false, addTeam : false, newItem : false, showNotifications : false, editItem : null, selectedProduct : {} }">
-
+<body class="bg-gray-100 flex flex-col min-h-screen" 
+      x-data="{ 
+          confirmLogout: false, 
+          propil: false, 
+          addTeam: false, 
+          newItem: false, 
+          showNotifications: false, 
+          editItem: null, 
+          selectedProduct: {}, 
+          manageCategory: false,
+          addCategory : false,
+          editCategory: false,
+          selectedCategory: {},
+          deleteCategory: false,
+        }">
   @yield('modals')
   <!-- Notifications Modal -->
   <div x-show="showNotifications" @click.away="showNotifications = false" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-20">
