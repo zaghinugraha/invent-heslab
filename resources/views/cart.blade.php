@@ -93,7 +93,18 @@
 
     <!-- Summary Section -->
     <div class="w-1/2 h-full">
+        @if($cartItems->Count() > 0)
         <div class="border border-blue-300 bg-blue-50 rounded p-4 h-full overflow-auto">
+            @foreach($cartItems as $item)
+                <div class="flex items-center gap-4 mb-4">
+                    <img src="{{ $item->model->product_image }}" alt="Sensor DHT22" class="w-16 h-16 rounded-lg object-cover">
+                    <div>
+                        <h3 class="text-xl font-semibold text-blue-700">{{ $item->model->name }}</h3>
+                        <p class="text-sm text-gray-600">{{ $item->qty }}</p>
+                        <p class="text-lg text-blue-700 font-medium">{{ $item->price }}</p>
+                    </div>
+                </div>
+            @endforeach
             <!-- Dummy Data Item 1 -->
             <div class="flex items-center gap-4 mb-4">
                 <img src="sensor.jpg" alt="Sensor DHT22" class="w-16 h-16 rounded-lg object-cover">
@@ -137,9 +148,16 @@
             </div>
             <div class="flex justify-between items-center mt-4 font-semibold text-lg">
                 <span>Total Bill</span>
-                <span class="text-blue-700">Rp 33.000</span>
+                <span class="text-blue-700">${{ Cart::instance('cart')->subtotal() }}</span>
             </div>
         </div>
+        @else
+            <div class="flex items-center gap-4 mb-4">
+                <div>
+                    <h3 class="text-xl font-semibold text-blue-700">Your cart is empty.</h3>
+                </div>
+            </div>
+        @endif
     </div>
 </div>
 @endsection
