@@ -18,56 +18,104 @@ class CartController extends Controller
     public function add(Request $request)
     {
         try {
+            $request->validate([
+                'id' => 'required|exists:products,id',
+                'quantity' => 'required|numeric|min:1'
+            ]);
+
             $product = Product::findOrFail($request->id);
 
-            // Check if product exists in cart
-            $duplicates = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
+            // Check if requested quantity is available
+            if ($request->quantity > $product->quantity) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Requested quantity not available'
+                ], 400);
+            }
+
+            // Check if product already in cart
+            $duplicates = Cart::instance('cart')->search(function ($cartItem) use ($product) {
                 return $cartItem->id === $product->id;
             });
 
             if ($duplicates->isNotEmpty()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Item already in cart'
-                ]);
+                // Update quantity if already in cart
+                $cartItem = $duplicates->first();
+                $newQty = $cartItem->qty + $request->quantity;
+
+                if ($newQty > $product->quantity) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Cannot add more of this item'
+                    ], 400);
+                }
+
+                Cart::instance('cart')->update($cartItem->rowId, $newQty);
+            } else {
+                // Add new item to cart
+                Cart::instance('cart')->add([
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'qty' => $request->quantity,
+                    'price' => $product->price,
+                    'weight' => 0,
+                    'options' => [
+                        'product_image' => $product->product_image ?? 'default-image.jpg'
+                    ]
+                ])->associate(Product::class);
             }
 
-            Cart::instance('cart')->add([
-                'id' => $product->id,
-                'name' => $product->name,
-                'qty' => 1,
-                'price' => $product->price,
-                'options' => [
-                    'image' => $product->image
-                ]
-            ])->associate(Product::class);
-
             return response()->json([
-                'status' => 'success',
-                'message' => 'Item added to cart successfully',
-                'cartCount' => Cart::instance('cart')->count()
+                'success' => true,
+                'message' => 'Product added to cart successfully!',
+                'cartCount' => Cart::instance('cart')->count(),
+                'cartTotal' => Cart::instance('cart')->subtotal(0),
+                'cartContents' => Cart::instance('cart')->content()
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Error adding to cart: ' . $e->getMessage());
+            Log::error('Cart add error: ' . $e->getMessage());
             return response()->json([
-                'status' => 'error',
-                'message' => 'Error adding item to cart'
+                'success' => false,
+                'message' => 'Error adding item to cart. Please try again.'
             ], 500);
         }
     }
 
-    public function checkSession()
+    public function remove($rowId)
     {
-        if (session()->has('test')) {
-            return response()->json(['message' => session('test')]);
+        try {
+            Cart::instance('cart')->remove($rowId);
+            return redirect()->back()->with('success', 'Item removed from cart.');
+        } catch (\Exception $e) {
+            Log::error('Cart remove error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error removing item from cart.');
         }
-        return response()->json(['message' => 'No session found']);
     }
 
-    public function testCart()
+    public function update(Request $request, $rowId)
     {
-        Cart::instance('cart')->add('293ad', 'Sample Product', 1, 9.99);
-        return response()->json(['cart' => Cart::instance('cart')->content()]);
+        try {
+            $request->validate([
+                'quantity' => 'required|numeric|min:1'
+            ]);
+
+            Cart::instance('cart')->update($rowId, $request->quantity);
+            return redirect()->back()->with('success', 'Cart updated successfully.');
+        } catch (\Exception $e) {
+            Log::error('Cart update error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error updating cart.');
+        }
+    }
+
+    public function clear()
+    {
+        try {
+            Cart::instance('cart')->destroy();
+            return redirect()->back()->with('success', 'Cart cleared successfully.');
+        } catch (\Exception $e) {
+            Log::error('Cart clear error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error clearing cart.');
+        }
     }
 }
