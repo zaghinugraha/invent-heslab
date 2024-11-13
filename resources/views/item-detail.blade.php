@@ -2,6 +2,8 @@
 
 @section('title', $product['name'])
 
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 @section('heading', $product['name'])
 @section('sidebar')
     <aside id="sidebar" class="transition-width w-64 h-full fixed top-16 bottom-16 lg:relative lg:h-screen p-2">
@@ -89,28 +91,35 @@
             </p>
 
         <!-- Quantity Selector and Buttons -->
-        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 mt-4">
-            <!-- Quantity Selector -->
-            <div class="flex items-center border border-gray-300 rounded">
-                <button class="px-3 py-1 text-gray-700" >-</button>
-                <input type="text" value="1" class="w-12 text-center border-0 focus:outline-none">
-                <button class="px-3 py-1 text-gray-700">+</button>
-            </div>
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 mt-4">
+                <!-- Quantity Selector -->
+                <div class="flex items-center border border-gray-300 rounded">
+                    <button class="px-3 py-1 text-gray-700" onclick="updateQuantity('decrease')">-</button>
+                    <input type="text" id="quantity-input" value="1" min="1" max="{{ $product->quantity }}"
+                           class="w-12 text-center border-0 focus:outline-none"
+                           onchange="validateQuantity(this)">
+                    <button class="px-3 py-1 text-gray-700" onclick="updateQuantity('increase')">+</button>
+                </div>
 
                 <!-- Buttons -->
                 <div class="flex gap-2 mt-2 sm:mt-0">
                     @if ($product->quantity > 0)
-                        <form action="{{ route('cart.add') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="id" value="{{ $product->id }}">
-                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to Cart</button>
-                        </form>
-                        <button class="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50">Rent Now</button>
+                        <button onclick="addToCart({{ $product->id }})"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Add to Cart
+                        </button>
+                        <button class="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50">
+                            Rent Now
+                        </button>
                     @else
-                        <button class="bg-gray-300 text-gray-600 px-4 py-2 rounded cursor-not-allowed" disabled
-                                title="Out of Stock">Add to Cart</button>
-                        <button class="border border-gray-300 text-gray-600 px-4 py-2 rounded cursor-not-allowed" disabled
-                                title="Out of Stock">Rent Now</button>
+                        <button class="bg-gray-300 text-gray-600 px-4 py-2 rounded cursor-not-allowed"
+                                disabled title="Out of Stock">
+                            Add to Cart
+                        </button>
+                        <button class="border border-gray-300 text-gray-600 px-4 py-2 rounded cursor-not-allowed"
+                                disabled title="Out of Stock">
+                            Rent Now
+                        </button>
                     @endif
                 </div>
             </div>
@@ -196,5 +205,83 @@
                 specificationTab.classList.add('text-gray-500');
             }
         }
+
+        // Quantity handling functions
+        function updateQuantity(action) {
+            const input = document.getElementById('quantity-input');
+            let currentValue = parseInt(input.value) || 1;
+            const maxQuantity = parseInt(input.max);
+
+            if (action === 'increase' && currentValue < maxQuantity) {
+                input.value = currentValue + 1;
+            } else if (action === 'decrease' && currentValue > 1) {
+                input.value = currentValue - 1;
+            }
+        }
+
+        function validateQuantity(input) {
+            let value = parseInt(input.value) || 1;
+            const maxQuantity = parseInt(input.max);
+
+            if (value < 1) value = 1;
+            if (value > maxQuantity) value = maxQuantity;
+
+            input.value = value;
+        }
+
+        // Add to cart function
+        function addToCart(productId) {
+            const quantity = document.getElementById('quantity-input').value;
+
+            fetch('{{ route('cart.add') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    id: productId,
+                    quantity: quantity
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update cart display if you have a cart counter in your layout
+                        if (document.querySelector('.cart-count')) {
+                            document.querySelector('.cart-count').textContent = data.cartCount;
+                        }
+
+                        // Show success message
+                        showFlashMessage(data.message, 'success');
+
+                        // Update cart contents if on cart page
+                        if (typeof updateCartDisplay === 'function') {
+                            updateCartDisplay(data);
+                        }
+                    } else {
+                        showFlashMessage(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showFlashMessage('Error adding item to cart', 'error');
+                });
+        }
+
+        // Flash message function (if not already defined)
+        function showFlashMessage(message, type) {
+            const flashDiv = document.createElement('div');
+            flashDiv.className = `fixed top-20 right-10 p-4 rounded shadow-lg ${
+                type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+            }`;
+            flashDiv.textContent = message;
+            document.body.appendChild(flashDiv);
+
+            setTimeout(() => {
+                flashDiv.remove();
+            }, 3000);
+        }
+
     </script>
 @endsection
