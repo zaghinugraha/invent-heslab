@@ -9,63 +9,65 @@ use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
-
-    public function checkSession()
-    {
-        session(['test' => 'Session is working']);
-        dd(session('test'));
-    }
-
-
-    public function testCart()
-    {
-        Cart::add('293ad', 'Sample Product', 1, 9.99);
-        dd(Cart::content());
-    }
-
     public function index()
     {
-        $cartItems = Cart::instance('shoppingcart')->content();
-        $total = Cart::instance('shoppingcart')->total();
-        return view('cart', ['cartItems' => $cartItems, 'total' => $total]);
+        $cartItems = Cart::instance('cart')->content();
+        return view('cart', ['cartItems' => $cartItems]);
     }
 
     public function add(Request $request)
     {
-        $product = Product::find($request->id);
+        try {
+            $product = Product::findOrFail($request->id);
 
-        if (!$product) {
-            return redirect()->back()->with('error', 'Product not found.');
+            // Check if product exists in cart
+            $duplicates = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
+                return $cartItem->id === $product->id;
+            });
+
+            if ($duplicates->isNotEmpty()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Item already in cart'
+                ]);
+            }
+
+            Cart::instance('cart')->add([
+                'id' => $product->id,
+                'name' => $product->name,
+                'qty' => 1,
+                'price' => $product->price,
+                'options' => [
+                    'image' => $product->image
+                ]
+            ])->associate(Product::class);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Item added to cart successfully',
+                'cartCount' => Cart::instance('cart')->count()
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error adding to cart: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error adding item to cart'
+            ], 500);
         }
-
-        if ($product->quantity <= 0) {
-            return redirect()->back()->with('error', 'Product is out of stock.');
-        }
-
-        $price = $product->price;
-        Cart::instance('cart')->add($product->id, $product->name, 1, $price);
-
-        return redirect()->back()->with('success', 'Product added to cart successfully!');
     }
 
-
-
-
-//    public function add(Request $request)
-//    {
-//        $product = Product::find($request->id);
-//        $price = $product->price;
-//        Cart::instance('cart')->add($product->id, $product->name, $product->quantity, $price)->associate('App\Models\Product');
-//        return redirect()->back()->with('success', 'Product added to cart successfully!');
-//    }
-
-    public function update()
+    public function checkSession()
     {
-
+        if (session()->has('test')) {
+            return response()->json(['message' => session('test')]);
+        }
+        return response()->json(['message' => 'No session found']);
     }
 
-    public function delete()
+    public function testCart()
     {
-
+        Cart::instance('cart')->add('293ad', 'Sample Product', 1, 9.99);
+        return response()->json(['cart' => Cart::instance('cart')->content()]);
     }
 }

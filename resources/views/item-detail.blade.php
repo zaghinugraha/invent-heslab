@@ -88,26 +88,29 @@
             <p class="text-xl text-gray-700 font-semibold mt-2">Rp{{ number_format($product['price'], 0, ',', '.') }},-
             </p>
 
-            <!-- Quantity Selector and Buttons -->
-            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 mt-4">
-                <!-- Quantity Selector -->
-                <div class="flex items-center border border-gray-300 rounded">
-                    <button class="px-3 py-1 text-gray-700">-</button>
-                    <input type="text" value="2" class="w-12 text-center border-0 focus:outline-none">
-                    <button class="px-3 py-1 text-gray-700">+</button>
-                </div>
+        <!-- Quantity Selector and Buttons -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 mt-4">
+            <!-- Quantity Selector -->
+            <div class="flex items-center border border-gray-300 rounded">
+                <button class="px-3 py-1 text-gray-700" >-</button>
+                <input type="text" value="1" class="w-12 text-center border-0 focus:outline-none">
+                <button class="px-3 py-1 text-gray-700">+</button>
+            </div>
 
                 <!-- Buttons -->
                 <div class="flex gap-2 mt-2 sm:mt-0">
                     @if ($product->quantity > 0)
-                        <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to Cart</button>
-                        <button class="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50">Rent
-                            Now</button>
+                        <form action="{{ route('cart.add') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $product->id }}">
+                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to Cart</button>
+                        </form>
+                        <button class="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50">Rent Now</button>
                     @else
                         <button class="bg-gray-300 text-gray-600 px-4 py-2 rounded cursor-not-allowed" disabled
-                            title="Out of Stock">Add to Cart</button>
+                                title="Out of Stock">Add to Cart</button>
                         <button class="border border-gray-300 text-gray-600 px-4 py-2 rounded cursor-not-allowed" disabled
-                            title="Out of Stock">Rent Now</button>
+                                title="Out of Stock">Rent Now</button>
                     @endif
                 </div>
             </div>

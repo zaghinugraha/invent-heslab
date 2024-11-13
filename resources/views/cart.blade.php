@@ -93,64 +93,35 @@
 
     <!-- Summary Section -->
     <div class="w-1/2 h-full">
-        @if($cartItems->Count() > 0)
-        <div class="border border-blue-300 bg-blue-50 rounded p-4 h-full overflow-auto">
-            @foreach($cartItems as $item)
-                <div class="flex items-center gap-4 mb-4">
-                    <img src="{{ $item->model->product_image }}" alt="Sensor DHT22" class="w-16 h-16 rounded-lg object-cover">
-                    <div>
-                        <h3 class="text-xl font-semibold text-blue-700">{{ $item->model->name }}</h3>
-                        <p class="text-sm text-gray-600">{{ $item->qty }}</p>
-                        <p class="text-lg text-blue-700 font-medium">{{ $item->price }}</p>
+        @if($cartItems->count() > 0)
+            <div class="border border-blue-300 bg-blue-50 rounded p-4 h-full overflow-auto">
+                @foreach($cartItems as $item)
+                    <div class="flex items-center gap-4 mb-4">
+                        <img src="{{ $item->options->image ?? 'default-image.jpg' }}"
+                             alt="{{ $item->name }}"
+                             class="w-16 h-16 rounded-lg object-cover">
+                        <div>
+                            <h3 class="text-xl font-semibold text-blue-700">{{ $item->name }}</h3>
+                            <p class="text-sm text-gray-600">Amount: {{ $item->qty }}</p>
+                            <p class="text-lg text-blue-700 font-medium">Rp {{ number_format($item->price, 0, ',', '.') }}</p>
+                        </div>
                     </div>
+                @endforeach
+
+                <div class="mt-6 border-t border-gray-200 pt-4">
+                    @foreach($cartItems as $item)
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500">{{ $item->name }} ({{ $item->qty }} Item)</span>
+                            <span class="text-gray-500">Rp {{ number_format($item->price * $item->qty, 0, ',', '.') }}</span>
+                        </div>
+                    @endforeach
                 </div>
-            @endforeach
-            <!-- Dummy Data Item 1 -->
-            <div class="flex items-center gap-4 mb-4">
-                <img src="sensor.jpg" alt="Sensor DHT22" class="w-16 h-16 rounded-lg object-cover">
-                <div>
-                    <h3 class="text-xl font-semibold text-blue-700">Sensor DHT22</h3>
-                    <p class="text-sm text-gray-600">Amount: 2</p>
-                    <p class="text-lg text-blue-700 font-medium">Rp 11.000</p>
-                </div>
-            </div>
-            <!-- Dummy Data Item 2 -->
-            <div class="flex items-center gap-4 mb-4">
-                <img src="sensor.jpg" alt="Sensor DHT22" class="w-16 h-16 rounded-lg object-cover">
-                <div>
-                    <h3 class="text-xl font-semibold text-blue-700">Sensor DHT22</h3>
-                    <p class="text-sm text-gray-600">Amount: 1</p>
-                    <p class="text-lg text-blue-700 font-medium">Rp 5.500</p>
+
+                <div class="flex justify-between items-center mt-4 font-semibold text-lg">
+                    <span>Total Bill</span>
+                    <span class="text-blue-700">Rp {{ Cart::instance('cart')->subtotal() }}</span>
                 </div>
             </div>
-            <!-- Dummy Data Item 3 -->
-            <div class="flex items-center gap-4 mb-4">
-                <img src="sensor.jpg" alt="Sensor DHT22" class="w-16 h-16 rounded-lg object-cover">
-                <div>
-                    <h3 class="text-xl font-semibold text-blue-700">Sensor DHT22</h3>
-                    <p class="text-sm text-gray-600">Amount: 3</p>
-                    <p class="text-lg text-blue-700 font-medium">Rp 16.500</p>
-                </div>
-            </div>
-            <div class="mt-6 border-t border-gray-200 pt-4">
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-500">Sensor DHT11 (2 Item)</span>
-                    <span class="text-gray-500">Rp 11.000</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-500">Sensor DHT11 (1 Item)</span>
-                    <span class="text-gray-500">Rp 5.500</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-500">Sensor DHT11 (3 Item)</span>
-                    <span class="text-gray-500">Rp 16.500</span>
-                </div>
-            </div>
-            <div class="flex justify-between items-center mt-4 font-semibold text-lg">
-                <span>Total Bill</span>
-                <span class="text-blue-700">${{ Cart::instance('cart')->subtotal() }}</span>
-            </div>
-        </div>
         @else
             <div class="flex items-center gap-4 mb-4">
                 <div>
