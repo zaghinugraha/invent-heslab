@@ -89,7 +89,7 @@
     @yield('modals')
     <!-- Notifications Modal -->
     <div x-show="showNotifications" @click.away="showNotifications = false"
-        class="absolute right-10 top-20 flex items-center justify-center bg-white bg-opacity-0 z-20">
+        class="fixed right-10 top-20 flex items-center justify-center bg-white bg-opacity-0 z-20">
         <div class="bg-white p-6 rounded-lg shadow-lg w-full mb-8">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold gradient-text">Notifications</h2>

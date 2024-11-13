@@ -17,44 +17,37 @@ class CartController extends Controller
 
     public function add(Request $request)
     {
-        try {
-            $product = Product::findOrFail($request->id);
+        $product = Product::findOrFail($request->id);
 
-            // Check if product exists in cart
-            $duplicates = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
-                return $cartItem->id === $product->id;
-            });
+        // Check if product exists in cart
+        $duplicates = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
+            return $cartItem->id === $product->id;
+        });
 
-            if ($duplicates->isNotEmpty()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Item already in cart'
-                ]);
-            }
-
-            Cart::instance('cart')->add([
-                'id' => $product->id,
-                'name' => $product->name,
-                'qty' => 1,
-                'price' => $product->price,
-                'options' => [
-                    'image' => $product->image
-                ]
-            ])->associate(Product::class);
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Item added to cart successfully',
-                'cartCount' => Cart::instance('cart')->count()
-            ]);
-
-        } catch (\Exception $e) {
-            Log::error('Error adding to cart: ' . $e->getMessage());
+        if ($duplicates->isNotEmpty()) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Error adding item to cart'
-            ], 500);
+                'message' => 'Item already in cart'
+            ]);
         }
+
+        Cart::instance('cart')->add([
+            'id' => $product->id,
+            'name' => $product->name,
+            'qty' => 1,
+            'price' => $product->price,
+            'options' => [
+                'image' => $product->image
+            ]
+        ])->associate(Product::class);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Item added to cart successfully',
+            'cartCount' => Cart::instance('cart')->count()
+        ]);
+
+
     }
 
     public function checkSession()
