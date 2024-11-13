@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TeamController;
@@ -26,15 +27,19 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     })->name('dashboard-reg-history');
 
 
+    //  Route for Cart
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::get('/cart/test', [CartController::class, 'testCart']);
+    Route::get('/session/test', [CartController::class, 'checkSession']);
+
+
 
     //    Routes for product
     Route::get('/reg/items', [ProductController::class, 'user_dashboard'])->name('dashboard-reg-items');
     Route::get('/admin/items', [ProductController::class, 'admin_dashboard'])->name('dashboard-admin-items');
     Route::get('/products/{id}', [ProductController::class, 'showByID'])->name('products.showByID');
     Route::get('/product/image/{uuid}', [ProductController::class, 'getImage'])->name('product.image');
-    Route::get('/carttest', function () {
-        return view('cart');
-    })->name('carttest');
     Route::resource('/products', ProductController::class);
 
 
