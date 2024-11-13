@@ -60,7 +60,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/admin/items', [ProductController::class, 'admin_dashboard'])->name('dashboard-admin-items');
         Route::resource('/products', ProductController::class);
 
-        Route::resource('/categories', CategoryController::class);
+        Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
+        Route::post('categories/update/{category}', [CategoryController::class, 'update'])->name('categories.update');
+        Route::delete('categories/delete/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+        Route::resource('categories', CategoryController::class);
 
         Route::get('/admin/users', [UserController::class, 'index'])->name('users.index');
         Route::post('/users/{user}/promote', [UserController::class, 'promote'])->name('users.promote');

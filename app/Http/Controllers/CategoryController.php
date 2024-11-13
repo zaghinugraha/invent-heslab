@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Http\Requests\Category\StoreCategoryRequest;
-use App\Http\Requests\Category\UpdateCategoryRequest;
+use Illuminate\Http\Request;
 use Str;
 
 class CategoryController extends Controller
@@ -12,16 +11,13 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::where("user_id", auth()->id())->get();
-        return view('categories.index', compact('categories'));
+        return view("dashboard-admin-items", compact("categories"));
     }
 
-    public function create()
+    public function store(Request $request)
     {
-        return view('categories.create');
-    }
+        $request->validated();
 
-    public function store(StoreCategoryRequest $request)
-    {
         Category::create([
             "user_id" => auth()->id(),
             "name" => $request->name,
@@ -29,33 +25,22 @@ class CategoryController extends Controller
         ]);
 
         return redirect()
-            ->route('categories.index')
+            ->back()
             ->with('success', 'Category has been created!');
     }
 
-    public function show(Category $category)
+    public function update(Request $request, Category $category)
     {
-        return view('categories.show', [
-            'category' => $category
-        ]);
-    }
 
-    public function edit(Category $category)
-    {
-        return view('categories.edit', [
-            'category' => $category
-        ]);
-    }
+        $request->validated();
 
-    public function update(UpdateCategoryRequest $request, Category $category)
-    {
         $category->update([
             "name" => $request->name,
             "slug" => Str::slug($request->name)
         ]);
 
         return redirect()
-            ->route('categories.index')
+            ->back()
             ->with('success', 'Category has been updated!');
     }
 
@@ -64,7 +49,7 @@ class CategoryController extends Controller
         $category->delete();
 
         return redirect()
-            ->route('categories.index')
+            ->back()
             ->with('success', 'Category has been deleted!');
     }
 }
