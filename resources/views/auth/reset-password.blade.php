@@ -99,7 +99,7 @@
   </div>
 
   <!-- Footer -->
-  <footer class="absolute bottom-0 w-full text-center p-4 bg-white">
+  <footer class="fixed bottom-0 w-full text-center p-4 bg-white">
     <div class="flex items-center justify-center">
       <img src="{{ asset('images/logo_text.png') }}" alt="HES Vault Logo" class="h-6 mr-2">
       <p class="text-xs text-black font-semibold">&copy; 2024 HES VAULT. All rights reserved.</p>

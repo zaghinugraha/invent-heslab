@@ -45,7 +45,7 @@
 </head>
 <body class="flex items-center justify-center min-h-screen bg-cover bg-center background">
   <!-- Register Card -->
-  <div class="awe rounded-lg shadow-lg p-8 w-full max-w-sm mx-auto">
+  <div class="awe rounded-lg shadow-lg p-8 w-full max-w-sm mb-20">
     <!-- Logo and Title -->
     <div class="flex flex-col items-center">
       <img src="{{ asset('images/logo.png') }}" alt="HES Vault Logo" class="w-15 h-20 mb-4">
@@ -125,7 +125,7 @@
   </div>
 
   <!-- Footer -->
-  <footer class="absolute bottom-0 w-full text-center p-4 bg-white">
+  <footer class="fixed bottom-0 w-full text-center p-4 bg-white">
     <div class="flex items-center justify-center">
       <img src="{{ asset('images/logo_text.png') }}" alt="HES Vault Logo" class="h-6 mr-2">
       <p class="text-xs text-black font-semibold">&copy; 2024 HES VAULT. All rights reserved.</p>
