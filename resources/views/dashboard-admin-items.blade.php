@@ -318,7 +318,7 @@
                     x-text="selectedCategory.name"></span>?</p>
             <form :action="'/categories/' + selectedCategory.id" method="POST">
                 @csrf
-                @method('DELETE')
+                @method('delete')
                 <div class="flex justify-end">
                     <button type="button" @click="deleteCategory = false"
                         class="bg-gray-500 text-white px-4 py-2 rounded mr-2">
@@ -338,7 +338,7 @@
             <h2 class="text-xl font-bold gradient-text mb-4">Edit Category</h2>
             <form method="POST" :action="'/categories/' + selectedCategory.id">
                 @csrf
-                @method('PUT')
+                @method('put')
                 <!-- Category Name -->
                 <div class="mb-4">
                     <label for="edit-name" class="block text-gray-700">Category Name</label>
@@ -494,7 +494,7 @@ $maxQuantity = $products->max('quantity');
                                     <form action="{{ route('products.destroy', $product->uuid) }}" method="POST"
                                         style="display: inline;">
                                         @csrf
-                                        @method('DELETE')
+                                        @method('delete')
                                         <button
                                             class="w-24 text-center bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
                                             onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>

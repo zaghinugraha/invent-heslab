@@ -38,13 +38,13 @@ class ProductController extends Controller
 
         if ($request->has('search')) {
             $search = $request->input('search');
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'LIKE', "%{$search}%")
-                ->orWhere('brand', 'LIKE', "%{$search}%")
-                ->orWhere('source', 'LIKE', "%{$search}%")
-                ->orWhereHas('category', function($q) use ($search) {
-                    $q->where('name', 'LIKE', "%{$search}%");
-                });
+                    ->orWhere('brand', 'LIKE', "%{$search}%")
+                    ->orWhere('source', 'LIKE', "%{$search}%")
+                    ->orWhereHas('category', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    });
             });
         }
 
@@ -70,13 +70,13 @@ class ProductController extends Controller
 
         if ($request->has('search')) {
             $search = $request->input('search');
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'LIKE', "%{$search}%")
-                ->orWhere('brand', 'LIKE', "%{$search}%")
-                ->orWhere('source', 'LIKE', "%{$search}%")
-                ->orWhereHas('category', function($q) use ($search) {
-                    $q->where('name', 'LIKE', "%{$search}%");
-                });
+                    ->orWhere('brand', 'LIKE', "%{$search}%")
+                    ->orWhere('source', 'LIKE', "%{$search}%")
+                    ->orWhereHas('category', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    });
             });
         }
 
@@ -137,24 +137,24 @@ class ProductController extends Controller
                 'field' => 'code',
                 'length' => 4,
                 'product_image' => $imageData,
-                'specification'=> $request->specification,
+                'specification' => $request->specification,
                 'prefix' => 'PC'
             ]),
 
-            'product_image'     => $imageData,
-            'name'              => $request->name,
-            'category_id'       => $request->category_id,
-            'quantity'          => $request->quantity,
-            'quantity_alert'    => $request->quantity_alert,
-            'notes'             => $request->notes,
-            'specification'     => $htmlSpecification,
-            'price'             => $request->price,
-            'brand'             => $request->brand,
-            'source'            => $request->source,
-            'dateArrival'       => $request->dateArrival,
-            'user_id'           => auth()->id(),
-            'slug'              => Str::slug($request->name, '-'),
-            'uuid'              => Str::uuid()
+            'product_image' => $imageData,
+            'name' => $request->name,
+            'category_id' => $request->category_id,
+            'quantity' => $request->quantity,
+            'quantity_alert' => $request->quantity_alert,
+            'notes' => $request->notes,
+            'specification' => $htmlSpecification,
+            'price' => $request->price,
+            'brand' => $request->brand,
+            'source' => $request->source,
+            'dateArrival' => $request->dateArrival,
+            'user_id' => auth()->id(),
+            'slug' => Str::slug($request->name, '-'),
+            'uuid' => Str::uuid()
         ]);
         return to_route('dashboard-admin-items')->with('success', 'Product has been created!');
     }
@@ -184,7 +184,7 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, $uuid)
     {
-        
+
         $product = Product::where("uuid", $uuid)->firstOrFail();
 
         // Handle the product image (if applicable)

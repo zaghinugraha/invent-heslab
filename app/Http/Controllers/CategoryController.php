@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Models\Requests\Category\StoreCategoryRequest;
+use App\Models\Requests\Category\UpdateCategoryRequest;
 use Str;
 
 class CategoryController extends Controller
@@ -14,7 +15,7 @@ class CategoryController extends Controller
         return view("dashboard-admin-items", compact("categories"));
     }
 
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
         $request->validated();
 
@@ -24,12 +25,10 @@ class CategoryController extends Controller
             "slug" => Str::slug($request->name)
         ]);
 
-        return redirect()
-            ->back()
-            ->with('success', 'Category has been created!');
+        return redirect()->route("dashboard-admin-items")->with("success", "Category has been created!");
     }
 
-    public function update(Request $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
 
         $request->validated();
@@ -40,7 +39,7 @@ class CategoryController extends Controller
         ]);
 
         return redirect()
-            ->back()
+            ->route("dashboard-admin-items")
             ->with('success', 'Category has been updated!');
     }
 
@@ -49,7 +48,7 @@ class CategoryController extends Controller
         $category->delete();
 
         return redirect()
-            ->back()
+            ->route("dashboard-admin-items")
             ->with('success', 'Category has been deleted!');
     }
 }
