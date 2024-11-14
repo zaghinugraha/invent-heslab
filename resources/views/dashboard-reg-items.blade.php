@@ -84,9 +84,14 @@
         @foreach ($products as $product)
             <a href="{{ route('products.showByID', $product->id) }}" class="block">
                 <div class="border border-gray-300 rounded-lg p-4 hover:shadow-lg relative">
+                    <!-- Spinner -->
+                    <div class="spinner-container flex items-center justify-center w-full h-32 mb-4">
+                        <div class="spinner"></div>
+                    </div>
                     <!-- Existing card content -->
                     <img src="{{ route('product.image', $product->uuid) }}" alt="{{ $product->name }}"
-                        class="w-full h-32 object-cover rounded-md mb-4">
+                        class="w-full h-32 object-cover rounded-md mb-4 hidden"
+                        onload="this.style.display='block'; this.previousElementSibling.style.display='none';">
                     <div class="flex justify-between items-center mb-2">
                         <h3 class="text-gray-800 font-semibold">{{ $product->name }}</h3>
 

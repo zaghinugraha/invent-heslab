@@ -56,6 +56,21 @@
             left: 0;
             width: 100%;
         }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #7983ff;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
@@ -122,10 +137,10 @@
             <!-- Notifications Modal -->
             <div x-show="showNotifications" @click.away="showNotifications = false"
                 class="fixed right-10 top-20 flex items-center justify-center bg-white bg-opacity-0 z-20">
-                <div class="bg-white p-6 rounded-lg shadow-lg w-full mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg sm:w-1/2 md:w-full mb-8">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold gradient-text">Notifications</h2>
-                        <button class="text-blue-600 hover:underline">Mark all as read</button>
+                        <h2 class="md:text-xl sm:text-sm font-bold gradient-text">Notifications</h2>
+                        <button class="text-blue-600 hover:underline sm:text-xs md:text-sm">Mark all as read</button>
                     </div>
                     <hr class="mb-4">
                     <ul class="max-h-40 overflow-y-auto">

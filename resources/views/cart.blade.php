@@ -131,8 +131,8 @@
                     <div class="border border-blue-300 bg-blue-50 rounded p-4">
                         @foreach ($cartItems as $item)
                             <div class="flex items-center gap-4 mb-4">
-                                <img src="{{ $item->options->product_image }}" alt="{{ $item->name }}"
-                                    class="w-16 h-16 rounded-lg object-cover">
+                                <img src="data:image/jpeg;base64,{{ base64_encode($item->options->product_image) }}"
+                                    alt="{{ $item->name }}" class="w-16 h-16 rounded-lg object-cover">
                                 <div class="flex-grow">
                                     <h3 class="text-xl font-semibold text-blue-700">{{ $item->name }}</h3>
                                     <p class="text-sm text-gray-600">Quantity: {{ $item->qty }}</p>
