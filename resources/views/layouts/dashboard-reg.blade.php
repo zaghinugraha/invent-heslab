@@ -100,7 +100,7 @@
                             fill="#0F0F0F" />
                     </svg>
                     <span
-                        class="absolute top-0 right-0 inline-block w-4 h-4 bg-red-600 text-white text-xs font-semibold rounded-full text-center">{{ Cart::count() }}</span>
+                        class="absolute top-0 right-0 inline-block w-4 h-4 bg-red-600 text-white text-xs font-semibold rounded-full text-center">{{ Cart::instance('cart')->count() }}</span>
                 </a>
                 <button class="relative" @click="showNotifications = !showNotifications">
                     <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
