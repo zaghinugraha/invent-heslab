@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'HES Vault Dashboard')</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
@@ -74,7 +75,7 @@
     </style>
 </head>
 
-<body class="bg-gray-100 flex flex-col min-h-screen" x-data="{ confirmLogout: false, propil: false, addTeam: false, newItem: false, showNotifications: false }">
+<body class="bg-gray-100 flex flex-col min-h-screen" x-data="{ confirmLogout: false, propil: false, addTeam: false, newItem: false, showNotifications: false, showFilter: false, changeLang: false }">
     <div class="flex flex-col flex-grow">
         <!-- Header -->
         <header class="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4 bg-white shadow-md z-10">
@@ -85,7 +86,7 @@
                         class="w-5 h-5 text-gray-400" alt="Menu">
                 </button>
             </div>
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-5">
                 <button class="relative">
                     <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -114,17 +115,20 @@
                     <span
                         class="absolute top-0 right-0 inline-block w-4 h-4 bg-red-600 text-white text-xs font-semibold rounded-full text-center">3</span>
                 </button>
-                <!-- poto propil user -->
+                {{-- add button for change language --}}
                 <div class="relative">
-                    <img src="{{ asset('images/profil.png') }}" alt="User Avatar"
-                        class="w-8 h-8 rounded-full border border-gray-300 cursor-pointer" @click="propil = !propil">
-                    <div x-show="propil" @click.away="propil = false"
-                        class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20">
-                        <a href="#" @click.prevent="confirmLogout = true, propil = false"
-                            class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Log Out</a>
+                    <!-- poto propil user -->
+                    <div class="relative">
+                        <img src="{{ asset('images/profil.png') }}" alt="User Avatar"
+                            class="w-8 h-8 rounded-full border border-gray-300 cursor-pointer"
+                            @click="propil = !propil">
+                        <div x-show="propil" @click.away="propil = false"
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20">
+                            <a href="#" @click.prevent="confirmLogout = true, propil = false"
+                                class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Log Out</a>
+                        </div>
                     </div>
                 </div>
-            </div>
         </header>
 
         <div class="flex">

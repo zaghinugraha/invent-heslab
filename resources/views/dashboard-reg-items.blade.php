@@ -24,7 +24,7 @@
                         <line x1="5" y1="17" x2="19" y2="17" stroke="#000000" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Item List</span>
+                    <span class="sidebar-text">Daftar Barang</span>
                 </a>
                 <a href="{{ route('dashboard-reg-rent') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -39,7 +39,7 @@
                         <path d="M9 14H10" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Rent Status</span>
+                    <span class="sidebar-text">Status Peminjaman</span>
                 </a>
                 <a href="{{ route('dashboard-reg-history') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -49,11 +49,61 @@
                         <path d="M12 6V12L16 16" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text ml-3">History</span>
+                    <span class="sidebar-text ml-3">Riwayat</span>
                 </a>
             </nav>
         </div>
     </aside>
+@endsection
+
+@section('modals')
+    {{-- Filter Modal --}}
+    <div x-show="showFilter" @click.away="showFilter = false"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg w-1/2">
+            <h2 class="text-2xl font-bold mb-4 gradient-text">Filter</h2>
+            <form action="{{ route('dashboard-reg-items') }}" method="GET">
+                <!-- Include existing search query -->
+                <input type="hidden" name="search" value="{{ $searchQuery ?? '' }}">
+                <div class="flex flex-col space-y-4">
+                    <!-- Category Filter -->
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+                        <select name="category" id="category" class="mt-1 block w-full px-3 py-2 border rounded-md">
+                            <option value="all" {{ ($selectedCategory ?? 'all') == 'all' ? 'selected' : '' }}>All
+                            </option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    {{ ($selectedCategory ?? '') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <!-- Availability Filter -->
+                    <div>
+                        <label for="availability" class="block text-sm font-medium text-gray-700">Availability</label>
+                        <select name="availability" id="availability" class="mt-1 block w-full px-3 py-2 border rounded-md">
+                            <option value="all" {{ ($selectedAvailability ?? 'all') == 'all' ? 'selected' : '' }}>All
+                            </option>
+                            <option value="available" {{ ($selectedAvailability ?? '') == 'available' ? 'selected' : '' }}>
+                                Available</option>
+                            <option value="unavailable"
+                                {{ ($selectedAvailability ?? '') == 'unavailable' ? 'selected' : '' }}>Unavailable</option>
+                        </select>
+                    </div>
+                    <!-- Form Buttons -->
+                    <div class="flex justify-end">
+                        <button type="submit"
+                            class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Apply</button>
+                        <button type="button"
+                            class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg ml-2 hover:bg-gray-400"
+                            @click="showFilter = false">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection
 
 @section('content')
@@ -73,9 +123,8 @@
                     </svg>
                 </button>
             </form>
-            <button class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
-                Filter
-            </button>
+            <button @click="showFilter = !showFilter"
+                class="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400">Filter</button>
         </div>
     </div>
 

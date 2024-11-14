@@ -80,10 +80,27 @@ class ProductController extends Controller
             });
         }
 
+        if ($request->has('category') && $request->category != 'all') {
+            $query->where('category_id', $request->category);
+        }
+
+        if ($request->has('availability') && $request->availability != 'all') {
+            if ($request->availability == 'available') {
+                $query->where('quantity', '>', 0);
+            } elseif ($request->availability == 'unavailable') {
+                $query->where('quantity', '<=', 0);
+            }
+        }
+
         $products = $query->paginate(9);
+        $categories = Category::all();
 
         return view('dashboard-reg-items', [
             'products' => $products,
+            'categories' => $categories,
+            'selectedCategory' => $request->category,
+            'selectedAvailability' => $request->availability,
+            'searchQuery' => $request->search,
         ]);
     }
 

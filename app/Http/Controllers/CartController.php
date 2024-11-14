@@ -12,6 +12,12 @@ class CartController extends Controller
     public function index()
     {
         $cartItems = Cart::instance('cart')->content();
+
+        foreach ($cartItems as $item) {
+            $product = Product::find($item->id);
+            $item->options->max_quantity = $product->quantity;
+        }
+
         return view('cart', ['cartItems' => $cartItems]);
     }
 
@@ -100,7 +106,17 @@ class CartController extends Controller
                 'quantity' => 'required|numeric|min:1'
             ]);
 
+            $item = Cart::instance('cart')->get($rowId);
+            $product = Product::findOrFail($item->id);
+
+            if ($request->quantity > $product->quantity) {
+                return redirect()->back()->with('error', 'Requested quantity not available.');
+            }
+
             Cart::instance('cart')->update($rowId, $request->quantity);
+
+            $subtotal = Cart::instance('cart')->subtotal(0, ',', '.');
+
             return redirect()->back()->with('success', 'Cart updated successfully.');
         } catch (\Exception $e) {
             Log::error('Cart update error: ' . $e->getMessage());

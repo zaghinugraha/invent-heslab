@@ -73,9 +73,106 @@
         @endif
 
         <!-- Cart Items -->
-        <div class="flex gap-8 p-8">
+        <div class="flex flex-col lg:flex-row gap-8 p-8">
+            <!-- Cart Section -->
+            <div class="w-full lg:w-1/2 order-1 lg:order-2">
+                @if ($cartItems->isNotEmpty())
+                    <div class="border-2 border-blue-300 bg-blue-50 rounded p-4 shadow-lg">
+                        @foreach ($cartItems as $item)
+                            <div class="flex flex-row items-start gap-4 mb-4">
+                                <!-- Product Image -->
+                                <img src="data:image/jpeg;base64,{{ base64_encode($item->options->product_image) }}"
+                                    alt="{{ $item->name }}" class="w-20 h-20 rounded-lg object-cover shadow-md">
+
+                                <!-- Product Details -->
+                                <div class="flex-grow">
+                                    <h3 class="text-xl font-bold text-blue-700">{{ $item->name }}</h3>
+
+                                    <!-- Quantity Update Form -->
+                                    <form action="{{ route('cart.update', $item->rowId) }}" method="POST"
+                                        class="flex flex-row items-center mt-2 w-full">
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="flex items-center border border-blue-500 rounded overflow-hidden">
+                                            <button type="button" onclick="decreaseQuantity('{{ $item->rowId }}')"
+                                                class="px-2 py-1 text-gray-600 hover:bg-gray-200 focus:outline-none">
+                                                &minus;
+                                            </button>
+                                            <input type="text" name="quantity" id="quantity-{{ $item->rowId }}"
+                                                value="{{ $item->qty }}"
+                                                class="w-12 text-center focus:outline-none bg-transparent"
+                                                oninput="validateQuantity(this, {{ $item->options->max_quantity }})">
+                                            <button type="button"
+                                                onclick="increaseQuantity('{{ $item->rowId }}', {{ $item->options->max_quantity }})"
+                                                class="px-2 py-1 text-gray-600 hover:bg-gray-200 focus:outline-none">
+                                                &#43;
+                                            </button>
+                                        </div>
+                                        <div class="flex-grow"></div>
+                                        <div class="flex items-center ml-2 mt-2 sm:mt-0">
+                                            <button type="submit" class="text-blue-600 hover:text-blue-800">
+                                                <!-- Update Icon -->
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            </button>
+                                            <form action="{{ route('cart.remove', $item->rowId) }}" method="POST"
+                                                class="inline ml-2">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-800">
+                                                    <!-- Remove Icon -->
+                                                    <svg class="w-6 h-6" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </form>
+
+                                    <!-- Price -->
+                                    <p class="text-sm text-gray-400 font-semibold">
+                                        Rp {{ number_format($item->price, 0, ',', '.') }}/item
+                                    </p>
+                                </div>
+                            </div>
+                            <hr class="mb-4">
+                        @endforeach
+
+                        <!-- Cart Summary -->
+                        <div class="mt-6 pt-4">
+                            <div class="flex justify-between items-center font-semibold text-lg">
+                                <span>Total</span>
+                                <span class="text-blue-700">
+                                    Rp {{ Cart::instance('cart')->subtotal(0, ',', '.') }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Clear Cart Button -->
+                        <form action="{{ route('cart.clear') }}" method="POST" class="mt-4">
+                            @csrf
+                            <button type="submit"
+                                class="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600">
+                                Clear Cart
+                            </button>
+                        </form>
+                    </div>
+                @else
+                    <div class="flex items-center justify-center h-full">
+                        <div>
+                            <h3 class="text-xl font-semibold text-blue-700">Your cart is empty.</h3>
+                        </div>
+                    </div>
+                @endif
+            </div>
+
             <!-- Form Section -->
-            <div class="w-1/2">
+            <div class="w-full lg:w-1/2 order-2 lg:order-1">
                 <!-- Display Validation Errors -->
                 @if ($errors->any())
                     <div class="bg-red-100 text-red-700 p-2 rounded mb-4">
@@ -88,6 +185,8 @@
                 @endif
                 <form action="#" method="POST" enctype="multipart/form-data">
                     @csrf
+                    <h1 class="block text-gray-700 text-xl gradient-text font-bold mb-2">Fill in the Form</h1>
+                    <hr class="mb-4">
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">NIM/NIP</label>
                         <input type="text" name="nim_nip" value="{{ old('nim_nip') }}" required
@@ -124,60 +223,33 @@
                     </button>
                 </form>
             </div>
-
-            <!-- Cart Section -->
-            <div class="w-1/2">
-                @if ($cartItems->isNotEmpty())
-                    <div class="border border-blue-300 bg-blue-50 rounded p-4">
-                        @foreach ($cartItems as $item)
-                            <div class="flex items-center gap-4 mb-4">
-                                <img src="data:image/jpeg;base64,{{ base64_encode($item->options->product_image) }}"
-                                    alt="{{ $item->name }}" class="w-16 h-16 rounded-lg object-cover">
-                                <div class="flex-grow">
-                                    <h3 class="text-xl font-semibold text-blue-700">{{ $item->name }}</h3>
-                                    <p class="text-sm text-gray-600">Quantity: {{ $item->qty }}</p>
-                                    <p class="text-lg text-blue-700 font-medium">Rp
-                                        {{ number_format($item->price, 0, ',', '.') }}</p>
-                                </div>
-                                <!-- Remove Item Form -->
-                                <form action="{{ route('cart.remove', $item->rowId) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-800">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </form>
-                            </div>
-                        @endforeach
-
-                        <!-- Cart Summary -->
-                        <div class="mt-6 border-t border-gray-200 pt-4">
-                            <div class="flex justify-between items-center font-semibold text-lg">
-                                <span>Total</span>
-                                <span class="text-blue-700">Rp {{ Cart::instance('cart')->subtotal(0, ',', '.') }}</span>
-                            </div>
-                        </div>
-
-                        <!-- Clear Cart Button -->
-                        <form action="{{ route('cart.clear') }}" method="POST" class="mt-4">
-                            @csrf
-                            <button type="submit"
-                                class="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600">
-                                Clear Cart
-                            </button>
-                        </form>
-                    </div>
-                @else
-                    <div class="flex items-center justify-center h-full">
-                        <div>
-                            <h3 class="text-xl font-semibold text-blue-700">Your cart is empty.</h3>
-                        </div>
-                    </div>
-                @endif
-            </div>
         </div>
     </div>
 @endsection
+
+<script>
+    function decreaseQuantity(rowId) {
+        var input = document.getElementById('quantity-' + rowId);
+        var value = parseInt(input.value);
+        if (value > 1) {
+            input.value = value - 1;
+        }
+    }
+
+    function increaseQuantity(rowId, maxQuantity) {
+        var input = document.getElementById('quantity-' + rowId);
+        var value = parseInt(input.value);
+        if (value < maxQuantity) {
+            input.value = value + 1;
+        }
+    }
+
+    function validateQuantity(input, maxQuantity) {
+        var value = parseInt(input.value);
+        if (isNaN(value) || value < 1) {
+            input.value = 1;
+        } else if (value > maxQuantity) {
+            input.value = maxQuantity;
+        }
+    }
+</script>

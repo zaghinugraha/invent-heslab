@@ -31,7 +31,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
     Route::delete('/cart/{rowId}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::put('/cart/{rowId}', [CartController::class, 'update'])->name('cart.update');
+    Route::put('/cart//update/{rowId}', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
     Route::get('/cart/test', [CartController::class, 'testCart']);
     Route::get('/session/test', [CartController::class, 'checkSession']);
