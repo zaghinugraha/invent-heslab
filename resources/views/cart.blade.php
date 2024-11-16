@@ -53,7 +53,7 @@
     <ol class="flex text-sm text-gray-500">
         <li><a href="{{ route('dashboard-reg-items') }}" class="hover:underline">Item List</a></li>
         <li class="mx-2">/</li>
-        <li class="font-bold">Cart</li>
+        <li class="font-bold">Confirm Rent</li>
     </ol>
 @endsection
 
@@ -183,38 +183,47 @@
                         </ul>
                     </div>
                 @endif
-                <form action="#" method="POST" enctype="multipart/form-data">
+
+                <form action="{{ route('rent.store') }}" method="POST">
                     @csrf
                     <h1 class="block text-gray-700 text-xl gradient-text font-bold mb-2">Fill in the Form</h1>
                     <hr class="mb-4">
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">NIM/NIP</label>
-                        <input type="text" name="nim_nip" value="{{ old('nim_nip') }}" required
-                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
+                        <input type="text" name="nim_nip" value="{{ old('nim_nip') }}" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                     </div>
                     <div class="mb-6">
-                        <label class="block text-gray-700 font-medium mb-2">No. Wa Aktif</label>
-                        <input type="text" name="phone" value="{{ old('phone') }}" required
-                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
+                        <label class="block text-gray-700 font-medium mb-2">Nomor WhatsApp Aktif</label>
+                        <input type="text" name="phone" value="{{ old('phone') }}" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                     </div>
                     <div class="mb-6">
-                        <label class="block text-gray-700 font-medium mb-2">Foto KTM</label>
-                        <input type="file" name="ktm_image" required
-                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" />
+                        <label class="block text-gray-700 font-medium mb-2">Upload KTM Image</label>
+                        <input type="file" name="ktm_image" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" required />
                     </div>
                     <div class="flex gap-4 mb-6">
                         <div class="w-1/2">
                             <label class="block text-gray-700 font-medium mb-2">Rent Date</label>
-                            <input type="date" name="rent_date" value="{{ old('rent_date') }}" required
-                                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
+                            <input type="date" name="rent_date" value="{{ old('start_date') }}" required
+                                   class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                         </div>
                         <div class="w-1/2">
                             <label class="block text-gray-700 font-medium mb-2">Return Date</label>
-                            <input type="date" name="return_date" value="{{ old('return_date') }}" required
-                                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
+                            <input type="date" name="return_date" value="{{ old('end_date') }}" required
+                                   class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                         </div>
                     </div>
-                    <p class="text-red-500 text-sm italic">* Pastikan Data Sudah Benar</p>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-medium mb-2">Payment Method</label>
+                        <select name="payment_method" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
+                            <option value="credit_card">Credit Card</option>
+                            <option value="bank_transfer">Bank Transfer</option>
+                            <option value="e_wallet">E-Wallet</option>
+                        </select>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-medium mb-2">Notes</label>
+                        <textarea name="notes" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">{{ old('notes') }}</textarea>
+                    </div>
 
                     <!-- Submit Button -->
                     <button type="submit"
@@ -222,6 +231,60 @@
                         Rent Now
                     </button>
                 </form>
+            </div>
+
+            <!-- Cart Section -->
+            <div class="w-1/2">
+                @if ($cartItems->isNotEmpty())
+                    <div class="border border-blue-300 bg-blue-50 rounded p-4">
+                        @foreach ($cartItems as $item)
+                            <div class="flex items-center gap-4 mb-4">
+                                <img src="data:image/jpeg;base64,{{ base64_encode($item->options->product_image) }}"
+                                    alt="{{ $item->name }}" class="w-16 h-16 rounded-lg object-cover">
+                                <div class="flex-grow">
+                                    <h3 class="text-xl font-semibold text-blue-700">{{ $item->name }}</h3>
+                                    <p class="text-sm text-gray-600">Quantity: {{ $item->qty }}</p>
+                                    <p class="text-lg text-blue-700 font-medium">Rp
+                                        {{ number_format($item->price, 0, ',', '.') }}</p>
+                                </div>
+                                <!-- Remove Item Form -->
+                                <form action="{{ route('cart.remove', $item->rowId) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-800">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </form>
+                            </div>
+                        @endforeach
+
+                        <!-- Cart Summary -->
+                        <div class="mt-6 border-t border-gray-200 pt-4">
+                            <div class="flex justify-between items-center font-semibold text-lg">
+                                <span>Total</span>
+                                <span class="text-blue-700">Rp {{ Cart::instance('cart')->subtotal(0, ',', '.') }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Clear Cart Button -->
+                        <form action="{{ route('cart.clear') }}" method="POST" class="mt-4">
+                            @csrf
+                            <button type="submit"
+                                class="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600">
+                                Clear Cart
+                            </button>
+                        </form>
+                    </div>
+                @else
+                    <div class="flex items-center justify-center h-full">
+                        <div>
+                            <h3 class="text-xl font-semibold text-blue-700">Your cart is empty.</h3>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

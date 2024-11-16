@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\RentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TeamController;
@@ -25,6 +26,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/reg/history', function () {
         return view('dashboard-reg-history');
     })->name('dashboard-reg-history');
+
+    // Route for Rent
+    Route::get('/rent/create', [RentController::class, 'createInvoice'])->name('rent.create');
+    Route::post('/rent', [RentController::class, 'store'])->name('rent.store');
+    Route::get('/rent/{id}', [RentController::class, 'show'])->name('rent.show');
+
 
 
     //  Route for Cart

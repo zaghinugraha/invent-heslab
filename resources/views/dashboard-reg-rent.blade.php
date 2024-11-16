@@ -1,5 +1,7 @@
 @extends('layouts.dashboard-reg')
 
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 @section('title', 'Rent Status')
 
 @section('heading', 'Rent Status')
