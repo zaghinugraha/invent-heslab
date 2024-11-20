@@ -19,9 +19,7 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', [RedirectController::class, 'index'])->name('dashboard');
     Route::get('/reg/items', [ItemController::class, 'showAllRegular'])->name('dashboard-reg-items');
-    Route::get('/reg/rent', function () {
-        return view('dashboard-reg-rent');
-    })->name('dashboard-reg-rent');
+    Route::get('/reg/rent', [RentController::class, 'fetch'])->name('dashboard-reg-rent');
 
     Route::get('/reg/history', function () {
         return view('dashboard-reg-history');
@@ -37,8 +35,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     //  Route for Cart
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-    Route::delete('/cart/{rowId}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::put('/cart//update/{rowId}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('cart/remove/{rowId}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::put('/cart/update/{rowId}', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
     Route::get('/cart/test', [CartController::class, 'testCart']);
     Route::get('/session/test', [CartController::class, 'checkSession']);

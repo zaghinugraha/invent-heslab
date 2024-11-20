@@ -87,53 +87,53 @@
                                 <!-- Product Details -->
                                 <div class="flex-grow">
                                     <h3 class="text-xl font-bold text-blue-700">{{ $item->name }}</h3>
-
-                                    <!-- Quantity Update Form -->
-                                    <form action="{{ route('cart.update', $item->rowId) }}" method="POST"
-                                        class="flex flex-row items-center mt-2 w-full">
-                                        @csrf
-                                        @method('PUT')
-                                        <div class="flex items-center border border-blue-500 rounded overflow-hidden">
-                                            <button type="button" onclick="decreaseQuantity('{{ $item->rowId }}')"
-                                                class="px-2 py-1 text-gray-600 hover:bg-gray-200 focus:outline-none">
-                                                &minus;
-                                            </button>
-                                            <input type="text" name="quantity" id="quantity-{{ $item->rowId }}"
-                                                value="{{ $item->qty }}"
-                                                class="w-12 text-center focus:outline-none bg-transparent"
-                                                oninput="validateQuantity(this, {{ $item->options->max_quantity }})">
-                                            <button type="button"
-                                                onclick="increaseQuantity('{{ $item->rowId }}', {{ $item->options->max_quantity }})"
-                                                class="px-2 py-1 text-gray-600 hover:bg-gray-200 focus:outline-none">
-                                                &#43;
-                                            </button>
-                                        </div>
-                                        <div class="flex-grow"></div>
-                                        <div class="flex items-center ml-2 mt-2 sm:mt-0">
-                                            <button type="submit" class="text-blue-600 hover:text-blue-800">
-                                                <!-- Update Icon -->
-                                                <svg class="w-6 h-6" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M5 13l4 4L19 7" />
-                                                </svg>
-                                            </button>
-                                            <form action="{{ route('cart.remove', $item->rowId) }}" method="POST"
-                                                class="inline ml-2">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-800">
-                                                    <!-- Remove Icon -->
+                                    <div class="flex items-center mt-2 w-full">
+                                        <!-- Quantity Update Form -->
+                                        <form action="{{ route('cart.update', $item->rowId) }}" method="POST"
+                                            class="flex items-center">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="flex items-center border border-blue-500 rounded overflow-hidden">
+                                                <button type="button" onclick="decreaseQuantity('{{ $item->rowId }}')"
+                                                    class="px-2 py-1 text-gray-600 hover:bg-gray-200 focus:outline-none">
+                                                    &minus;
+                                                </button>
+                                                <input type="text" name="quantity" id="quantity-{{ $item->rowId }}"
+                                                    value="{{ $item->qty }}"
+                                                    class="w-12 text-center focus:outline-none bg-transparent"
+                                                    oninput="validateQuantity(this, {{ $item->options->max_quantity }})">
+                                                <button type="button"
+                                                    onclick="increaseQuantity('{{ $item->rowId }}', {{ $item->options->max_quantity }})"
+                                                    class="px-2 py-1 text-gray-600 hover:bg-gray-200 focus:outline-none">
+                                                    &#43;
+                                                </button>
+                                            </div>
+                                            <div class="flex-grow"></div>
+                                            <div class="flex items-center ml-2 mt-2 sm:mt-0">
+                                                <button type="submit" class="text-blue-600 hover:text-blue-800">
+                                                    <!-- Update Icon -->
                                                     <svg class="w-6 h-6" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                            stroke-width="2" d="M5 13l4 4L19 7" />
                                                     </svg>
                                                 </button>
-                                            </form>
-                                        </div>
-                                    </form>
-
+                                            </div>
+                                        </form>
+                                        <form action="{{ route('cart.remove', $item->rowId) }}" method="POST"
+                                            class="inline ml-2">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:text-red-800">
+                                                <!-- Remove Icon -->
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
                                     <!-- Price -->
                                     <p class="text-sm text-gray-400 font-semibold">
                                         Rp {{ number_format($item->price, 0, ',', '.') }}/item
@@ -146,7 +146,7 @@
                         <!-- Cart Summary -->
                         <div class="mt-6 pt-4">
                             <div class="flex justify-between items-center font-semibold text-lg">
-                                <span>Total</span>
+                                <span>Total :</span>
                                 <span class="text-blue-700">
                                     Rp {{ Cart::instance('cart')->subtotal(0, ',', '.') }}
                                 </span>
@@ -163,9 +163,11 @@
                         </form>
                     </div>
                 @else
-                    <div class="flex items-center justify-center h-full">
-                        <div>
-                            <h3 class="text-xl font-semibold text-blue-700">Your cart is empty.</h3>
+                    <div class="border-2 border-blue-300 bg-blue-50 rounded p-4 shadow-lg">
+                        <div class="flex items-center justify-center h-1/2">
+                            <div>
+                                <h3 class="text-xl font-semibold text-blue-700">Your cart is empty.</h3>
+                            </div>
                         </div>
                     </div>
                 @endif
@@ -184,37 +186,42 @@
                     </div>
                 @endif
 
-                <form action="{{ route('rent.store') }}" method="POST">
+                <form action="{{ route('rent.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <h1 class="block text-gray-700 text-xl gradient-text font-bold mb-2">Fill in the Form</h1>
                     <hr class="mb-4">
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">NIM/NIP</label>
-                        <input type="text" name="nim_nip" value="{{ old('nim_nip') }}" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
+                        <input type="text" name="nim_nip" value="{{ old('nim_nip') }}" required
+                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                     </div>
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">Nomor WhatsApp Aktif</label>
-                        <input type="text" name="phone" value="{{ old('phone') }}" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
+                        <input type="text" name="phone" value="{{ old('phone') }}" required
+                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                     </div>
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">Upload KTM Image</label>
-                        <input type="file" name="ktm_image" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" required />
+                        <input type="file" name="ktm_image"
+                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                            required />
                     </div>
                     <div class="flex gap-4 mb-6">
                         <div class="w-1/2">
                             <label class="block text-gray-700 font-medium mb-2">Rent Date</label>
-                            <input type="date" name="rent_date" value="{{ old('start_date') }}" required
-                                   class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
+                            <input type="date" name="start_date" value="{{ old('start_date') }}" required
+                                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                         </div>
                         <div class="w-1/2">
                             <label class="block text-gray-700 font-medium mb-2">Return Date</label>
-                            <input type="date" name="return_date" value="{{ old('end_date') }}" required
-                                   class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
+                            <input type="date" name="end_date" value="{{ old('end_date') }}" required
+                                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                         </div>
                     </div>
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">Payment Method</label>
-                        <select name="payment_method" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
+                        <select name="payment_method" required
+                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                             <option value="credit_card">Credit Card</option>
                             <option value="bank_transfer">Bank Transfer</option>
                             <option value="e_wallet">E-Wallet</option>
@@ -222,7 +229,8 @@
                     </div>
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">Notes</label>
-                        <textarea name="notes" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">{{ old('notes') }}</textarea>
+                        <textarea name="notes"
+                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">{{ old('notes') }}</textarea>
                     </div>
 
                     <!-- Submit Button -->
@@ -231,60 +239,6 @@
                         Rent Now
                     </button>
                 </form>
-            </div>
-
-            <!-- Cart Section -->
-            <div class="w-1/2">
-                @if ($cartItems->isNotEmpty())
-                    <div class="border border-blue-300 bg-blue-50 rounded p-4">
-                        @foreach ($cartItems as $item)
-                            <div class="flex items-center gap-4 mb-4">
-                                <img src="data:image/jpeg;base64,{{ base64_encode($item->options->product_image) }}"
-                                    alt="{{ $item->name }}" class="w-16 h-16 rounded-lg object-cover">
-                                <div class="flex-grow">
-                                    <h3 class="text-xl font-semibold text-blue-700">{{ $item->name }}</h3>
-                                    <p class="text-sm text-gray-600">Quantity: {{ $item->qty }}</p>
-                                    <p class="text-lg text-blue-700 font-medium">Rp
-                                        {{ number_format($item->price, 0, ',', '.') }}</p>
-                                </div>
-                                <!-- Remove Item Form -->
-                                <form action="{{ route('cart.remove', $item->rowId) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-800">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </form>
-                            </div>
-                        @endforeach
-
-                        <!-- Cart Summary -->
-                        <div class="mt-6 border-t border-gray-200 pt-4">
-                            <div class="flex justify-between items-center font-semibold text-lg">
-                                <span>Total</span>
-                                <span class="text-blue-700">Rp {{ Cart::instance('cart')->subtotal(0, ',', '.') }}</span>
-                            </div>
-                        </div>
-
-                        <!-- Clear Cart Button -->
-                        <form action="{{ route('cart.clear') }}" method="POST" class="mt-4">
-                            @csrf
-                            <button type="submit"
-                                class="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600">
-                                Clear Cart
-                            </button>
-                        </form>
-                    </div>
-                @else
-                    <div class="flex items-center justify-center h-full">
-                        <div>
-                            <h3 class="text-xl font-semibold text-blue-700">Your cart is empty.</h3>
-                        </div>
-                    </div>
-                @endif
             </div>
         </div>
     </div>

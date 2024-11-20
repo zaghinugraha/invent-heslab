@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\Requests\Category\StoreCategoryRequest;
-use App\Models\Requests\Category\UpdateCategoryRequest;
+use App\Http\Requests\Category\StoreCategoryRequest;
+use App\Http\Requests\Category\UpdateCategoryRequest;
 use Str;
 
 class CategoryController extends Controller

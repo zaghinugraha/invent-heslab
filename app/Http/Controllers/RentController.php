@@ -47,8 +47,8 @@ class RentController extends Controller
                 'end_date' => $request->end_date,
                 'total_cost' => Cart::instance('cart')->total(0, '', ''),
                 'payment_method' => $request->payment_method,
-                'payment_status' => 'pending',
-                'order_status' => 'active',
+                'payment_status' => 'not available',
+                'order_status' => 'waiting',
                 'notes' => $request->notes,
                 'nim_nip' => $request->nim_nip,
                 'phone' => $request->phone,
@@ -75,7 +75,7 @@ class RentController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'Error creating rent order. Please try again.');
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
@@ -85,5 +85,28 @@ class RentController extends Controller
         $rent = Rent::with('items')->findOrFail($id);
 
         return view('rent.show', compact('rent'));
+    }
+
+    public function fetch()
+    {
+        // Update rents to 'overdue' where 'end_date' is past and status is 'active'
+        Rent::where('user_id', Auth::id())
+            ->where('order_status', 'active')
+            ->whereDate('end_date', '<', now()->toDateString())
+            ->update(['order_status' => 'overdue']);
+
+        // Fetch rent orders for the authenticated user
+        $rents = Rent::with('items.product')
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Calculate counts for status cards
+        $approvedCount = $rents->where('order_status', 'approved')->count();
+        $onRentCount = $rents->where('order_status', 'active')->count();
+        $overdueCount = $rents->where('order_status', 'overdue')->count();
+        $waitingCount = $rents->where('order_status', 'waiting')->count();
+
+        return view('dashboard-reg-rent', compact('rents', 'onRentCount', 'overdueCount', 'waitingCount', 'approvedCount'));
     }
 }
