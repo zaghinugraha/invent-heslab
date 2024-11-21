@@ -24,6 +24,8 @@ class Rent extends Model
         'nim_nip',       // NIM/NIP
         'phone',         // Nomor WhatsApp Aktif
         'ktm_image',     // Path atau URL gambar KTM
+        'before_documentation',
+        'after_documentation',
     ];
 
     /**
@@ -40,5 +42,20 @@ class Rent extends Model
     public function items()
     {
         return $this->hasMany(RentItem::class);
+    }
+
+    public function getBeforeDocumentationImageAttribute()
+    {
+        if ($this->before_documentation) {
+            return 'data:image/jpeg;base64,' . base64_encode($this->before_documentation);
+        }
+        return null;
+    }
+    public function getAfterDocumentationImageAttribute()
+    {
+        if ($this->after_documentation) {
+            return 'data:image/jpeg;base64,' . base64_encode($this->after_documentation);
+        }
+        return null;
     }
 }

@@ -29,6 +29,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/rent/create', [RentController::class, 'createInvoice'])->name('rent.create');
     Route::post('/rent', [RentController::class, 'store'])->name('rent.store');
     Route::get('/rent/{id}', [RentController::class, 'show'])->name('rent.show');
+    Route::post('/rent/documentation', [RentController::class, 'submitDocumentation'])->name('rent.documentation');
+    Route::delete('/rent/{rent}/cancel', [RentController::class, 'cancel'])->name('rent.cancel');
 
 
 

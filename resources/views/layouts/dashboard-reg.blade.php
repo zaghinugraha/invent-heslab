@@ -75,7 +75,7 @@
     </style>
 </head>
 
-<body class="bg-gray-100 flex flex-col min-h-screen" x-data="{ confirmLogout: false, propil: false, addTeam: false, newItem: false, showNotifications: false, showFilter: false, changeLang: false }">
+<body class="bg-gray-100 flex flex-col min-h-screen" x-data="{ confirmLogout: false, propil: false, addTeam: false, newItem: false, showNotifications: false, showFilter: false, changeLang: false, documentationModal: false, rentId: null, documentationType: null }">
     <div class="flex flex-col flex-grow">
         <!-- Header -->
         <header class="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4 bg-white shadow-md z-10">
@@ -134,8 +134,6 @@
         <div class="flex">
             <!-- Sidebar -->
             @yield('sidebar')
-
-            @yield('modals')
 
 
             <!-- Notifications Modal -->
@@ -222,6 +220,8 @@
 
         @yield('scripts')
     </script>
+
+    @yield('modals')
 </body>
 
 </html>

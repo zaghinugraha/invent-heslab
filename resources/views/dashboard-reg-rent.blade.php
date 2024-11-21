@@ -54,6 +54,40 @@
     </aside>
 @endsection
 
+@section('modals')
+    <div x-show="documentationModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50"
+        x-init="$watch('documentationModal', value => document.body.classList.toggle('overflow-hidden', value))">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 mb-8 max-h-full overflow-y-auto">
+            <h2 class="text-xl font-semibold mb-4"
+                x-text="documentationType === 'before' ? 'Submit Before Documentation' : 'Submit After Documentation'"></h2>
+            <form id="documentationForm" action="{{ route('rent.documentation') }}" method="POST"
+                enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="rent_id" :value="rentId">
+                <input type="hidden" name="documentation_type" :value="documentationType">
+                <div class="mb-4">
+                    <label for="documentation" class="block text-sm font-medium text-gray-700">Upload Documentation
+                        Picture</label>
+                    <input type="file" name="documentation" id="documentation" accept="image/*" required
+                        class="mt-1 block w-full border-gray-300 rounded-md">
+                    @error('documentation')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" @click="documentationModal = false"
+                        class="bg-gray-500 text-white px-4 py-2 rounded mr-2">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+@endsection
+
 @section('content')
     <div class="flex flex-col items-center">
         <!-- Status Cards -->
@@ -97,6 +131,7 @@
                         <th class="px-4 py-2 border">Return Date</th>
                         <th class="px-4 py-2 border">Payment</th>
                         <th class="px-4 py-2 border">Status</th>
+                        <th class="px-4 py-2 border">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -120,22 +155,26 @@
                                         title="Already paid" disabled>
                                         Pay Now
                                     </button>
-                                @elseif ($rent->order_status == 'waiting')
-                                    <!-- Button Greyed Out - Not Approved Yet -->
-                                    <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
-                                        title="Not approved yet" disabled>
-                                        Pay Now
-                                    </button>
-                                @elseif ($rent->order_status == 'approved')
-                                    <!-- Active Button - Redirects to Payment Gateway -->
-                                    <a href="#" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                                        Pay Now
-                                    </a>
                                 @else
-                                    <!-- Default State -->
-                                    <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed" disabled>
-                                        Pay Now
-                                    </button>
+                                    @if ($rent->order_status == 'waiting')
+                                        <!-- Button Greyed Out - Not Approved Yet -->
+                                        <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
+                                            title="Not approved yet" disabled>
+                                            Pay Now
+                                        </button>
+                                    @elseif ($rent->order_status == 'approved')
+                                        <!-- Active Button - Redirects to Payment Gateway -->
+                                        <a href="#"
+                                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                                            Pay Now
+                                        </a>
+                                    @else
+                                        <!-- Default State -->
+                                        <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
+                                            disabled>
+                                            Pay Now
+                                        </button>
+                                    @endif
                                 @endif
                             </td>
                             <td class="px-4 py-2 border">
@@ -149,6 +188,48 @@
                                 @elseif($rent->order_status == 'approved')
                                 bg-green-500 @endif
                             ">{{ ucfirst($rent->order_status) }}</span>
+                            </td>
+                            <td class="px-4 py-2 border">
+                                <!-- Actions Buttons -->
+                                <div class="flex flex-col items-center space-y-2">
+                                    @php
+                                        $today = \Carbon\Carbon::now()->toDateString();
+                                        $startDate = $rent->start_date;
+                                        $endDate = $rent->end_date;
+                                    @endphp
+
+                                    @if ($rent->payment_status == 'paid')
+                                        <!-- Submit Before Documentation Button -->
+                                        @if (!$rent->before_documentation && $today >= $startDate && $today <= $endDate)
+                                            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+                                                @click="documentationModal = true; rentId = {{ $rent->id }}; documentationType = 'before';">
+                                                Before-rent Documentation
+                                            </button>
+                                        @elseif ($rent->before_documentation && !$rent->after_documentation && $today >= $endDate)
+                                            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+                                                @click="documentationModal = true; rentId = {{ $rent->id }}; documentationType = 'after';">
+                                                After-rent Documentation
+                                            </button>
+                                        @elseif ($rent->before_documentation && $rent->after_documentation)
+                                            <span class="text-green-600 font-semibold">All Documentation Submitted</span>
+                                        @else
+                                            <span class="text-gray-600 font-semibold">Unavailable</span>
+                                        @endif
+                                    @else
+                                        <!-- Cancel Button -->
+                                        @if ($rent->order_status != 'cancelled' && $rent->order_status != 'overdue' && $rent->order_status != 'completed')
+                                            <form action="{{ route('rent.cancel', $rent) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                                                    onclick="return confirm('Are you sure you want to cancel this rent?');">
+                                                    Cancel
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @empty

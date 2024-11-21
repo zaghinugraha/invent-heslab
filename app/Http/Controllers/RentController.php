@@ -17,7 +17,7 @@ class RentController extends Controller
         $request->validate([
             'nim_nip' => 'required|string|max:20',
             'phone' => 'required|string|max:15',
-            'ktm_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar
+            'ktm_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:8192', // Validasi gambar
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'payment_method' => 'required|string',
@@ -47,7 +47,7 @@ class RentController extends Controller
                 'end_date' => $request->end_date,
                 'total_cost' => Cart::instance('cart')->total(0, '', ''),
                 'payment_method' => $request->payment_method,
-                'payment_status' => 'not available',
+                'payment_status' => 'unavailable',
                 'order_status' => 'waiting',
                 'notes' => $request->notes,
                 'nim_nip' => $request->nim_nip,
@@ -108,5 +108,74 @@ class RentController extends Controller
         $waitingCount = $rents->where('order_status', 'waiting')->count();
 
         return view('dashboard-reg-rent', compact('rents', 'onRentCount', 'overdueCount', 'waitingCount', 'approvedCount'));
+    }
+
+    public function submitDocumentation(Request $request)
+    {
+        try {
+            $request->validate([
+                'rent_id' => 'required|exists:rent,id',
+                'documentation' => 'required|image|mimes:jpg,jpeg,png|max:8192', // Max 2MB
+                'documentation_type' => 'required|in:before,after',
+            ]);
+
+            $rent = Rent::findOrFail($request->rent_id);
+
+            // Ensure the authenticated user owns the rent
+            if ($rent->user_id !== Auth::id()) {
+                return redirect()->back()->with('error', 'Unauthorized action.');
+            }
+
+            $today = now()->toDateString();
+            $startDate = $rent->start_date;
+            $endDate = $rent->end_date;
+
+            // Handle 'before' documentation
+            if ($request->documentation_type == 'before' && !$rent->before_documentation) {
+                // Before documentation deadline: start_date to start_date + 1 day
+                if ($today >= $startDate && $today <= $endDate) {
+                    // Store Before Documentation
+                    $docContent = file_get_contents($request->file('documentation')->getRealPath());
+                    $rent->before_documentation = $docContent;
+                    $rent->save();
+
+                    return redirect()->back()->with('success', 'Before documentation submitted successfully.');
+                } else {
+                    return redirect()->back()->with('error', 'Cannot submit before documentation at this time.');
+                }
+            }
+            // Handle 'after' documentation
+            elseif ($request->documentation_type == 'after' && !$rent->after_documentation) {
+                // After documentation deadline: end_date only
+                if ($today >= $startDate && $today <= $endDate) {
+                    // Store After Documentation
+                    $docContent = file_get_contents($request->file('documentation')->getRealPath());
+                    $rent->after_documentation = $docContent;
+                    $rent->save();
+
+                    return redirect()->back()->with('success', 'After documentation submitted successfully.');
+                } else {
+                    return redirect()->back()->with('error', 'Cannot submit after documentation at this time.');
+                }
+            } else {
+                return redirect()->back()->with('error', 'Invalid documentation submission.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function cancel(Rent $rent)
+    {
+        // Ensure the authenticated user owns the rent
+        if ($rent->user_id !== Auth::id()) {
+            return redirect()->back()->with('error', 'Unauthorized action.');
+        }
+
+        // Update the rent status to 'cancelled'
+        $rent->order_status = 'cancelled';
+        $rent->save();
+
+        return redirect()->back()->with('success', 'Rent cancelled successfully.');
     }
 }
