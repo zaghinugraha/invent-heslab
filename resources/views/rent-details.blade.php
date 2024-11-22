@@ -71,7 +71,9 @@
 
 @section('content')
     <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg my-8">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Rent Details</h2>
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">
+            {{ $rent->user->name }}'s Rent Details
+        </h2>
         <!-- Rent Information -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="space-y-4">
@@ -99,6 +101,17 @@
                 <div class="flex items-center">
                     <span class="w-1/3 font-semibold">End Date:</span>
                     <span class="w-2/3">{{ $rent->end_date }}</span>
+                </div>
+                <div class="flex items-center">
+                    <span class="w-1/3 font-semibold">Total Days:</span>
+                    <span class="w-2/3">
+                        @php
+                            $start = new DateTime($rent->start_date);
+                            $end = new DateTime($rent->end_date);
+                            $interval = $start->diff($end);
+                            echo $interval->days;
+                        @endphp
+                    </span>
                 </div>
                 <div class="flex items-center">
                     <span class="w-1/3 font-semibold">Total Cost:</span>

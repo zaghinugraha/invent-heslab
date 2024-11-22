@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminHistoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\RentController;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +23,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/reg/items', [ItemController::class, 'showAllRegular'])->name('dashboard-reg-items');
     Route::get('/reg/rent', [RentController::class, 'fetch'])->name('dashboard-reg-rent');
 
-    Route::get('/dashboard/history', [RentController::class, 'history'])->name('dashboard-reg-history');
+    Route::get('/reg/history', [RentController::class, 'history'])->name('dashboard-reg-history');
 
     // Route for Rent
     Route::get('/rent/create', [RentController::class, 'createInvoice'])->name('rent.create');
@@ -54,9 +55,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
 
     Route::middleware(['check.admin.team'])->group(function () {
-        Route::get('/admin/history', function () {
-            return view('dashboard-admin-history');
-        })->name('dashboard-admin-history');
+        Route::get('/admin/history', [AdminHistoryController::class, 'history'])->name('dashboard-admin-history');
 
         Route::get('/admin/rent', [AdminRentController::class, 'index'])->name('dashboard-admin-rent');
         Route::post('/admin/rent-requests/{rent}/approve', [AdminRentController::class, 'approve'])->name('rent.approve');

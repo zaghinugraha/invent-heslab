@@ -15,33 +15,6 @@ class AdminRentController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        $today = Carbon::today();
-
-        foreach ($rents as $rent) {
-            // Update rent status to 'overdue' where 'end_date' is past and status is 'active'
-            if ($rent->order_status === 'active' && $rent->end_date < $today) {
-                $rent->order_status = 'overdue';
-                $rent->save();
-            }
-
-            // Update rent status to 'active' where 'payment_status' is 'paid' and 'start_date' is today
-            if ($rent->payment_status === 'paid' && $rent->order_status !== 'active' && $rent->start_date === $today) {
-                $rent->order_status = 'active';
-                $rent->save();
-            }
-
-            // Update rent status to 'cancelled' where 'payment_status' is 'unpaid' and past 'start_date'
-            if ($rent->payment_status === 'unpaid' && $rent->start_date < $today) {
-                $rent->order_status = 'cancelled';
-                $rent->save();
-            }
-
-            // Update rent status to 'rejected' where status is 'waiting' and past 'start_date'
-            if ($rent->order_status === 'waiting' && $rent->start_date < $today) {
-                $rent->order_status = 'rejected';
-                $rent->save();
-            }
-        }
 
         // Calculate counts for status cards
         $approvedCount = Rent::where('order_status', 'approved')->count();
