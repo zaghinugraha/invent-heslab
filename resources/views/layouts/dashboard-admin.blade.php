@@ -86,7 +86,6 @@
     selectedCategory: {},
     deleteCategory: false,
 }">
-    @yield('modals')
     <!-- Notifications Modal -->
     <div x-show="showNotifications" @click.away="showNotifications = false"
         class="fixed right-10 top-20 flex items-center justify-center bg-white bg-opacity-0 z-20">
@@ -166,13 +165,21 @@
             <main id="mainContent" class="flex-1 ml-64 lg:ml-0 p-8 transition-width">
                 <div class="bg-white p-6 rounded-lg shadow-md my-10">
                     <h2 class="text-2xl font-bold text-blue-600 mb-4">@yield('heading')</h2>
-                    <p class="text-gray-600 mb-4">
-                        Selamat datang di halaman <span class="font-bold">@yield('headingDesc')</span>!
-                    </p>
-                    <p class="text-gray-600 mb-4">
-                        @yield('description')
-                    </p>
-                    <hr class="mb-4">
+                    <!-- Breadcrumb Section -->
+                    @if (View::hasSection('breadcrumb'))
+                        <nav class="bg-white border-b pb-3">
+                            @yield('breadcrumb')
+                        </nav>
+                    @endif
+                    @if (View::hasSection('headingDesc'))
+                        <p class="text-gray-600 mb-4">
+                            Selamat datang di halaman <span class="font-bold">@yield('headingDesc')</span>!
+                        </p>
+                        <p class="text-gray-600 mb-4">
+                            @yield('description')
+                        </p>
+                        <hr class="mb-4">
+                    @endif
 
                     @yield('content')
                 </div>
@@ -202,6 +209,7 @@
 
         @yield('scripts')
     </script>
+    @yield('modals')
 </body>
 
 </html>

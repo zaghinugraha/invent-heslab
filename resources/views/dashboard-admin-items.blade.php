@@ -432,8 +432,10 @@
                             <td class="px-4 py-2 border">{{ $product['name'] }}</td>
                             <td class="px-4 py-2 border">{{ $product['brand'] }}</td>
                             <td class="px-4 py-2 border">{{ $product->category->name ?? 'No Category' }}</td>
-                            <td class="px-4 py-2 border">{{ number_format($product['price'], 0, ',', '.') }}</td>
-                            <td class="px-4 py-2 border text-center"
+                            <td class="px-4 py-2 border oldstyle-nums">
+                                {{ number_format($product['price'], 0, ',', '.') }}
+                            </td>
+                            <td class="px-4 py-2 border text-center diagonal-fractions"
                                 style="
                 @php
 $maxQuantity = $products->max('quantity');

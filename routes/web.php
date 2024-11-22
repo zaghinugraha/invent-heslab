@@ -11,6 +11,7 @@ use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AdminRentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,9 +22,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/reg/items', [ItemController::class, 'showAllRegular'])->name('dashboard-reg-items');
     Route::get('/reg/rent', [RentController::class, 'fetch'])->name('dashboard-reg-rent');
 
-    Route::get('/reg/history', function () {
-        return view('dashboard-reg-history');
-    })->name('dashboard-reg-history');
+    Route::get('/dashboard/history', [RentController::class, 'history'])->name('dashboard-reg-history');
 
     // Route for Rent
     Route::get('/rent/create', [RentController::class, 'createInvoice'])->name('rent.create');
@@ -59,9 +58,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             return view('dashboard-admin-history');
         })->name('dashboard-admin-history');
 
-        Route::get('/admin/rent', function () {
-            return view('dashboard-admin-rent');
-        })->name('dashboard-admin-rent');
+        Route::get('/admin/rent', [AdminRentController::class, 'index'])->name('dashboard-admin-rent');
+        Route::post('/admin/rent-requests/{rent}/approve', [AdminRentController::class, 'approve'])->name('rent.approve');
+        Route::post('/admin/rent-requests/{rent}/reject', [AdminRentController::class, 'reject'])->name('rent.reject');
+        Route::get('/admin/rent/{id}/ktm-image', [AdminRentController::class, 'getKtmImage'])->name('rent.ktmImage');
+        Route::get('/admin/rent/{id}/before-documentation', [AdminRentController::class, 'getBeforeDocumentation'])->name('rent.beforeDocumentation');
+        Route::get('/admin/rent/{id}/after-documentation', [AdminRentController::class, 'getAfterDocumentation'])->name('rent.afterDocumentation');
+        Route::get('/admin/rent/{id}/details', [RentController::class, 'show'])->name('rent.details');
 
         Route::get('/admin/items', [ItemController::class, 'showAllAdmin'])->name('dashboard-admin-items');
         Route::get('/admin/items', [ProductController::class, 'admin_dashboard'])->name('dashboard-admin-items');

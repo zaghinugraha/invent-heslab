@@ -90,34 +90,6 @@
 
 @section('content')
     <div class="flex flex-col items-center">
-        <!-- Status Cards -->
-        <div class="space-y-4 mb-8 w-full mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 w-full mx-auto">
-                <!-- Approved Card -->
-                <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-                    <div class="bg-green-500 text-white font-semibold py-2">Approved</div>
-                    <div class="bg-white py-4 text-2xl font-bold text-black">{{ $approvedCount }}</div>
-                </div>
-
-                <!-- On loan Card -->
-                <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-                    <div class="bg-blue-500 text-white font-semibold py-2">On Rent</div>
-                    <div class="bg-white py-4 text-2xl font-bold text-black">{{ $onRentCount }}</div>
-                </div>
-
-                <!-- Overdue Card -->
-                <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-                    <div class="bg-red-500 text-white font-semibold py-2">Overdue</div>
-                    <div class="bg-white py-4 text-2xl font-bold text-black">{{ $overdueCount }}</div>
-                </div>
-
-                <!-- Waiting Card -->
-                <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-                    <div class="bg-yellow-500 text-white font-semibold py-2">Waiting</div>
-                    <div class="bg-white py-4 text-2xl font-bold text-black">{{ $waitingCount }}</div>
-                </div>
-            </div>
-        </div>
 
         <!-- Table -->
         <div class="overflow-x-auto w-full">
@@ -135,7 +107,7 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($rents as $index => $rent)
+                    @forelse ($rents as $index => $rent)
                         <tr class="hover:bg-gray-50 text-center">
                             <td class="px-4 py-2 border">{{ $index + 1 }}</td>
                             <td class="px-4 py-2 border text-left">
@@ -189,47 +161,46 @@
                                 bg-green-500 @endif
                             ">{{ ucfirst($rent->order_status) }}</span>
                             </td>
-                            <td class="px-4 py-2 border">
+                            <td class="px-4 py-2 border text-center">
                                 <!-- Actions Buttons -->
-                                <div class="flex flex-col items-center space-y-2">
-                                    @php
-                                        $today = \Carbon\Carbon::now()->toDateString();
-                                        $startDate = $rent->start_date;
-                                        $endDate = $rent->end_date;
-                                    @endphp
+                                @php
+                                    $today = \Carbon\Carbon::now()->toDateString();
+                                    $startDate = $rent->start_date;
+                                    $endDate = $rent->end_date;
+                                @endphp
 
-                                    @if ($rent->payment_status == 'paid')
-                                        <!-- Submit Before Documentation Button -->
-                                        @if (!$rent->before_documentation && $today >= $startDate && $today <= $endDate)
-                                            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
-                                                @click="documentationModal = true; rentId = {{ $rent->id }}; documentationType = 'before';">
-                                                Before-rent Documentation
-                                            </button>
-                                        @elseif ($rent->before_documentation && !$rent->after_documentation && $today >= $endDate)
-                                            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
-                                                @click="documentationModal = true; rentId = {{ $rent->id }}; documentationType = 'after';">
-                                                After-rent Documentation
-                                            </button>
-                                        @elseif ($rent->before_documentation && $rent->after_documentation)
-                                            <span class="text-green-600 font-semibold">All Documentation Submitted</span>
-                                        @else
-                                            <span class="text-gray-600 font-semibold">Unavailable</span>
-                                        @endif
+                                @if ($rent->payment_status == 'paid')
+                                    <!-- Submit Before Documentation Button -->
+                                    @if (!$rent->before_documentation && $today >= $startDate && $today <= $endDate)
+                                        <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                                            @click="documentationModal = true; rentId = {{ $rent->id }}; documentationType = 'before';">
+                                            Before-rent Documentation
+                                        </button>
+                                    @elseif ($rent->before_documentation && !$rent->after_documentation && $today >= $endDate)
+                                        <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                                            @click="documentationModal = true; rentId = {{ $rent->id }}; documentationType = 'after';">
+                                            After-rent Documentation
+                                        </button>
+                                    @elseif ($rent->before_documentation && $rent->after_documentation)
+                                        <span class="text-green-600 font-semibold">All Documentation
+                                            Submitted</span>
                                     @else
-                                        <!-- Cancel Button -->
-                                        @if ($rent->order_status != 'cancelled' && $rent->order_status != 'overdue' && $rent->order_status != 'completed')
-                                            <form action="{{ route('rent.cancel', $rent) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                                                    onclick="return confirm('Are you sure you want to cancel this rent?');">
-                                                    Cancel
-                                                </button>
-                                            </form>
-                                        @endif
+                                        <span class="text-gray-600 font-semibold">Unavailable</span>
                                     @endif
-                                </div>
+                                @else
+                                    <!-- Cancel Button -->
+                                    @if ($rent->order_status != 'cancelled' && $rent->order_status != 'overdue' && $rent->order_status != 'completed')
+                                        <form action="{{ route('rent.cancel', $rent) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                                onclick="return confirm('Are you sure you want to cancel this rent?');">
+                                                Cancel
+                                            </button>
+                                        </form>
+                                    @endif
+                                @endif
                             </td>
                         </tr>
                     @empty
@@ -242,24 +213,8 @@
         </div>
 
         <!-- Pagination -->
-        <div class="mt-4 flex justify-center">
-            <nav class="inline-flex -space-x-px">
-                <a href="#"
-                    class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100">Previous</a>
-                <a href="#"
-                    class="px-3 py-2 leading-tight text-white bg-blue-600 border border-gray-300 hover:bg-blue-700">1</a>
-                <a href="#"
-                    class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">2</a>
-                <a href="#"
-                    class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">3</a>
-                <span class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300">...</span>
-                <a href="#"
-                    class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">67</a>
-                <a href="#"
-                    class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">68</a>
-                <a href="#"
-                    class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100">Next</a>
-            </nav>
+        <div class="mt-8">
+            {{ $rents->links() }}
         </div>
     </div>
 @endsection

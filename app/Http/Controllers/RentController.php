@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Carbon\Carbon;
 
 class RentController extends Controller
 {
@@ -27,9 +28,10 @@ class RentController extends Controller
         DB::beginTransaction();
 
         try {
-            // Simpan file gambar KTM
+            // Read the binary content of the uploaded KTM image
+            $ktmImageContent = null;
             if ($request->hasFile('ktm_image')) {
-                $ktmImagePath = $request->file('ktm_image')->store('ktm_images', 'public');
+                $ktmImageContent = file_get_contents($request->file('ktm_image')->getRealPath());
             }
 
             // Ambil item di keranjang
@@ -47,12 +49,12 @@ class RentController extends Controller
                 'end_date' => $request->end_date,
                 'total_cost' => Cart::instance('cart')->total(0, '', ''),
                 'payment_method' => $request->payment_method,
-                'payment_status' => 'unavailable',
+                'payment_status' => 'unpaid',
                 'order_status' => 'waiting',
                 'notes' => $request->notes,
                 'nim_nip' => $request->nim_nip,
                 'phone' => $request->phone,
-                'ktm_image' => $ktmImagePath ?? null,
+                'ktm_image' => $ktmImageContent,
             ]);
 
             // Simpan setiap item di keranjang ke tabel rent_items
@@ -71,7 +73,7 @@ class RentController extends Controller
 
             DB::commit();
 
-            return redirect()->route('rent.show', $rent->id)->with('success', 'Rent order successfully created.');
+            return redirect()->route('dashboard-reg-rent')->with('success', 'Rent order successfully created.');
 
         } catch (\Exception $e) {
             DB::rollback();
@@ -81,12 +83,9 @@ class RentController extends Controller
 
     public function show($id)
     {
-        // Tampilkan detail rent order
-        $rent = Rent::with('items')->findOrFail($id);
-
-        return view('rent.show', compact('rent'));
+        $rent = Rent::with('items.product')->findOrFail($id);
+        return view('rent-details', compact('rent'));
     }
-
     public function fetch()
     {
         // Update rents to 'overdue' where 'end_date' is past and status is 'active'
@@ -98,8 +97,37 @@ class RentController extends Controller
         // Fetch rent orders for the authenticated user
         $rents = Rent::with('items.product')
             ->where('user_id', Auth::id())
+            ->whereIn('order_status', ['approved', 'active', 'overdue', 'waiting'])
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10);
+
+        $today = Carbon::today();
+
+        foreach ($rents as $rent) {
+            // Update rent status to 'overdue' where 'end_date' is past and status is 'active'
+            if ($rent->order_status === 'active' && $rent->end_date < $today) {
+                $rent->order_status = 'overdue';
+                $rent->save();
+            }
+
+            // Update rent status to 'active' where 'payment_status' is 'paid' and 'start_date' is today
+            if ($rent->payment_status === 'paid' && $rent->order_status === 'approved' && $rent->start_date >= $today) {
+                $rent->order_status = 'active';
+                $rent->save();
+            }
+
+            // Update rent status to 'cancelled' where 'payment_status' is 'unpaid' and past 'start_date'
+            if ($rent->payment_status === 'unpaid' && $rent->start_date < $today) {
+                $rent->order_status = 'cancelled';
+                $rent->save();
+            }
+
+            // Update rent status to 'rejected' where status is 'waiting' and past 'start_date'
+            if ($rent->order_status === 'waiting' && $rent->start_date < $today) {
+                $rent->order_status = 'rejected';
+                $rent->save();
+            }
+        }
 
         // Calculate counts for status cards
         $approvedCount = $rents->where('order_status', 'approved')->count();
@@ -177,5 +205,24 @@ class RentController extends Controller
         $rent->save();
 
         return redirect()->back()->with('success', 'Rent cancelled successfully.');
+    }
+
+    public function history()
+    {
+        $userId = Auth::id();
+
+        // Fetch rents with statuses: cancelled, rejected, returned
+        $rents = Rent::with('items.product')
+            ->where('user_id', operator: $userId)
+            ->whereIn('order_status', ['cancelled', 'rejected', 'returned'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        // Calculate counts for status cards
+        $cancelledCount = $rents->where('order_status', 'cancelled')->count();
+        $rejectedCount = $rents->where('order_status', 'rejected')->count();
+        $returnedCount = $rents->where('order_status', 'returned')->count();
+
+        return view('dashboard-reg-history', compact('rents', 'rejectedCount', 'returnedCount', 'cancelledCount'));
     }
 }

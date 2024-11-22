@@ -21,41 +21,41 @@ class Rent extends Model
         'payment_status',
         'order_status',
         'notes',
-        'nim_nip',       // NIM/NIP
-        'phone',         // Nomor WhatsApp Aktif
-        'ktm_image',     // Path atau URL gambar KTM
+        'nim_nip',
+        'phone',
+        'ktm_image',
         'before_documentation',
         'after_documentation',
     ];
 
-    /**
-     * Relasi ke model User
-     */
+    protected $hidden = [
+        'ktm_image',
+        'before_documentation',
+        'after_documentation',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Relasi ke model RentItem
-     */
     public function items()
     {
         return $this->hasMany(RentItem::class);
     }
 
-    public function getBeforeDocumentationImageAttribute()
+    public function getKtmImageUrlAttribute()
     {
-        if ($this->before_documentation) {
-            return 'data:image/jpeg;base64,' . base64_encode($this->before_documentation);
-        }
-        return null;
+        return $this->ktm_image ? route('rent.ktmImage', $this->id) : null;
     }
-    public function getAfterDocumentationImageAttribute()
+
+    public function getBeforeDocumentationUrlAttribute()
     {
-        if ($this->after_documentation) {
-            return 'data:image/jpeg;base64,' . base64_encode($this->after_documentation);
-        }
-        return null;
+        return $this->before_documentation ? route('rent.beforeDocumentation', $this->id) : null;
+    }
+
+    public function getAfterDocumentationUrlAttribute()
+    {
+        return $this->after_documentation ? route('rent.afterDocumentation', $this->id) : null;
     }
 }
