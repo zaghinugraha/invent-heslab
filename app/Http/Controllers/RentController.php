@@ -102,13 +102,8 @@ class RentController extends Controller
             ->paginate(10);
 
 
-        // Calculate counts for status cards
-        $approvedCount = $rents->where('order_status', 'approved')->count();
-        $onRentCount = $rents->where('order_status', 'active')->count();
-        $overdueCount = $rents->where('order_status', 'overdue')->count();
-        $waitingCount = $rents->where('order_status', 'waiting')->count();
 
-        return view('dashboard-reg-rent', compact('rents', 'onRentCount', 'overdueCount', 'waitingCount', 'approvedCount'));
+        return view('dashboard-reg-rent', compact('rents'));
     }
 
     public function submitDocumentation(Request $request)
@@ -191,11 +186,7 @@ class RentController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        // Calculate counts for status cards
-        $cancelledCount = $rents->where('order_status', 'cancelled')->count();
-        $rejectedCount = $rents->where('order_status', 'rejected')->count();
-        $returnedCount = $rents->where('order_status', 'returned')->count();
 
-        return view('dashboard-reg-history', compact('rents', 'rejectedCount', 'returnedCount', 'cancelledCount'));
+        return view('dashboard-reg-history', compact('rents'));
     }
 }

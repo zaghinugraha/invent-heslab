@@ -57,26 +57,6 @@
 @section('content')
 
     <div class="space-y-4 w-full mx-auto">
-        <!-- Status Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 w-full mx-auto">
-            <!-- Rejected Card -->
-            <div class="text-center rounded-lg shadow-lg overflow-hidden">
-                <div class="bg-red-500 text-white font-semibold py-2">Rejected</div>
-                <div class="bg-white py-4 text-2xl font-bold text-black">{{ $rejectedCount }}</div>
-            </div>
-
-            <!-- Cancelled Card -->
-            <div class="text-center rounded-lg shadow-lg overflow-hidden">
-                <div class="bg-yellow-500 text-white font-semibold py-2">Cancelled</div>
-                <div class="bg-white py-4 text-2xl font-bold text-black">{{ $cancelledCount }}</div>
-            </div>
-
-            <!-- Returned Card -->
-            <div class="text-center rounded-lg shadow-lg overflow-hidden">
-                <div class="bg-green-500 text-white font-semibold py-2">Returned</div>
-                <div class="bg-white py-4 text-2xl font-bold text-black">{{ $returnedCount }}</div>
-            </div>
-        </div>
 
         <!-- Table -->
         <div class="overflow-x-auto rounded-lg">

@@ -34,6 +34,29 @@ class Rent extends Model
         'after_documentation',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updated(function ($rent) {
+            // Decrease stock when payment_status changes to 'paid'
+            if ($rent->isDirty('payment_status') && $rent->payment_status === 'paid') {
+                foreach ($rent->items as $item) {
+                    $product = $item->product;
+                    $product->decrement('quantity', $item->quantity);
+                }
+            }
+
+            // Increase stock when order_status changes to 'returned'
+            if ($rent->isDirty('order_status') && $rent->order_status === 'returned') {
+                foreach ($rent->items as $item) {
+                    $product = $item->product;
+                    $product->increment('quantity', $item->quantity);
+                }
+            }
+        });
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
