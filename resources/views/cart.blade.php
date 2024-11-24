@@ -136,7 +136,11 @@
                                     </div>
                                     <!-- Price -->
                                     <p class="text-sm text-gray-400 font-semibold">
-                                        Rp {{ number_format($item->price, 0, ',', '.') }}/item
+                                        @if (auth()->user()->type !== 'Regular')
+                                            Free because you are {{ auth()->user()->teams->first()->name }}
+                                        @else
+                                            Rp {{ number_format($item->price, 0, ',', '.') }}/item
+                                        @endif
                                     </p>
                                 </div>
                             </div>
@@ -148,7 +152,11 @@
                             <div class="flex justify-between items-center font-semibold text-lg">
                                 <span>Total :</span>
                                 <span class="text-blue-700">
-                                    Rp {{ Cart::instance('cart')->subtotal(0, ',', '.') }}
+                                    @if (auth()->user()->type !== 'Regular')
+                                        Free
+                                    @else
+                                        Rp {{ Cart::instance('cart')->subtotal(0, ',', '.') }}
+                                    @endif
                                 </span>
                             </div>
                         </div>
@@ -219,12 +227,17 @@
                         </div>
                     </div>
                     <div class="mb-6">
-                        <label class="block text-gray-700 font-medium mb-2">Payment Method</label>
+                        <label class="block text-gray-700 font-medium mb-2">
+                            Payment Method <span class="italic">(Choose Free if you are a member)</span>
+                        </label>
                         <select name="payment_method" required
                             class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                             <option value="credit_card">Credit Card</option>
                             <option value="bank_transfer">Bank Transfer</option>
                             <option value="e_wallet">E-Wallet</option>
+                            @if (auth()->user()->type !== 'Regular')
+                                <option value="free">Free</option>
+                            @endif
                         </select>
                     </div>
                     <div class="mb-6">

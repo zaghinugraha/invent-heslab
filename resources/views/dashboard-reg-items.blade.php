@@ -130,7 +130,7 @@
 
     <!-- Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-        @foreach ($products as $product)
+        @forelse ($products as $product)
             <a href="{{ route('products.showByID', $product->id) }}" class="block">
                 <div class="border border-gray-300 rounded-lg p-4 hover:shadow-lg relative">
                     <!-- Spinner -->
@@ -152,11 +152,16 @@
                                 class="bg-green-100 text-green-600 text-xs font-semibold px-2 py-1 rounded-full">Available</span>
                         @endif
                     </div>
-                    <p class="text-gray-600">Rp{{ number_format($product['price'], 0, ',', '.') }},-</p>
-                    <!-- Other content -->
+                    @if (auth()->user()->type !== 'Regular')
+                        <p class="text-gray-600">Free</p>
+                    @else
+                        <p class="text-gray-600">Rp{{ number_format($product['price'], 0, ',', '.') }},-</p>
+                    @endif
                 </div>
             </a>
-        @endforeach
+        @empty
+            <p class="text-gray-600">No items found.</p>
+        @endforelse
     </div>
 
 

@@ -87,17 +87,22 @@
             </div>
 
             <!-- Price -->
-            <p class="text-xl text-gray-700 font-semibold mt-2">Rp{{ number_format($product['price'], 0, ',', '.') }},-
+            <p class="text-xl text-gray-700 font-semibold mt-2">
+                @if (auth()->user()->type !== 'Regular')
+                    Free
+                @else
+                    Rp{{ number_format($product['price'], 0, ',', '.') }},-
+                @endif
             </p>
 
-        <!-- Quantity Selector and Buttons -->
+            <!-- Quantity Selector and Buttons -->
             <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 mt-4">
                 <!-- Quantity Selector -->
                 <div class="flex items-center border border-gray-300 rounded">
                     <button class="px-3 py-1 text-gray-700" onclick="updateQuantity('decrease')">-</button>
-                    <input type="text" id="quantity-input" value="1" min="1" max="{{ $product->quantity }}"
-                           class="w-12 text-center border-0 focus:outline-none"
-                           onchange="validateQuantity(this)">
+                    <input type="text" id="quantity-input" value="1" min="1"
+                        max="{{ $product->quantity }}" class="w-12 text-center border-0 focus:outline-none"
+                        onchange="validateQuantity(this)">
                     <button class="px-3 py-1 text-gray-700" onclick="updateQuantity('increase')">+</button>
                 </div>
 
@@ -105,19 +110,19 @@
                 <div class="flex gap-2 mt-2 sm:mt-0">
                     @if ($product->quantity > 0)
                         <button onclick="addToCart({{ $product->id }})"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Add to Cart
                         </button>
                         <button class="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50">
                             Rent Now
                         </button>
                     @else
-                        <button class="bg-gray-300 text-gray-600 px-4 py-2 rounded cursor-not-allowed"
-                                disabled title="Out of Stock">
+                        <button class="bg-gray-300 text-gray-600 px-4 py-2 rounded cursor-not-allowed" disabled
+                            title="Out of Stock">
                             Add to Cart
                         </button>
-                        <button class="border border-gray-300 text-gray-600 px-4 py-2 rounded cursor-not-allowed"
-                                disabled title="Out of Stock">
+                        <button class="border border-gray-300 text-gray-600 px-4 py-2 rounded cursor-not-allowed" disabled
+                            title="Out of Stock">
                             Rent Now
                         </button>
                     @endif
@@ -234,16 +239,16 @@
             const quantity = document.getElementById('quantity-input').value;
 
             fetch('{{ route('cart.add') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({
-                    id: productId,
-                    quantity: quantity
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        id: productId,
+                        quantity: quantity
+                    })
                 })
-            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -282,6 +287,5 @@
                 flashDiv.remove();
             }, 3000);
         }
-
     </script>
 @endsection

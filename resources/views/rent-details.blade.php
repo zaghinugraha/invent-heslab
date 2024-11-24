@@ -102,6 +102,12 @@
                     <span class="w-1/3 font-semibold">End Date:</span>
                     <span class="w-2/3">{{ $rent->end_date }}</span>
                 </div>
+                @if ($rent->returned_date)
+                    <div class="flex items-center">
+                        <span class="w-1/3 font-semibold">Returned Date:</span>
+                        <span class="w-2/3">{{ $rent->returned_date }}</span>
+                    </div>
+                @endif
                 <div class="flex items-center">
                     <span class="w-1/3 font-semibold">Total Days:</span>
                     <span class="w-2/3">
@@ -115,18 +121,26 @@
                 </div>
                 <div class="flex items-center">
                     <span class="w-1/3 font-semibold">Total Cost:</span>
-                    <span class="w-2/3">Rp {{ number_format($rent->total_cost, 0, ',', '.') }}</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">Payment Status:</span>
                     <span class="w-2/3">
-                        @if ($rent->payment_status == 'paid')
-                            <span class="bg-green-500 text-white px-2 py-1 rounded-lg">Paid</span>
+                        @if ($rent->user->type !== 'Regular')
+                            Free
                         @else
-                            <span class="bg-red-500 text-white px-2 py-1 rounded-lg">Unpaid</span>
+                            Rp {{ number_format($rent->total_cost, 0, ',', '.') }}
                         @endif
                     </span>
                 </div>
+                @if ($rent->user->type === 'Regular')
+                    <div class="flex items-center">
+                        <span class="w-1/3 font-semibold">Payment Status:</span>
+                        <span class="w-2/3">
+                            @if ($rent->payment_status == 'paid')
+                                <span class="bg-green-500 text-white px-2 py-1 rounded-lg">Paid</span>
+                            @else
+                                <span class="bg-red-500 text-white px-2 py-1 rounded-lg">Unpaid</span>
+                            @endif
+                        </span>
+                    </div>
+                @endif
                 <div class="flex items-center">
                     <span class="w-1/3 font-semibold">Rent Status:</span>
                     <span class="w-2/3">
@@ -197,6 +211,20 @@
                     <button type="submit"
                         class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
                         Reject
+                    </button>
+                </form>
+            </div>
+        @elseif (
+            ($rent->order_status == 'active' || $rent->order_status == 'overdue') &&
+                $rent->before_documentation_url &&
+                $rent->after_documentation_url)
+            <!-- Return Button -->
+            <div class="flex justify-end mt-8">
+                <form action="{{ route('rent.return', $rent) }}" method="POST">
+                    @csrf
+                    <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
+                        User ini telah mengembalikan barang
                     </button>
                 </form>
             </div>

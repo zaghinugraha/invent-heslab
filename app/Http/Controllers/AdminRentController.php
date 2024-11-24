@@ -5,11 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Rent;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use App\Services\RentStatusUpdater;
 
 class AdminRentController extends Controller
 {
+
+    protected $rentStatusUpdater;
+
+    public function __construct(RentStatusUpdater $rentStatusUpdater)
+    {
+        $this->rentStatusUpdater = $rentStatusUpdater;
+    }
     public function index()
     {
+
+        $this->rentStatusUpdater->updateStatuses();
         $rents = Rent::with('user', 'items.product')
             ->whereIn('order_status', ['approved', 'active', 'overdue', 'waiting'])
             ->orderBy('created_at', 'desc')
@@ -29,6 +40,14 @@ class AdminRentController extends Controller
     {
         // Update rent status to 'approved'
         $rent->order_status = 'approved';
+        $startDate = Carbon::parse($rent->start_date);
+        $currentDate = Carbon::now();
+        if ($currentDate->gte($startDate)) {
+            $rent->order_status = 'active';
+        }
+        if ($rent->user->role !== 'Regular') {
+            $rent->payment_status = 'paid';
+        }
         $rent->save();
 
         return redirect()->back()->with('success', 'Rent request approved successfully.');
@@ -41,6 +60,16 @@ class AdminRentController extends Controller
         $rent->save();
 
         return redirect()->back()->with('success', 'Rent request rejected successfully.');
+    }
+
+    public function returned(Rent $rent)
+    {
+        // Update rent status to 'returned'
+        $rent->order_status = 'returned';
+        $rent->returned_date = Carbon::now();
+        $rent->save();
+
+        return redirect()->back()->with('success', 'Rent marked as returned successfully.');
     }
 
     public function getKtmImage($id)

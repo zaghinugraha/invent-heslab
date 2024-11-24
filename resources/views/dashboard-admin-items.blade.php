@@ -425,7 +425,7 @@
                         <th class="px-4 py-2 border">Action</th>
                     </tr>
                 </thead>
-                @foreach ($products as $product)
+                @forelse ($products as $product)
                     <tbody class="bg-white divide-y divide-gray-200">
                         <tr class="hover:bg-gray-50 text-center">
                             <td class="px-4 py-2 border">{{ $product['id'] }}</td>
@@ -503,8 +503,10 @@ $maxQuantity = $products->max('quantity');
                                     </form>
                                 </div>
                             </td>
+                        @empty
+                            <td class="px-4 py-2 border text-center" colspan="11">No items found.</td>
                         </tr>
-                @endforeach
+                @endforelse
                 </tbody>
             </table>
         </div>

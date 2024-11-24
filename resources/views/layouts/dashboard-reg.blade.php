@@ -190,6 +190,9 @@
                         <p class="text-gray-600 mb-4">
                             @yield('description')
                         </p>
+                        @if (View::hasSection('warnings'))
+                            @yield('warnings')
+                        @endif
                         <hr class="mb-4">
                     @endif
                     @yield('content')

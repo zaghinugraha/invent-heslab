@@ -9,10 +9,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use App\Services\RentStatusUpdater;
 use Carbon\Carbon;
 
 class RentController extends Controller
 {
+
+    protected $rentStatusUpdater;
+
+    public function __construct(RentStatusUpdater $rentStatusUpdater)
+    {
+        $this->rentStatusUpdater = $rentStatusUpdater;
+    }
     public function store(Request $request)
     {
         $request->validate([
@@ -88,11 +96,8 @@ class RentController extends Controller
     }
     public function fetch()
     {
-        // Update rents to 'overdue' where 'end_date' is past and status is 'active'
-        Rent::where('user_id', Auth::id())
-            ->where('order_status', 'active')
-            ->whereDate('end_date', '<', now()->toDateString())
-            ->update(['order_status' => 'overdue']);
+
+        $this->rentStatusUpdater->updateStatuses();
 
         // Fetch rent orders for the authenticated user
         $rents = Rent::with('items.product')
@@ -101,9 +106,18 @@ class RentController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
+        // Calculate counts for overdue, and unpaid rents
+        $overdueCount = Rent::where('user_id', Auth::id())
+            ->where('order_status', 'overdue')
+            ->count();
+
+        $approvedAndUnpaidCount = Rent::where('user_id', Auth::id())
+            ->where('order_status', 'approved')
+            ->where('payment_status', 'unpaid')
+            ->count();
 
 
-        return view('dashboard-reg-rent', compact('rents'));
+        return view('dashboard-reg-rent', compact('rents', 'overdueCount', 'approvedAndUnpaidCount'));
     }
 
     public function submitDocumentation(Request $request)

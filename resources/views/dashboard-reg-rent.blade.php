@@ -6,8 +6,31 @@
 
 @section('heading', 'Rent Status')
 @section('headingDesc', 'Rent Status')
-@section('description', 'p minjem bwang nih wkwk :v')
+@section('description',
+    '
+    This is a list of items that you have rented. Use the search column to find a specific record, or navigate the page to
+    view more history.
+    ')
+@section('warnings')
+    @if ($overdueCount > 0)
+        <div class="bg-red-100 border border-red-400 text-red-500 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">
+                You have {{ $overdueCount }} overdue rent(s). Please return the item(s)
+                immediately.</span>
+            </span>
+        </div>
+    @endif
 
+    @if ($approvedAndUnpaidCount > 0)
+        <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">
+                You have {{ $unpaidCount }} unpaid rent(s). Please pay the rent(s)
+                immediately.</span>
+            </span>
+        </div>
+    @endif
+
+@endsection
 @section('sidebar')
     <aside id="sidebar" class="transition-width w-64 h-max fixed top-16 bottom-16 lg:relative p-2">
         <div class="bg-white rounded p-2">
@@ -101,7 +124,9 @@
                         <th class="px-4 py-2 border">Total Price</th>
                         <th class="px-4 py-2 border">Rent Date</th>
                         <th class="px-4 py-2 border">Return Date</th>
-                        <th class="px-4 py-2 border">Payment</th>
+                        @if (auth()->user()->type === 'Regular')
+                            <th class="px-4 py-2 border">Payment</th>
+                        @endif
                         <th class="px-4 py-2 border">Status</th>
                         <th class="px-4 py-2 border">Actions</th>
                     </tr>
@@ -120,35 +145,37 @@
                             <td class="px-4 py-2 border">Rp {{ number_format($rent->total_cost, 0, ',', '.') }}</td>
                             <td class="px-4 py-2 border">{{ $rent->start_date }}</td>
                             <td class="px-4 py-2 border">{{ $rent->end_date }}</td>
-                            <td class="px-4 py-2 border text-center">
-                                @if ($rent->payment_status == 'paid')
-                                    <!-- Button Greyed Out - Already Paid -->
-                                    <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
-                                        title="Already paid" disabled>
-                                        Pay Now
-                                    </button>
-                                @else
-                                    @if ($rent->order_status == 'waiting')
-                                        <!-- Button Greyed Out - Not Approved Yet -->
+                            @if (auth()->user()->type === 'Regular')
+                                <td class="px-4 py-2 border text-center">
+                                    @if ($rent->payment_status == 'paid')
+                                        <!-- Button Greyed Out - Already Paid -->
                                         <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
-                                            title="Not approved yet" disabled>
+                                            title="Already paid" disabled>
                                             Pay Now
                                         </button>
-                                    @elseif ($rent->order_status == 'approved')
-                                        <!-- Active Button - Redirects to Payment Gateway -->
-                                        <a href="#"
-                                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                                            Pay Now
-                                        </a>
                                     @else
-                                        <!-- Default State -->
-                                        <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
-                                            disabled>
-                                            Pay Now
-                                        </button>
+                                        @if ($rent->order_status == 'waiting')
+                                            <!-- Button Greyed Out - Not Approved Yet -->
+                                            <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
+                                                title="Not approved yet" disabled>
+                                                Pay Now
+                                            </button>
+                                        @elseif ($rent->order_status == 'approved')
+                                            <!-- Active Button - Redirects to Payment Gateway -->
+                                            <a href="#"
+                                                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                                                Pay Now
+                                            </a>
+                                        @else
+                                            <!-- Default State -->
+                                            <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
+                                                disabled>
+                                                Pay Now
+                                            </button>
+                                        @endif
                                     @endif
-                                @endif
-                            </td>
+                                </td>
+                            @endif
                             <td class="px-4 py-2 border">
                                 <span
                                     class="inline-block px-2 py-1 text-white rounded
