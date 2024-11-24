@@ -65,7 +65,9 @@
                     <tr class="bg-blue-600 text-white">
                         <th class="px-4 py-2 border">No</th>
                         <th class="px-4 py-2 border">Item</th>
-                        <th class="px-4 py-2 border">Price</th>
+                        @if (auth()->user()->type === 'Regular')
+                            <th class="px-4 py-2 border">Price</th>
+                        @endif
                         <th class="px-4 py-2 border">Rent Date</th>
                         <th class="px-4 py-2 border">Return Date</th>
                         <th class="px-4 py-2 border">Status</th>
@@ -82,7 +84,9 @@
                                     @endforeach
                                 </ul>
                             </td>
-                            <td class="px-4 py-2 border">Rp {{ number_format($rent->total_cost, 0, ',', '.') }}</td>
+                            @if (auth()->user()->type === 'Regular')
+                                <td class="px-4 py-2 border">Rp {{ number_format($rent->total_cost, 0, ',', '.') }}</td>
+                            @endif
                             <td class="px-4 py-2 border">{{ $rent->start_date }}</td>
                             <td class="px-4 py-2 border">{{ $rent->end_date }}</td>
                             <td class="px-4 py-2 border">

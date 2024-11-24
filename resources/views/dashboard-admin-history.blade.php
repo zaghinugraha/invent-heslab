@@ -129,7 +129,11 @@
                                 @endforeach
                             </ul>
                         </td>
-                        <td class="px-4 py-2 border">Rp{{ number_format($rent->total_cost, 0, ',', '.') }}</td>
+                        @if (auth()->user()->type === 'Regular')
+                            <td class="px-4 py-2 border">Rp{{ number_format($rent->total_cost, 0, ',', '.') }}</td>
+                        @else
+                            <td class="px-4 py-2 border">Free</td>
+                        @endif
                         <td class="px-4 py-2 border">
                             <span
                                 class="inline-block px-2 py-1 text-white rounded

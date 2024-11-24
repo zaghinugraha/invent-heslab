@@ -72,6 +72,16 @@ class AdminRentController extends Controller
         return redirect()->back()->with('success', 'Rent marked as returned successfully.');
     }
 
+    public function invalid(Rent $rent)
+    {
+        // Reset Documentation Pictures
+        $rent->before_documentation = null;
+        $rent->after_documentation = null;
+        $rent->save();
+
+        return redirect()->back()->with('success', 'Rent documentation marked as invalid successfully.');
+    }
+
     public function getKtmImage($id)
     {
         $rent = Rent::findOrFail($id);

@@ -219,7 +219,7 @@
                 $rent->before_documentation_url &&
                 $rent->after_documentation_url)
             <!-- Return Button -->
-            <div class="flex justify-end mt-8">
+            <div class="flex justify-end space-x-4 mt-8">
                 <form action="{{ route('rent.return', $rent) }}" method="POST">
                     @csrf
                     <button type="submit"
@@ -227,6 +227,13 @@
                         User ini telah mengembalikan barang
                     </button>
                 </form>
+                <!-- Reset Documentation Picture because they're not valid -->
+                <form action="{{ route('rent.invalid', $rent) }}" method="POST">
+                    @csrf
+                    <button type="submit"
+                        class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
+                        Invalid Documentation
+                    </button>
             </div>
         @endif
     </div>

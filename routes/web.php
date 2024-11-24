@@ -61,6 +61,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::post('/admin/rent-requests/{rent}/approve', [AdminRentController::class, 'approve'])->name('rent.approve');
         Route::post('/admin/rent-requests/{rent}/reject', [AdminRentController::class, 'reject'])->name('rent.reject');
         Route::post('/admin/rent-requests/{rent}/returned', [AdminRentController::class, 'returned'])->name('rent.return');
+        Route::post('/admin/rent-requests/{rent}/invalid', [AdminRentController::class, 'invalid'])->name('rent.invalid');
         Route::get('/admin/rent/{id}/ktm-image', [AdminRentController::class, 'getKtmImage'])->name('rent.ktmImage');
         Route::get('/admin/rent/{id}/before-documentation', [AdminRentController::class, 'getBeforeDocumentation'])->name('rent.beforeDocumentation');
         Route::get('/admin/rent/{id}/after-documentation', [AdminRentController::class, 'getAfterDocumentation'])->name('rent.afterDocumentation');

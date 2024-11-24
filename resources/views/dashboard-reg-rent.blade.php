@@ -128,6 +128,7 @@
                             <th class="px-4 py-2 border">Payment</th>
                         @endif
                         <th class="px-4 py-2 border">Status</th>
+                        <th class="px-4 py-2 border">Documentation Status</th>
                         <th class="px-4 py-2 border">Actions</th>
                     </tr>
                 </thead>
@@ -188,6 +189,31 @@
                                 bg-green-500 @endif
                             ">{{ ucfirst($rent->order_status) }}</span>
                             </td>
+                            <td class="px-4 py-2 border text-left">
+                                @if ($rent->before_documentation)
+                                    <p>
+                                        <span>Before: </span>
+                                        <span class="text-green-600 font-bold">Submitted</span>
+                                    </p>
+                                @else
+                                    <p>
+                                        <span>Before: </span>
+                                        <span class="text-red-600 font-bold">Not Submitted</span>
+                                    </p>
+                                @endif
+
+                                @if ($rent->after_documentation)
+                                    <p>
+                                        <span>After: </span>
+                                        <span class="text-green-600 font-bold">Submitted</span>
+                                    </p>
+                                @else
+                                    <p>
+                                        <span>After: </span>
+                                        <span class="text-red-600 font-bold">Not Submitted</span>
+                                    </p>
+                                @endif
+                            </td>
                             <td class="px-4 py-2 border text-center">
                                 <!-- Actions Buttons -->
                                 @php
@@ -203,7 +229,7 @@
                                             @click="documentationModal = true; rentId = {{ $rent->id }}; documentationType = 'before';">
                                             Before-rent Documentation
                                         </button>
-                                    @elseif ($rent->before_documentation && !$rent->after_documentation && $today >= $endDate)
+                                    @elseif ($rent->before_documentation && !$rent->after_documentation && $today >= $startDate && $today <= $endDate)
                                         <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
                                             @click="documentationModal = true; rentId = {{ $rent->id }}; documentationType = 'after';">
                                             After-rent Documentation
@@ -216,7 +242,7 @@
                                     @endif
                                 @else
                                     <!-- Cancel Button -->
-                                    @if ($rent->order_status != 'cancelled' && $rent->order_status != 'overdue' && $rent->order_status != 'completed')
+                                    @if ($rent->payment_status !== 'paid' && $today < $startDate)
                                         <form action="{{ route('rent.cancel', $rent) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
