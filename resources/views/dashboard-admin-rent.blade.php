@@ -65,7 +65,7 @@
 @section('content')
     <div class="flex flex-col items-center">
         <!-- Status Cards -->
-        <div class="space-y-4 mb-8 w-full mx-auto">
+        <div class="space-y-4 mb-4 w-full mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 w-full mx-auto">
                 <!-- Approved Card -->
                 <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
@@ -90,6 +90,20 @@
                     <div class="bg-yellow-500 text-white font-semibold py-2">Waiting</div>
                     <div class="bg-white py-4 text-2xl font-bold text-black">{{ $waitingCount }}</div>
                 </div>
+            </div>
+            <div class="w-full flex justify-end">
+                <form action="{{ route('dashboard-admin-rent') }}" method="GET" class="flex w-1/2">
+                    <input type="text" name="search" placeholder="Search"
+                        class="w-full px-4 py-2 border rounded-l-lg focus:outline-none"
+                        value="{{ request()->query('search') }}" />
+                    <button type="submit" class="bg-gray-300 px-4 rounded-r-lg">
+                        <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M21.707 20.293l-6.388-6.388A7.455 7.455 0 0018 10.5a7.5 7.5 0 10-7.5 7.5c1.8 0 3.464-.63 4.904-1.681l6.388 6.388a1 1 0 001.415-1.414zM10.5 16a5.5 5.5 0 110-11 5.5 5.5 0 010 11z">
+                            </path>
+                        </svg>
+                    </button>
+                </form>
             </div>
         </div>
 

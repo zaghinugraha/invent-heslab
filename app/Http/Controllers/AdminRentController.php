@@ -17,14 +17,30 @@ class AdminRentController extends Controller
     {
         $this->rentStatusUpdater = $rentStatusUpdater;
     }
-    public function index()
+    public function index(Request $request)
     {
 
         $this->rentStatusUpdater->updateStatuses();
-        $rents = Rent::with('user', 'items.product')
-            ->whereIn('order_status', ['approved', 'active', 'overdue', 'waiting'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+
+        $search = $request->input('search');
+
+        $query = Rent::with('user', 'items.product')
+            ->whereIn('order_status', ['approved', 'active', 'overdue', 'waiting']);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nim_nip', 'LIKE', "%{$search}%")
+                    ->orWhere('phone', 'LIKE', "%{$search}%")
+                    ->orWhereHas('user', function ($qUser) use ($search) {
+                        $qUser->where('name', 'LIKE', "%{$search}%");
+                    })
+                    ->orWhereHas('items.product', function ($qProduct) use ($search) {
+                        $qProduct->where('name', 'LIKE', "%{$search}%");
+                    });
+            });
+        }
+
+        $rents = $query->orderBy('created_at', 'desc')->paginate(10)->appends(['search' => $search]);
 
 
         // Calculate counts for status cards

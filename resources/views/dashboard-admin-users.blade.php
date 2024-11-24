@@ -67,30 +67,30 @@
 @endsection
 
 @section('content')
-    <div class="flex justify-between mb-4" x-data="{ addTeam: false }">
-        <!-- Filter Section -->
-        <form method="GET" action="{{ route('users.index') }}" class="flex items-center" id="filterForm">
-            <label for="team_id" class="mr-2">Filter by Role:</label>
-            <select name="team_id" id="team_id" class="border rounded p-2">
-                <option value="">All Roles</option>
-                @foreach (['Admin', 'Dosen', 'Koordinator', 'Research Group', 'Study Group'] as $role)
-                    <option value="{{ $role }}" {{ request('team_id') == $role ? 'selected' : '' }}>
-                        {{ $role }}
-                    </option>
-                @endforeach
-            </select>
-        </form>
+    <div class="flex justify-between" x-data="{ addTeam: false }">
+        <div class="w-full mb-4 flex justify-end">
+            <form action="{{ route('users.index') }}" method="GET" class="flex w-full">
+                <input type="text" name="search" placeholder="Search users..."
+                    class="w-full px-4 py-2 border rounded-l-lg focus:outline-none"
+                    value="{{ request()->query('search') }}" />
 
-        <!-- Search Bar Section -->
-        <div class="flex items-center">
-            <input type="text" placeholder="Search" class="px-4 py-2 border rounded-l-lg focus:outline-none" />
-            <button class="bg-gray-300 px-4 py-2 rounded-r-lg">
-                <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                        d="M21.707 20.293l-6.388-6.388A7.455 7.455 0 0018 10.5a7.5 7.5 0 10-7.5 7.5c1.8 0 3.464-.63 4.904-1.681l6.388 6.388a1 1 0 001.415-1.414zM10.5 16a5.5 5.5 0 110-11 5.5 5.5 0 010 11z">
-                    </path>
-                </svg>
-            </button>
+                <select name="team_id" class="px-4 py-2 border-t border-b border-l-none focus:outline-none">
+                    <option value="">All Teams</option>
+                    @foreach ($teams as $team)
+                        <option value="{{ $team }}" {{ $selectedTeam == $team ? 'selected' : '' }}>
+                            {{ $team }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <button type="submit" class="bg-gray-300 px-4 py-2 rounded-r-lg">
+                    <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M21.707 20.293l-6.388-6.388A7.455 7.455 0 0018 10.5a7.5 7.5 0 10-7.5 7.5c1.8 0 3.464-.63 4.904-1.681l6.388 6.388a1 1 0 001.415-1.414zM10.5 16a5.5 5.5 0 110-11 5.5 5.5 0 010 11z">
+                        </path>
+                    </svg>
+                </button>
+            </form>
         </div>
     </div>
 
