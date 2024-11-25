@@ -29,14 +29,23 @@ class RentController extends Controller
         $request->validate([
             'nim_nip' => 'required|string|max:20',
             'phone' => 'required|string|max:15',
-            'ktm_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:8192', // Validasi gambar
-            'start_date' => 'required|date',
+            'ktm_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:8192',
+            'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after_or_equal:start_date',
             'payment_method' => 'required|string',
             'notes' => 'nullable|string',
         ]);
 
+        $startDate = Carbon::parse($request->start_date);
+        $endDate = Carbon::parse($request->end_date);
+        $days = $startDate->diffInDays($endDate);
+
+        if ($days < 7) {
+            return redirect()->back()->withErrors(['end_date' => 'The minimum rental period is one week.']);
+        }
+
         DB::beginTransaction();
+
 
         try {
             // Read the binary content of the uploaded KTM image
@@ -52,13 +61,26 @@ class RentController extends Controller
                 return redirect()->back()->with('error', 'Cart is empty. Please add items to the cart.');
             }
 
+            $weeks = ceil($days / 7);
+            $totalCost = 0;
+
+            foreach ($cartItems as $item) {
+                if (Auth::user()->hasType('Regular')) {
+                    $itemTotal = $item->price * $weeks * $item->qty;
+                    $totalCost += $itemTotal;
+                } else {
+                    $totalCost = 0;
+                    break;
+                }
+            }
+
             // Buat pemesanan baru di tabel rent
             $rent = Rent::create([
                 'user_id' => Auth::id(),
                 'order_date' => now(),
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
-                'total_cost' => Cart::instance('cart')->total(0, '', ''),
+                'total_cost' => $totalCost,
                 'payment_method' => $request->payment_method,
                 'payment_status' => 'unpaid',
                 'order_status' => 'waiting',
@@ -75,7 +97,7 @@ class RentController extends Controller
                     'item_id' => $item->id,
                     'quantity' => $item->qty,
                     'price_per_unit' => $item->price,
-                    'subtotal' => $item->qty * $item->price,
+                    'subtotal' => Auth::user()->hasType('Regular') ? $item->price * $weeks * $item->qty : 0,
                 ]);
             }
 

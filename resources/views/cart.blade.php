@@ -79,7 +79,10 @@
                 @if ($cartItems->isNotEmpty())
                     <div class="border-2 border-blue-300 bg-blue-50 rounded p-4 shadow-lg">
                         @foreach ($cartItems as $item)
-                            <div class="flex flex-row items-start gap-4 mb-4">
+                            <div class="cart-item flex flex-row items-start gap-4 mb-4" data-row-id="{{ $item->rowId }}"
+                                data-price-per-week="{{ auth()->user()->hasType('Regular') ? $item->price : 0 }}"
+                                data-quantity="{{ $item->qty }}">
+
                                 <!-- Product Image -->
                                 <img src="data:image/jpeg;base64,{{ base64_encode($item->options->product_image) }}"
                                     alt="{{ $item->name }}" class="w-20 h-20 rounded-lg object-cover shadow-md">
@@ -151,7 +154,7 @@
                         <div class="mt-6 pt-4">
                             <div class="flex justify-between items-center font-semibold text-lg">
                                 <span>Total :</span>
-                                <span class="text-blue-700">
+                                <span class="text-blue-700" id="total-price">
                                     @if (!auth()->user()->hasType('Regular'))
                                         Free
                                     @else
@@ -217,12 +220,14 @@
                     <div class="flex gap-4 mb-6">
                         <div class="w-1/2">
                             <label class="block text-gray-700 font-medium mb-2">Rent Date</label>
-                            <input type="date" name="start_date" value="{{ old('start_date') }}" required
+                            <input type="date" name="start_date" id="start_date" value="{{ old('start_date') }}"
+                                required min="{{ date('Y-m-d') }}"
                                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                         </div>
                         <div class="w-1/2">
                             <label class="block text-gray-700 font-medium mb-2">Return Date</label>
-                            <input type="date" name="end_date" value="{{ old('end_date') }}" required
+                            <input type="date" name="end_date" id="end_date" value="{{ old('end_date') }}" required
+                                min="{{ date('Y-m-d', strtotime('+1 week')) }}"
                                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                         </div>
                     </div>
@@ -259,6 +264,95 @@
 @endsection
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const isRegularUser = {{ auth()->user()->hasType('Regular') ? 'true' : 'false' }};
+        const startDateInput = document.getElementById('start_date');
+        const endDateInput = document.getElementById('end_date');
+
+        startDateInput.addEventListener('change', onStartDateChange);
+        endDateInput.addEventListener('change', updatePrice);
+
+        function onStartDateChange() {
+            const startDateValue = startDateInput.value;
+            if (startDateValue) {
+                const startDate = new Date(startDateValue);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                if (startDate < today) {
+                    alert("Rent date cannot be earlier than today.");
+                    startDateInput.value = today.toISOString().split('T')[0];
+                    return;
+                }
+
+                // Set minimum end date (start date + 7 days)
+                const minEndDate = getMinEndDate(startDate);
+                endDateInput.value = '';
+                endDateInput.setAttribute('min', minEndDate.toISOString().split('T')[0]);
+            }
+            updatePrice();
+        }
+
+        function updatePrice() {
+            const startDateValue = startDateInput.value;
+            const endDateValue = endDateInput.value;
+
+            if (startDateValue && endDateValue) {
+                const startDate = new Date(startDateValue);
+                const endDate = new Date(endDateValue);
+
+                const timeDiff = endDate - startDate;
+                const days = timeDiff / (1000 * 3600 * 24);
+
+                if (days < 7) {
+                    alert("Minimum rental period is 1 week.");
+                    const minEndDate = getMinEndDate(startDate);
+                    endDateInput.value = minEndDate.toISOString().split('T')[0];
+                    return;
+                }
+
+                const weeks = Math.ceil(days / 7);
+                let totalPrice = 0;
+
+                if (isRegularUser) {
+                    const cartItems = document.querySelectorAll('.cart-item');
+                    cartItems.forEach(function(cartItem) {
+                        const pricePerWeek = parseFloat(cartItem.dataset.pricePerWeek);
+                        const quantity = parseInt(cartItem.dataset.quantity);
+                        const itemTotal = pricePerWeek * weeks * quantity;
+                        totalPrice += itemTotal;
+                    });
+                    document.getElementById('total-price').textContent = 'Rp ' + formatNumber(totalPrice);
+                }
+            }
+        }
+
+        function getMinEndDate(startDate) {
+            const minEndDate = new Date(startDate);
+            minEndDate.setDate(minEndDate.getDate() + 7);
+            return minEndDate;
+        }
+
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Initialize min attributes on page load
+        (function initializeDates() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            startDateInput.setAttribute('min', today.toISOString().split('T')[0]);
+
+            const startDateValue = startDateInput.value || today.toISOString().split('T')[0];
+            const startDate = new Date(startDateValue);
+            const minEndDate = getMinEndDate(startDate);
+            endDateInput.setAttribute('min', minEndDate.toISOString().split('T')[0]);
+        })();
+
+        // Initialize price on page load
+        updatePrice();
+    });
+
     function decreaseQuantity(rowId) {
         var input = document.getElementById('quantity-' + rowId);
         var value = parseInt(input.value);

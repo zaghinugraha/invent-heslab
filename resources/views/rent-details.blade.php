@@ -122,14 +122,14 @@
                 <div class="flex items-center">
                     <span class="w-1/3 font-semibold">Total Cost:</span>
                     <span class="w-2/3">
-                        @if (!auth()->user()->hasType('Regular'))
+                        @if (!$rent->user->hasType('Regular'))
                             Free
                         @else
                             Rp {{ number_format($rent->total_cost, 0, ',', '.') }}
                         @endif
                     </span>
                 </div>
-                @if (auth()->user()->hasType('Regular'))
+                @if ($rent->user->hasType('Regular'))
                     <div class="flex items-center">
                         <span class="w-1/3 font-semibold">Payment Status:</span>
                         <span class="w-2/3">
