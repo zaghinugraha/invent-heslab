@@ -13,6 +13,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AdminRentController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -55,6 +56,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
 
     Route::middleware(['check.admin.team'])->group(function () {
+        Route::post('/admin/notifications/mark-all-read', [AdminController::class, 'markAllNotificationsAsRead'])
+            ->name('notifications.markAllAsRead');
+
         Route::get('/admin/history', [AdminHistoryController::class, 'history'])->name('dashboard-admin-history');
 
         Route::get('/admin/rent', [AdminRentController::class, 'index'])->name('dashboard-admin-rent');

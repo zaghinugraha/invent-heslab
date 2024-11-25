@@ -87,21 +87,33 @@
     deleteCategory: false,
 }">
     <!-- Notifications Modal -->
-    <div x-show="showNotifications" @click.away="showNotifications = false"
-        class="fixed right-10 top-20 flex items-center justify-center bg-white bg-opacity-0 z-20">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-full mb-8">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold gradient-text">Notifications</h2>
-                <button class="text-blue-600 hover:underline">Mark all as read</button>
+    <div x-show="showNotifications" @click.away="showNotifications = false" class="fixed right-10 top-20 z-20">
+        <div class="bg-white p-6 rounded-lg shadow-lg sm:w-1/2 md:w-full mb-8">
+            <div class="flex justify-between items-center mb-4 gap-3">
+                <h2 class="md:text-xl sm:text-sm font-bold gradient-text">Notifications</h2>
+                <form method="POST" action="{{ route('notifications.markAllAsRead') }}">
+                    @csrf
+                    <button type="submit" class="text-blue-600 hover:underline sm:text-xs md:text-sm">
+                        Mark all as read
+                    </button>
+                </form>
             </div>
             <hr class="mb-4">
             <ul class="max-h-40 overflow-y-auto">
-                <li class="mb-2">Notification 1: Your item has been approved.</li>
-                <li class="mb-2">Notification 2: Your item is due for return tomorrow.</li>
-                <li class="mb-2">Notification 3: A new item has been added to the inventory.</li>
-                <li class="mb-2">Notification 4: Your item has been shipped.</li>
-                <li class="mb-2">Notification 5: Your item is out for delivery.</li>
-                <li class="mb-2">Notification 6: Your item has been delivered.</li>
+                @forelse (auth()->user()->unreadNotifications as $notification)
+                    <li class="mb-2">
+                        <a href="{{ route('rent.details', ['id' => $notification->data['rent_id'], 'notification_id' => $notification->id]) }}"
+                            class="text-blue-500 hover:underline">
+                            {{ $notification->data['user_name'] }} {{ $notification->data['message'] }}
+                            ({{ $notification->data['rent_id'] }})
+                        </a>
+                        <div class="text-gray-600 text-xs">
+                            {{ \Carbon\Carbon::parse($notification->data['created_at'])->diffForHumans() }}
+                        </div>
+                    </li>
+                @empty
+                    <li class="mb-2 text-center">No new notifications.</li>
+                @endforelse
             </ul>
         </div>
     </div>
@@ -141,8 +153,12 @@
                             stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                     <!-- ini span buat jumlah notip, disesuaiin sama jumlah notip user yang ada di db -->
-                    <span
-                        class="absolute top-0 right-0 inline-block w-4 h-4 bg-red-600 text-white text-xs font-semibold rounded-full text-center">3</span>
+                    @if (auth()->user()->unreadNotifications->count() > 0)
+                        <span
+                            class="absolute top-0 right-0 inline-block w-4 h-4 bg-red-600 text-white text-xs font-semibold rounded-full text-center">
+                            {{ auth()->user()->unreadNotifications->count() }}
+                        </span>
+                    @endif
                 </button>
                 <!-- poto propil user -->
                 <div class="relative">

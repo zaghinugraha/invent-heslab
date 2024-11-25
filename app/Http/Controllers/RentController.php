@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Notifications\NewRentRequest;
 use App\Models\Rent;
 use App\Models\RentItem;
 use Illuminate\Http\Request;
@@ -81,6 +83,14 @@ class RentController extends Controller
 
             DB::commit();
 
+            $admins = User::whereHas('currentTeam', function ($query) {
+                $query->where('name', 'Admin');
+            })->get();
+
+            foreach ($admins as $admin) {
+                $admin->notify(new NewRentRequest($rent));
+            }
+
             return redirect()->route('dashboard-reg-rent')->with('success', 'Rent order successfully created.');
 
         } catch (\Exception $e) {
@@ -89,9 +99,18 @@ class RentController extends Controller
         }
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
         $rent = Rent::with('items.product')->findOrFail($id);
+
+        // Mark the notification as read if 'notification_id' is present
+        if ($request->has('notification_id')) {
+            $notification = auth()->user()->notifications()->find($request->notification_id);
+            if ($notification) {
+                $notification->markAsRead();
+            }
+        }
+
         return view('rent-details', compact('rent'));
     }
     public function fetch()

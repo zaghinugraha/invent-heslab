@@ -41,4 +41,14 @@ class Team extends JetstreamTeam
             'personal_team' => 'boolean',
         ];
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'team_user')->withPivot('role');
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
