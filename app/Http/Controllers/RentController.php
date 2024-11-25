@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Notifications\NewRentRequest;
+use App\Notifications\DocumentationCompletedNotification;
 use App\Models\Rent;
 use App\Models\RentItem;
 use Illuminate\Http\Request;
@@ -181,6 +182,17 @@ class RentController extends Controller
                     $docContent = file_get_contents($request->file('documentation')->getRealPath());
                     $rent->after_documentation = $docContent;
                     $rent->save();
+
+                    if ($rent->before_documentation && $rent->after_documentation) {
+                        // Notify all admin users
+                        $admins = User::whereHas('currentTeam', function ($query) {
+                            $query->where('name', 'Admin');
+                        })->get();
+
+                        foreach ($admins as $admin) {
+                            $admin->notify(new DocumentationCompletedNotification($rent));
+                        }
+                    }
 
                     return redirect()->back()->with('success', 'After documentation submitted successfully.');
                 } else {

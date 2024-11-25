@@ -13,7 +13,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AdminRentController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -53,11 +53,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/product/image/{uuid}', [ProductController::class, 'getImage'])->name('product.image');
     Route::resource('/products', ProductController::class);
 
+    Route::post('/reg/notifications/mark-all-read', [NotificationController::class, 'readAllReg'])
+        ->name('notifications.readAllReg');
 
 
     Route::middleware(['check.admin.team'])->group(function () {
-        Route::post('/admin/notifications/mark-all-read', [AdminController::class, 'markAllNotificationsAsRead'])
-            ->name('notifications.markAllAsRead');
+        Route::post('/admin/notifications/mark-all-read', [NotificationController::class, 'readAllAdmin'])
+            ->name('notifications.readAllAdmin');
 
         Route::get('/admin/history', [AdminHistoryController::class, 'history'])->name('dashboard-admin-history');
 

@@ -136,7 +136,7 @@
                                     </div>
                                     <!-- Price -->
                                     <p class="text-sm text-gray-400 font-semibold">
-                                        @if (auth()->user()->type !== 'Regular')
+                                        @if (!auth()->user()->hasType('Regular'))
                                             Free because you are {{ auth()->user()->teams->first()->name }}
                                         @else
                                             Rp {{ number_format($item->price, 0, ',', '.') }}/item
@@ -152,7 +152,7 @@
                             <div class="flex justify-between items-center font-semibold text-lg">
                                 <span>Total :</span>
                                 <span class="text-blue-700">
-                                    @if (auth()->user()->type !== 'Regular')
+                                    @if (!auth()->user()->hasType('Regular'))
                                         Free
                                     @else
                                         Rp {{ Cart::instance('cart')->subtotal(0, ',', '.') }}
@@ -232,10 +232,11 @@
                         </label>
                         <select name="payment_method" required
                             class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
-                            <option value="credit_card">Credit Card</option>
-                            <option value="bank_transfer">Bank Transfer</option>
-                            <option value="e_wallet">E-Wallet</option>
-                            @if (auth()->user()->type !== 'Regular')
+                            @if (auth()->user()->hasType('Regular'))
+                                <option value="credit_card">Credit Card</option>
+                                <option value="bank_transfer">Bank Transfer</option>
+                                <option value="e_wallet">E-Wallet</option>
+                            @else
                                 <option value="free">Free</option>
                             @endif
                         </select>

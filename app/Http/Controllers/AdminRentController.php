@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Rent;
 use Illuminate\Http\Request;
+use App\Notifications\RentApprovedNotification;
+use App\Notifications\RentRejectedNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Services\RentStatusUpdater;
@@ -58,13 +60,16 @@ class AdminRentController extends Controller
         $rent->order_status = 'approved';
         $startDate = Carbon::parse($rent->start_date);
         $currentDate = Carbon::now();
+
         if ($currentDate->gte($startDate)) {
             $rent->order_status = 'active';
         }
-        if ($rent->user->role !== 'Regular') {
+        if ($rent->user->hasType('Admin')) {
             $rent->payment_status = 'paid';
         }
         $rent->save();
+
+        $rent->user->notify(new RentApprovedNotification($rent));
 
         return redirect()->back()->with('success', 'Rent request approved successfully.');
     }
@@ -74,6 +79,8 @@ class AdminRentController extends Controller
         // Update rent status to 'rejected'
         $rent->order_status = 'rejected';
         $rent->save();
+
+        $rent->user->notify(new RentRejectedNotification($rent));
 
         return redirect()->back()->with('success', 'Rent request rejected successfully.');
     }

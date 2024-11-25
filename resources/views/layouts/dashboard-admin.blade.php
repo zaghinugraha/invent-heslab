@@ -91,7 +91,7 @@
         <div class="bg-white p-6 rounded-lg shadow-lg sm:w-1/2 md:w-full mb-8">
             <div class="flex justify-between items-center mb-4 gap-3">
                 <h2 class="md:text-xl sm:text-sm font-bold gradient-text">Notifications</h2>
-                <form method="POST" action="{{ route('notifications.markAllAsRead') }}">
+                <form method="POST" action="{{ route('notifications.readAllAdmin') }}">
                     @csrf
                     <button type="submit" class="text-blue-600 hover:underline sm:text-xs md:text-sm">
                         Mark all as read
@@ -101,16 +101,29 @@
             <hr class="mb-4">
             <ul class="max-h-40 overflow-y-auto">
                 @forelse (auth()->user()->unreadNotifications as $notification)
-                    <li class="mb-2">
-                        <a href="{{ route('rent.details', ['id' => $notification->data['rent_id'], 'notification_id' => $notification->id]) }}"
-                            class="text-blue-500 hover:underline">
-                            {{ $notification->data['user_name'] }} {{ $notification->data['message'] }}
-                            ({{ $notification->data['rent_id'] }})
-                        </a>
-                        <div class="text-gray-600 text-xs">
-                            {{ \Carbon\Carbon::parse($notification->data['created_at'])->diffForHumans() }}
-                        </div>
-                    </li>
+                    @if ($notification->type === 'App\Notifications\NewRentRequest')
+                        <li class="mb-2">
+                            <a href="{{ route('rent.details', ['id' => $notification->data['rent_id'], 'notification_id' => $notification->id]) }}"
+                                class="text-yellow-500 hover:underline">
+                                {{ $notification->data['user_name'] }} {{ $notification->data['message'] }}
+                                ({{ $notification->data['rent_id'] }})
+                            </a>
+                            <div class="text-gray-600 text-xs">
+                                {{ \Carbon\Carbon::parse($notification->data['created_at'])->diffForHumans() }}
+                            </div>
+                        </li>
+                    @elseif ($notification->type === 'App\Notifications\DocumentationCompletedNotification')
+                        <li class="mb-2">
+                            <a href="{{ route('rent.details', ['id' => $notification->data['rent_id'], 'notification_id' => $notification->id]) }}"
+                                class="text-green-500 hover:underline">
+                                {{ $notification->data['user_name'] }} {{ $notification->data['message'] }}
+                                ({{ $notification->data['rent_id'] }})
+                            </a>
+                            <div class="text-gray-600 text-xs">
+                                {{ \Carbon\Carbon::parse($notification->data['created_at'])->diffForHumans() }}
+                            </div>
+                        </li>
+                    @endif
                 @empty
                     <li class="mb-2 text-center">No new notifications.</li>
                 @endforelse
@@ -156,7 +169,7 @@
                     @if (auth()->user()->unreadNotifications->count() > 0)
                         <span
                             class="absolute top-0 right-0 inline-block w-4 h-4 bg-red-600 text-white text-xs font-semibold rounded-full text-center">
-                            {{ auth()->user()->unreadNotifications->count() }}
+                            {{ auth()->user()->unreadNotifications->where('type', 'App\Notifications\NewRentRequest')->count() + auth()->user()->unreadNotifications->where('type', 'App\Notifications\DocumentationCompletedNotification')->count() }}
                         </span>
                     @endif
                 </button>

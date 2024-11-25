@@ -76,6 +76,49 @@
 </head>
 
 <body class="bg-gray-100 flex flex-col min-h-screen" x-data="{ confirmLogout: false, propil: false, addTeam: false, newItem: false, showNotifications: false, showFilter: false, changeLang: false, documentationModal: false, rentId: null, documentationType: null }">
+    <!-- Notifications Modal -->
+    <div x-show="showNotifications" @click.away="showNotifications = false" class="fixed right-10 top-20 z-20">
+        <div class="bg-white p-6 rounded-lg shadow-lg sm:w-1/2 md:w-full mb-8">
+            <div class="flex justify-between items-center mb-4 gap-3">
+                <h2 class="md:text-xl sm:text-sm font-bold gradient-text">Notifications</h2>
+                <form method="POST" action="{{ route('notifications.readAllReg') }}">
+                    @csrf
+                    <button type="submit" class="text-blue-600 hover:underline sm:text-xs md:text-sm">
+                        Mark all as read
+                    </button>
+                </form>
+            </div>
+            <hr class="mb-4">
+            <ul class="max-h-40 overflow-y-auto">
+                @forelse (auth()->user()->unreadNotifications as $notification)
+                    @if ($notification->type === 'App\Notifications\RentApprovedNotification')
+                        <li class="mb-2">
+                            <a href="{{ route('rent.details', ['id' => $notification->data['rent_id'], 'notification_id' => $notification->id]) }}"
+                                class="text-blue-500 hover:underline">
+                                {{ $notification->data['message'] }} ({{ $notification->data['rent_id'] }})
+                            </a>
+                            <div class="text-gray-600 text-xs">
+                                {{ \Carbon\Carbon::parse($notification->data['created_at'])->diffForHumans() }}
+                            </div>
+                        </li>
+                    @elseif ($notification->type === 'App\Notifications\RentRejectedNotification')
+                        <li class="mb-2">
+                            <a href="{{ route('rent.details', ['id' => $notification->data['rent_id'], 'notification_id' => $notification->id]) }}"
+                                class="text-red-500 hover:underline">
+                                {{ $notification->data['message'] }} ({{ $notification->data['rent_id'] }})
+                            </a>
+                            <div class="text-gray-600 text-xs">
+                                {{ \Carbon\Carbon::parse($notification->data['created_at'])->diffForHumans() }}
+                            </div>
+                        </li>
+                    @endif
+                @empty
+                    <li class="mb-2 text-center">No new notifications.</li>
+                @endforelse
+            </ul>
+        </div>
+    </div>
+
     <div class="flex flex-col flex-grow">
         <!-- Header -->
         <header class="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4 bg-white shadow-md z-10">
@@ -113,7 +156,8 @@
                     </svg>
                     <!-- ini span buat jumlah notip, disesuaiin sama jumlah notip user yang ada di db -->
                     <span
-                        class="absolute top-0 right-0 inline-block w-4 h-4 bg-red-600 text-white text-xs font-semibold rounded-full text-center">3</span>
+                        class="absolute top-0 right-0 inline-block w-4 h-4 bg-red-600 text-white text-xs font-semibold rounded-full text-center">
+                        {{ auth()->user()->unreadNotifications->where('type', 'App\Notifications\RentApprovedNotification')->count() + auth()->user()->unreadNotifications->where('type', 'App\Notifications\RentRejectedNotification')->count() }}</span>
                 </button>
                 {{-- add button for change language --}}
                 <div class="relative">
@@ -134,27 +178,6 @@
         <div class="flex">
             <!-- Sidebar -->
             @yield('sidebar')
-
-
-            <!-- Notifications Modal -->
-            <div x-show="showNotifications" @click.away="showNotifications = false"
-                class="fixed right-10 top-20 flex items-center justify-center bg-white bg-opacity-0 z-20">
-                <div class="bg-white p-6 rounded-lg shadow-lg sm:w-1/2 md:w-full mb-8">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="md:text-xl sm:text-sm font-bold gradient-text">Notifications</h2>
-                        <button class="text-blue-600 hover:underline sm:text-xs md:text-sm">Mark all as read</button>
-                    </div>
-                    <hr class="mb-4">
-                    <ul class="max-h-40 overflow-y-auto">
-                        <li class="mb-2">Notification 1: Your item has been approved.</li>
-                        <li class="mb-2">Notification 2: Your item is due for return tomorrow.</li>
-                        <li class="mb-2">Notification 3: A new item has been added to the inventory.</li>
-                        <li class="mb-2">Notification 4: Your item has been shipped.</li>
-                        <li class="mb-2">Notification 5: Your item is out for delivery.</li>
-                        <li class="mb-2">Notification 6: Your item has been delivered.</li>
-                    </ul>
-                </div>
-            </div>
 
             <!-- Logout Confirmation Modal -->
             <div x-show="confirmLogout"

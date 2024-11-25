@@ -152,7 +152,7 @@
                                 class="bg-green-100 text-green-600 text-xs font-semibold px-2 py-1 rounded-full">Available</span>
                         @endif
                     </div>
-                    @if (auth()->user()->type !== 'Regular')
+                    @if (!auth()->user()->hasType('Regular'))
                         <p class="text-gray-600">Free</p>
                     @else
                         <p class="text-gray-600">Rp{{ number_format($product['price'], 0, ',', '.') }},-</p>

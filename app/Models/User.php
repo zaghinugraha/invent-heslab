@@ -69,4 +69,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Team::class, 'current_team_id');
     }
+
+    public function hasType(string $type): bool
+    {
+        return $this->currentTeam && $this->currentTeam->name === $type;
+    }
 }

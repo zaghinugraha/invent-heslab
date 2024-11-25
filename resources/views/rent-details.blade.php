@@ -122,14 +122,14 @@
                 <div class="flex items-center">
                     <span class="w-1/3 font-semibold">Total Cost:</span>
                     <span class="w-2/3">
-                        @if ($rent->user->type !== 'Regular')
+                        @if (!auth()->user()->hasType('Regular'))
                             Free
                         @else
                             Rp {{ number_format($rent->total_cost, 0, ',', '.') }}
                         @endif
                     </span>
                 </div>
-                @if ($rent->user->type === 'Regular')
+                @if (auth()->user()->hasType('Regular'))
                     <div class="flex items-center">
                         <span class="w-1/3 font-semibold">Payment Status:</span>
                         <span class="w-2/3">
@@ -232,7 +232,7 @@
                     @csrf
                     <button type="submit"
                         class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
-                        Invalid Documentation
+                        Dokumentasi tidak valid
                     </button>
             </div>
         @endif

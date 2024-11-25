@@ -88,7 +88,7 @@
 
             <!-- Price -->
             <p class="text-xl text-gray-700 font-semibold mt-2">
-                @if (auth()->user()->type !== 'Regular')
+                @if (!auth()->user()->hasType('Regular'))
                     Free
                 @else
                     Rp{{ number_format($product['price'], 0, ',', '.') }},-

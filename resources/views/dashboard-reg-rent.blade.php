@@ -124,7 +124,7 @@
                         <th class="px-4 py-2 border">Total Price</th>
                         <th class="px-4 py-2 border">Rent Date</th>
                         <th class="px-4 py-2 border">Return Date</th>
-                        @if (auth()->user()->type === 'Regular')
+                        @if (auth()->user()->hasType('Regular'))
                             <th class="px-4 py-2 border">Payment</th>
                         @endif
                         <th class="px-4 py-2 border">Status</th>
@@ -146,7 +146,7 @@
                             <td class="px-4 py-2 border">Rp {{ number_format($rent->total_cost, 0, ',', '.') }}</td>
                             <td class="px-4 py-2 border">{{ $rent->start_date }}</td>
                             <td class="px-4 py-2 border">{{ $rent->end_date }}</td>
-                            @if (auth()->user()->type === 'Regular')
+                            @if (auth()->user()->hasType('Regular'))
                                 <td class="px-4 py-2 border text-center">
                                     @if ($rent->payment_status == 'paid')
                                         <!-- Button Greyed Out - Already Paid -->
