@@ -134,7 +134,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse ($rents as $index => $rent)
-                        <tr class="hover:bg-gray-50 text-center">
+                        <tr class="hover:bg-gray-50 text-center text-sm">
                             <td class="px-4 py-2 border">{{ $index + 1 }}</td>
                             <td class="px-4 py-2 border text-left">
                                 <ul>
@@ -189,7 +189,7 @@
                                 bg-green-500 @endif
                             ">{{ ucfirst($rent->order_status) }}</span>
                             </td>
-                            <td class="px-4 py-2 border text-left">
+                            <td class="px-4 py-2 border text-left text-sm">
                                 @if ($rent->before_documentation)
                                     <p>
                                         <span>Before: </span>
@@ -214,7 +214,7 @@
                                     </p>
                                 @endif
                             </td>
-                            <td class="px-4 py-2 border text-center">
+                            <td class="px-4 py-2 border text-center text-sm">
                                 <!-- Actions Buttons -->
                                 @php
                                     $today = \Carbon\Carbon::now()->toDateString();
@@ -225,12 +225,12 @@
                                 @if ($rent->payment_status == 'paid')
                                     <!-- Submit Before Documentation Button -->
                                     @if (!$rent->before_documentation && $today >= $startDate && $today <= $endDate)
-                                        <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                                        <button class="bg-green-500 hover:bg-green-600 text-white px-2 py-2 rounded"
                                             @click="documentationModal = true; rentId = {{ $rent->id }}; documentationType = 'before';">
                                             Before-rent Documentation
                                         </button>
                                     @elseif ($rent->before_documentation && !$rent->after_documentation && $today >= $startDate && $today <= $endDate)
-                                        <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                                        <button class="bg-green-500 hover:bg-green-600 text-white px-2 py-2 rounded"
                                             @click="documentationModal = true; rentId = {{ $rent->id }}; documentationType = 'after';">
                                             After-rent Documentation
                                         </button>
@@ -247,7 +247,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                                class="bg-red-500 hover:bg-red-600 text-white px-2 py-2 rounded"
                                                 onclick="return confirm('Are you sure you want to cancel this rent?');">
                                                 Cancel
                                             </button>

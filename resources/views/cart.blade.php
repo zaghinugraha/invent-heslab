@@ -228,7 +228,7 @@
                     </div>
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">
-                            Payment Method <span class="italic">(Choose Free if you are a member)</span>
+                            Payment Method
                         </label>
                         <select name="payment_method" required
                             class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
