@@ -13,6 +13,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('rents:update-statuses')->daily();
+        $schedule->call(function () {
+            \DB::table('notifications')
+                ->where('created_at', '<', now()->subWeek())
+                ->delete();
+        })->daily();
     }
 
     /**

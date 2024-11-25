@@ -324,6 +324,7 @@
                     });
                     document.getElementById('total-price').textContent = 'Rp ' + formatNumber(totalPrice);
                 }
+
             }
         }
 
