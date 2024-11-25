@@ -51,16 +51,16 @@ This project is an Inventory Management System for managing electronic component
 
 6. **Configure database**
 
-Update the `.env` file with your database credentials.
+    Update the `.env` file with your database credentials.
 
-8. **Run migrations and seeders**
+7. **Run migrations and seeders**
 
     ```bash
     php artisan migrate --seed
 
     ```
 
-9. **Start the development server**
+8. **Start the development server**
 
     ```bash
     php artisan serve
