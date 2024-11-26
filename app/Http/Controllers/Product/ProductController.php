@@ -51,9 +51,17 @@ class ProductController extends Controller
 
         $products = $query->with('category')->paginate(10);
 
-        //also get the categories
+        $productsWithMaintenance = Product::with(['maintenance'])->get();
 
-        // Image encoding
+        $needMaintenanceCount = $productsWithMaintenance->filter(function ($product) {
+            $lastMaintenance = $product->maintenance->sortByDesc('created_at')->first();
+            $referenceDate = $lastMaintenance ? $lastMaintenance->created_at : $product->date_arrived;
+            if (!$referenceDate) {
+                return false;
+            }
+            return now()->greaterThanOrEqualTo($referenceDate->copy()->addWeek());
+        })->count();
+
         $categories = Category::where("user_id", auth()->id())->get(['id', 'name']);
 
         $lowStockCount = Product::whereColumn('quantity', '<', 'quantity_alert')->count();
@@ -61,7 +69,8 @@ class ProductController extends Controller
         return view('dashboard-admin-items', [
             'products' => $products,
             'categories' => $categories,
-            'lowStockCount' => $lowStockCount
+            'lowStockCount' => $lowStockCount,
+            'needMaintenanceCount' => $needMaintenanceCount,
         ]);
     }
 

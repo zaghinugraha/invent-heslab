@@ -9,7 +9,6 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\RedirectController;
-use App\Http\Controllers\ItemController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AdminRentController;
@@ -21,7 +20,6 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', [RedirectController::class, 'index'])->name('dashboard');
-    Route::get('/reg/items', [ItemController::class, 'showAllRegular'])->name('dashboard-reg-items');
     Route::get('/reg/rent', [RentController::class, 'fetch'])->name('dashboard-reg-rent');
 
     Route::get('/reg/history', [RentController::class, 'history'])->name('dashboard-reg-history');
@@ -73,7 +71,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/admin/rent/{id}/after-documentation', [AdminRentController::class, 'getAfterDocumentation'])->name('rent.afterDocumentation');
         Route::get('/admin/rent/{id}/details', [RentController::class, 'show'])->name('rent.details');
 
-        Route::get('/admin/items', [ItemController::class, 'showAllAdmin'])->name('dashboard-admin-items');
         Route::get('/admin/items', [ProductController::class, 'admin_dashboard'])->name('dashboard-admin-items');
         Route::resource('/products', ProductController::class);
 

@@ -380,7 +380,7 @@
             <!-- Maintenance Card -->
             <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
                 <div class="bg-red-500 text-white font-semibold py-2">Need Maintenance</div>
-                <div class="bg-white py-4 text-2xl font-bold text-black">0</div>
+                <div class="bg-white py-4 text-2xl font-bold text-black">{{ $needMaintenanceCount }}</div>
             </div>
 
             <!-- Low on Stock Card -->
@@ -489,7 +489,16 @@ $maxQuantity = $products->max('quantity');
                             </td>
                             <td class="px-4 py-2 border">{{ $product['source'] }}</td>
                             <td class="px-4 py-2 border">{{ $product['dateArrival'] }}</td>
-                            <td ss="px-4 py-2 border">tanggal last maintained</td>
+                            <td class="px-4 py-2 border">
+                                @php
+                                    $lastMaintenance = $product->maintenance->sortByDesc('created_at')->first();
+                                @endphp
+                                @if ($lastMaintenance)
+                                    {{ $lastMaintenance->created_at->format('Y-m-d') }}
+                                @else
+                                    N/A
+                                @endif
+                            </td>
                             <td class="px-4 py-2 border">
                                 <div class="flex justify-center space-x-2">
                                     @php

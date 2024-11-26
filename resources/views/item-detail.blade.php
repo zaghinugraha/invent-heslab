@@ -155,18 +155,55 @@
 
             <!-- Maintenance Content -->
             <div id="maintenance-content" class="transition-all duration-300 ease-in-out opacity-0 max-h-0 overflow-auto">
-                @foreach ($product->maintenance->sortByDesc('created_at') as $maintenance)
-                    <div class="border-t py-2">
-                        <p class="text-gray-700">
-                            {{ $maintenance->created_at->format('Y-m-d') }} - {!! nl2br(e($maintenance->notes)) !!}
-                        </p>
-                        @if ($maintenance->documentation)
-                            <img src="data:image/jpeg;base64,{{ base64_encode($maintenance->documentation) }}"
-                                alt="Maintenance Picture" class="mt-2 w-32 h-32 object-cover">
-                        @endif
-                    </div>
-                @endforeach
+                <ul class="space-y-4 p-4 lg:p-8">
+                    @forelse ($product->maintenance->sortByDesc('created_at') as $maintenance)
+                        <li>
+                            <div
+                                class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 flex flex-col md:flex-row items-start md:items-center">
+                                <!-- Date Badge -->
+                                <div class="flex-shrink-0">
+                                    <span
+                                        class="inline-block bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                                        {{ $maintenance->created_at->format('Y-m-d') }}
+                                    </span>
+                                </div>
+
+                                <!-- Notes -->
+                                <div class="mt-4 md:mt-0 md:ml-4 flex-1">
+                                    <p class="text-gray-700 dark:text-gray-300">
+                                        {!! nl2br(e($maintenance->notes)) !!}
+                                    </p>
+                                </div>
+
+                                <!-- Documentation Image -->
+                                @if ($maintenance->documentation)
+                                    <div class="mt-4 md:mt-0 md:ml-4">
+                                        <img src="data:image/jpeg;base64,{{ base64_encode($maintenance->documentation) }}"
+                                            alt="Maintenance Picture"
+                                            class="w-24 h-24 object-cover rounded-lg shadow-sm cursor-pointer"
+                                            onclick="openImageModal(this.src)">
+                                    </div>
+                                @endif
+                            </div>
+                        </li>
+                    @empty
+                        <li class="text-center text-gray-500 dark:text-gray-400">No maintenance records available.</li>
+                    @endforelse
+                </ul>
             </div>
+
+            <!-- Image Modal -->
+            <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg relative max-w-md w-full mx-4">
+                    <button onclick="closeImageModal()"
+                        class="absolute top-2 right-2 text-gray-600 dark:text-gray-300 text-2xl">
+                        &times;
+                    </button>
+                    <img src="" alt="Maintenance Documentation" id="modal-image"
+                        class="max-w-full max-h-96 mx-auto object-contain rounded-lg shadow-sm">
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -232,6 +269,16 @@
             if (value > maxQuantity) value = maxQuantity;
 
             input.value = value;
+        }
+
+        function openImageModal(src) {
+            document.getElementById('modal-image').src = src;
+            document.getElementById('image-modal').classList.remove('hidden');
+        }
+
+        function closeImageModal() {
+            document.getElementById('image-modal').classList.add('hidden');
+            document.getElementById('modal-image').src = '';
         }
 
         // Add to cart function

@@ -155,7 +155,7 @@
                     @if (!auth()->user()->hasType('Regular'))
                         <p class="text-gray-600">Free</p>
                     @else
-                        <p class="text-gray-600">Rp{{ number_format($product['price'], 0, ',', '.') }},-</p>
+                        <p class="text-gray-600">Rp{{ number_format($product['price'], 0, ',', '.') }} / Minggu</p>
                     @endif
                 </div>
             </a>
