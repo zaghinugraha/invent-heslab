@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Category;
+use App\Models\Maintenance;
 use App\Models\Product;
 use App\Models\Unit;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
@@ -204,6 +205,21 @@ class ProductController extends Controller
 
         $product = Product::where("uuid", $uuid)->firstOrFail();
 
+        // Store original attributes for change detection
+        $originalData = $product->getOriginal();
+
+        $product->fill($request->only([
+            'name',
+            'category_id',
+            'brand',
+            'source',
+            'dateArrival',
+            'price',
+            'quantity',
+            'quantity_alert',
+            'notes',
+        ]));
+
         // Handle the product image (if applicable)
         if ($request->hasFile('product_image')) {
             $imageFile = $request->file('product_image');
@@ -211,34 +227,79 @@ class ProductController extends Controller
             $product->product_image = $imageData;
         }
 
-        // Process the specification field
+        // Handle specification
         if ($request->has('specification')) {
             $specifications = explode("\n", $request->input('specification'));
-            // Create HTML list
             $htmlSpecification = '';
             foreach ($specifications as $spec) {
                 $spec = trim($spec);
                 if ($spec !== '') {
-                    $htmlSpecification .= '<li>' . e($spec) . '</li>';
+                    $htmlSpecification .= "<li>{$spec}</li>";
                 }
             }
             $product->specification = $htmlSpecification;
         }
 
-        // Update remaining fields
-        $product->name = $request->name;
-        $product->slug = Str::slug($request->name, '-');
-        $product->category_id = $request->category_id;
-        $product->quantity = $request->quantity;
-        $product->price = $request->price;
-        $product->quantity_alert = $request->quantity_alert;
-        $product->notes = $request->notes;
-        $product->source = $request->source;
-        $product->dateArrival = $request->dateArrival;
-        $product->brand = $request->brand;
-
         // Save the product with the updated data
         $product->save();
+
+        // Detect changes
+        $changes = [];
+        foreach ($product->getChanges() as $attribute => $value) {
+            if (in_array($attribute, ['updated_at'])) {
+                continue;
+            }
+
+            $originalValue = $originalData[$attribute] ?? null;
+
+            // Handle specification separately to strip HTML tags
+            if ($attribute === 'specification') {
+                // Strip HTML tags from both original and new values
+                $originalSpec = strip_tags($originalValue);
+                $newSpec = strip_tags($value);
+                $changes[] = "Changed {$attribute} from '{$originalSpec}' to '{$newSpec}'";
+            } else if ($attribute === 'product_image') {
+                $changes[] = "Changed {$attribute}";
+            } else if ($attribute === "category_id") {
+                $originalCategory = Category::find($originalValue);
+                $newCategory = Category::find($value);
+                $originalCategoryName = $originalCategory ? $originalCategory->name : 'Unknown';
+                $newCategoryName = $newCategory ? $newCategory->name : 'Unknown';
+                $changes[] = "Changed category from '{$originalCategoryName}' to '{$newCategoryName}'";
+            } else {
+                $changes[] = "Changed {$attribute} from '{$originalValue}' to '{$value}'";
+            }
+        }
+
+        // Prepare maintenance notes
+        $maintenanceNotes = implode("\n", $changes);
+        if ($request->filled('maintenance_notes')) {
+            $maintenanceNotes .= "\n" . $request->input('maintenance_notes');
+        }
+
+        // Create Maintenance record if there are changes or maintenance notes
+        if (!empty($changes) || $request->filled('maintenance_notes') || $request->hasFile('maintenance_picture')) {
+            $maintenance = new Maintenance();
+            $maintenance->product_id = $product->id;
+            $maintenance->user_id = auth()->id();
+            $maintenance->notes = $maintenanceNotes;
+
+            if ($request->hasFile('maintenance_picture')) {
+                $pictureFile = $request->file('maintenance_picture');
+                $pictureData = file_get_contents($pictureFile->getRealPath());
+                $maintenance->documentation = $pictureData;
+            }
+
+            try {
+                $maintenance->save();
+            } catch (\Exception $e) {
+                // Log the error for debugging
+                \Log::error('Failed to save maintenance record: ' . $e->getMessage());
+                return redirect()
+                    ->back()
+                    ->withErrors('Failed to save maintenance record. Please check the logs for more details.');
+            }
+        }
 
         return redirect()
             ->route('dashboard-admin-items')

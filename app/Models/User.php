@@ -74,4 +74,9 @@ class User extends Authenticatable
     {
         return $this->currentTeam && $this->currentTeam->name === $type;
     }
+
+    public function maintenance()
+    {
+        return $this->hasMany(Maintenance::class);
+    }
 }

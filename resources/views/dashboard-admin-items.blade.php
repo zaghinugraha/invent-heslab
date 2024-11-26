@@ -231,6 +231,17 @@
                     <input type="file" name="product_image"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
                 </div>
+                <!-- Maintenance Notes (Optional) -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Maintenance Notes (Optional)</label>
+                    <textarea name="maintenance_notes" class="w-full px-4 py-2 border rounded-lg focus:outline-none"></textarea>
+                </div>
+                <!-- Maintenance Picture (Optional) -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Maintenance Picture (Optional)</label>
+                    <input type="file" name="maintenance_picture"
+                        class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
+                </div>
                 <!-- Form Buttons -->
                 <div class="flex justify-end">
                     <button type="button" @click="editItem = false"

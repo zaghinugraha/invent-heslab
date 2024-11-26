@@ -162,7 +162,14 @@
                 <p class="font-bold mb-2">Items:</p>
                 <ul class="list-disc list-inside text-gray-700">
                     @foreach ($rent->items as $item)
-                        <li>{{ $item->product->name }} x{{ $item->quantity }}</li>
+                        @if ($rent->user->hasType('Regular'))
+                            <li>{{ $item->product->name }}: Rp {{ number_format($item->product->price, 0, ',', '.') }} x
+                                {{ $item->quantity }} buah
+                                x
+                                @php echo ceil($interval->days/7); @endphp minggu</li>
+                        @else
+                            <li>{{ $item->product->name }} x{{ $item->quantity }}</li>
+                        @endif
                     @endforeach
                 </ul>
                 <div class="mt-4">

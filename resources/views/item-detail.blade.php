@@ -143,29 +143,29 @@
 
             <!-- Specification Content -->
             <div id="specification-content"
-                class="transition-all duration-300 ease-in-out opacity-100 max-h-full overflow-hidden">
+                class="transition-all duration-300 ease-in-out opacity-100 max-h-64 overflow-auto">
                 <p class="text-gray-600 mt-4">
                     {{ $product['notes'] }}
                 </p>
 
                 <ul class="text-gray-600 mt-2 list-disc list-inside space-y-1">
                     {!! $product['specification'] !!}
-                    {{--                <li>Humidity measuring range: 20%-95% (0 degrees -> 50 degrees) Humidity measurement error: +/-5%</li> --}}
-                    {{--                <li>Temperature measurement range: 0 degrees -> 50 degrees temperature measurement error: +/- 2 degrees</li> --}}
-                    {{--                <li>Operating voltage 3.3V-5V</li> --}}
-                    {{--                <li>Output Type Digital Output</li> --}}
-                    {{--                <li>With fixed bolt hole for easy installation</li> --}}
-                    {{--                <li>Small plates PCB size: 3.2cm x 1.4cm</li> --}}
                 </ul>
             </div>
 
             <!-- Maintenance Content -->
-            <div id="maintenance-content"
-                class="transition-all duration-300 ease-in-out opacity-0 max-h-0 overflow-hidden">
-                <p class="text-gray-600 mt-4">
-                    <!-- Add your maintenance information here -->
-                    Maintenance instructions and information about the product.
-                </p>
+            <div id="maintenance-content" class="transition-all duration-300 ease-in-out opacity-0 max-h-0 overflow-auto">
+                @foreach ($product->maintenance->sortByDesc('created_at') as $maintenance)
+                    <div class="border-t py-2">
+                        <p class="text-gray-700">
+                            {{ $maintenance->created_at->format('Y-m-d') }} - {!! nl2br(e($maintenance->notes)) !!}
+                        </p>
+                        @if ($maintenance->documentation)
+                            <img src="data:image/jpeg;base64,{{ base64_encode($maintenance->documentation) }}"
+                                alt="Maintenance Picture" class="mt-2 w-32 h-32 object-cover">
+                        @endif
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -181,10 +181,10 @@
             if (tab === 'specification') {
                 // Show Specification Content
                 specificationContent.classList.remove('opacity-0', 'max-h-0');
-                specificationContent.classList.add('opacity-100', 'max-h-full');
+                specificationContent.classList.add('opacity-100', 'max-h-64');
 
                 // Hide Maintenance Content
-                maintenanceContent.classList.remove('opacity-100', 'max-h-full');
+                maintenanceContent.classList.remove('opacity-100', 'max-h-64');
                 maintenanceContent.classList.add('opacity-0', 'max-h-0');
 
                 // Update Tab Styles
@@ -196,10 +196,10 @@
             } else if (tab === 'maintenance') {
                 // Show Maintenance Content
                 maintenanceContent.classList.remove('opacity-0', 'max-h-0');
-                maintenanceContent.classList.add('opacity-100', 'max-h-full');
+                maintenanceContent.classList.add('opacity-100', 'max-h-64');
 
                 // Hide Specification Content
-                specificationContent.classList.remove('opacity-100', 'max-h-full');
+                specificationContent.classList.remove('opacity-100', 'max-h-64');
                 specificationContent.classList.add('opacity-0', 'max-h-0');
 
                 // Update Tab Styles

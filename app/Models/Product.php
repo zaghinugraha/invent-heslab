@@ -55,7 +55,7 @@ class Product extends Model
         $query->where('name', 'like', "%{$value}%")
             ->orWhere('code', 'like', "%{$value}%");
     }
-     /**
+    /**
      * Get the user that owns the Category
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -65,7 +65,7 @@ class Product extends Model
         return $this->belongsTo(User::class);
     }
 
-    
+
     public function getSpecificationPlainAttribute()
     {
         // Convert the HTML list to plain text with newlines
@@ -79,5 +79,10 @@ class Product extends Model
             return trim($text);
         }
         return '';
+    }
+
+    public function maintenance()
+    {
+        return $this->hasMany(Maintenance::class);
     }
 }

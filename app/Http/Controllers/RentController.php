@@ -26,6 +26,18 @@ class RentController extends Controller
     }
     public function store(Request $request)
     {
+
+        if (!Auth::user()->hasType('Admin')) {
+            $today = Carbon::today();
+            $rentCount = Rent::where('user_id', Auth::id())
+                ->whereDate('created_at', $today)
+                ->count();
+
+            if ($rentCount >= 5) {
+                return redirect()->back()->with('error', 'You have reached the maximum number of rent transactions for today.');
+            }
+        }
+
         $request->validate([
             'nim_nip' => 'required|string|max:20',
             'phone' => 'required|string|max:15',
