@@ -10,7 +10,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $teams = ['Admin', 'Dosen', 'Koordinator', 'Research Group', 'Study Group'];
+        $teams = ['Admin', 'Dosen', 'Koordinator', 'Research Group', 'Study Group', 'Regular'];
         $selectedTeam = $request->input('team_id');
         $search = $request->input('search');
 

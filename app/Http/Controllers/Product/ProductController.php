@@ -238,6 +238,7 @@ class ProductController extends Controller
             'source',
             'dateArrival',
             'price',
+            'is_rentable',
             'quantity',
             'quantity_alert',
             'notes',
@@ -289,6 +290,8 @@ class ProductController extends Controller
                 $originalCategoryName = $originalCategory ? $originalCategory->name : 'Unknown';
                 $newCategoryName = $newCategory ? $newCategory->name : 'Unknown';
                 $changes[] = "Changed category from '{$originalCategoryName}' to '{$newCategoryName}'";
+            } else if ($attribute === "is_rentable") {
+                $changes[] = $value ? "Product is now rentable" : "Product is no longer rentable";
             } else {
                 $changes[] = "Changed {$attribute} from '{$originalValue}' to '{$value}'";
             }

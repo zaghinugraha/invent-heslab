@@ -19,7 +19,6 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-    Route::get('/dashboard', [RedirectController::class, 'index'])->name('dashboard');
     Route::get('/reg/rent', [RentController::class, 'fetch'])->name('dashboard-reg-rent');
 
     Route::get('/reg/history', [RentController::class, 'history'])->name('dashboard-reg-history');

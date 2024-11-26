@@ -62,20 +62,9 @@
 @section('content')
     <div class="max-w-5xl mx-auto p-6 flex flex-col lg:flex-row gap-6">
         <div class="w-full lg:w-1/3">
-            <div class="border border-gray-300 rounded-lg overflow-hidden mb-4">
+            <div class="rounded-lg overflow-hidden mb-4">
                 <img src="{{ route('product.image', $product->uuid) }}" alt="{{ $product->name }}"
-                    class="w-full h-32 object-cover rounded-md mb-4">
-            </div>
-            <!-- Thumbnail Images -->
-            <div class="flex gap-2 overflow-x-auto">
-                <img src="{{ route('product.image', $product->uuid) }}" alt="Thumbnail"
-                    class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
-                <img src="{{ route('product.image', $product->uuid) }}" alt="Thumbnail"
-                    class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
-                <img src="{{ route('product.image', $product->uuid) }}" alt="Thumbnail"
-                    class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
-                <img src="{{ route('product.image', $product->uuid) }}" alt="Thumbnail"
-                    class="w-14 h-14 border border-gray-300 rounded-lg flex-shrink-0">
+                    class="w-72 h-72 object-cover rounded-md mb-4">
             </div>
         </div>
         <div class="w-full lg:w-2/3">
@@ -109,13 +98,17 @@
                 <!-- Buttons -->
                 <div class="flex gap-2 mt-2 sm:mt-0">
                     @if ($product->quantity > 0)
-                        <button onclick="addToCart({{ $product->id }})"
-                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Add to Cart
-                        </button>
-                        <button class="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50">
-                            Rent Now
-                        </button>
+                        @if (!$product->is_rentable)
+                            <button class="bg-gray-300 text-gray-600 px-4 py-2 rounded cursor-not-allowed" disabled
+                                title="Not Rentable">
+                                Add to Cart
+                            </button>
+                        @else
+                            <button onclick="addToCart({{ $product->id }})"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Add to Cart
+                            </button>
+                        @endif
                     @else
                         <button class="bg-gray-300 text-gray-600 px-4 py-2 rounded cursor-not-allowed" disabled
                             title="Out of Stock">

@@ -132,7 +132,7 @@
                                 @endforeach
                             </ul>
                         </td>
-                        @if ($rent->user->teams->first()->name == 'Regular')
+                        @if ($rent->user->hasType('Regular'))
                             <td class="px-4 py-2 border">Rp{{ number_format($rent->total_cost, 0, ',', '.') }}</td>
                         @else
                             <td class="px-4 py-2 border">Free</td>

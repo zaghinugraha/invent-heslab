@@ -16,6 +16,7 @@ class Rent extends Model
         'order_date',
         'start_date',
         'end_date',
+        'return_date',
         'total_cost',
         'payment_method',
         'payment_status',

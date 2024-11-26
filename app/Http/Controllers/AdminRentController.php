@@ -61,11 +61,11 @@ class AdminRentController extends Controller
         $startDate = Carbon::parse($rent->start_date);
         $currentDate = Carbon::now();
 
-        if ($currentDate->gte($startDate)) {
-            $rent->order_status = 'active';
-        }
         if ($rent->user->hasType('Admin')) {
             $rent->payment_status = 'paid';
+            if ($currentDate->gte($startDate)) {
+                $rent->order_status = 'active';
+            }
         }
         $rent->save();
 
@@ -89,7 +89,7 @@ class AdminRentController extends Controller
     {
         // Update rent status to 'returned'
         $rent->order_status = 'returned';
-        $rent->returned_date = Carbon::now();
+        $rent->return_date = Carbon::now();
         $rent->save();
 
         return redirect()->back()->with('success', 'Rent marked as returned successfully.');

@@ -144,7 +144,7 @@
                     <div class="flex justify-between items-center mb-2">
                         <h3 class="text-gray-800 font-semibold">{{ $product->name }}</h3>
 
-                        @if ($product->quantity <= 0)
+                        @if ($product->quantity <= 0 || !$product->is_rentable)
                             <span
                                 class="bg-red-100 text-red-600 text-xs font-semibold px-2 py-1 rounded-full">Unavailable</span>
                         @else

@@ -74,7 +74,8 @@
                     class="w-full px-4 py-2 border rounded-l-lg focus:outline-none"
                     value="{{ request()->query('search') }}" />
 
-                <select name="team_id" class="px-4 py-2 border-t border-b border-l-none focus:outline-none">
+                <select name="team_id" onchange="this.form.submit()"
+                    class="px-4 py-2 border-t border-b border-l-none focus:outline-none">
                     <option value="">All Teams</option>
                     @foreach ($teams as $team)
                         <option value="{{ $team }}" {{ $selectedTeam == $team ? 'selected' : '' }}>
@@ -145,36 +146,29 @@
     <div class="mt-4">
         {{ $users->links() }}
     </div>
-@endsection
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUserId = {{ $currentUserId }};
 
-@section('scripts')
-    document.getElementById('team_id').addEventListener('change', function(event) {
-    if (this.value === 'new') {
-    event.preventDefault();
-    document.querySelector('[x-data]').__x.$data.addTeam = true;
-    } else {
-    document.getElementById('filterForm').submit();
-    }
-    });
-    const currentUserId = {{ $currentUserId }};
+            document.querySelectorAll('.role-change-form').forEach(form => {
+                const select = form.querySelector('.role-select');
+                const userId = parseInt(form.getAttribute('data-user-id'));
 
-    document.querySelectorAll('.role-change-form').forEach(form => {
-    const select = form.querySelector('.role-select');
-    const userId = parseInt(form.getAttribute('data-user-id'));
-
-    select.addEventListener('change', function(event) {
-    if(userId === currentUserId){
-    event.preventDefault();
-    const confirmed = confirm('Are you sure you want to change your own role?');
-    if(confirmed){
-    form.submit();
-    } else {
-    // Revert to previous value
-    select.value = select.getAttribute('data-original-value');
-    }
-    } else {
-    form.submit();
-    }
-    });
-    });
+                select.addEventListener('change', function(event) {
+                    if (userId === currentUserId) {
+                        event.preventDefault();
+                        const confirmed = confirm('Are you sure you want to change your own role?');
+                        if (confirmed) {
+                            form.submit();
+                        } else {
+                            // Revert to previous value
+                            select.value = select.getAttribute('data-original-value');
+                        }
+                    } else {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

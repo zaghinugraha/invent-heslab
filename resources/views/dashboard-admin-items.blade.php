@@ -226,6 +226,15 @@
                     <input type="number" name="price" x-model="selectedProduct.price"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
                 </div>
+                {{-- Is Rentable --}}
+                <div class="mb-4">
+                    <label class="block text-gray-700">Rentable?</label>
+                    <select name="is_rentable" x-model="selectedProduct.is_rentable"
+                        class="w-full px-4 py-2 border rounded-lg focus:outline-none" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
                 <!-- Quantity -->
                 <div class="mb-4">
                     <label class="block text-gray-700">Quantity</label>
@@ -464,6 +473,7 @@
                         <th class="px-4 py-2 border">Source</th>
                         <th class="px-4 py-2 border">Date Arrived</th>
                         <th class="px-4 py-2 border">Last Maintained</th>
+                        <th class="px-4 py-2 border">Rentable?</th>
                         <th class="px-4 py-2 border">Action</th>
                     </tr>
                 </thead>
@@ -529,6 +539,29 @@ $maxQuantity = $products->max('quantity');
                                 @else
                                     N/A
                                 @endif
+                            </td>
+                            <td class="px-4 py-2 border">
+                                <div class="flex justify-center">
+                                    @if ($product->is_rentable)
+                                        <svg class="w-6 h-6 text-green-500" viewBox="0 0 20 20" fill="currentColor"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="0" fill="none" width="20" height="20" />
+                                            <g>
+                                                <path
+                                                    d="M10 2c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm-.615 12.66h-1.34l-3.24-4.54 1.34-1.25 2.57 2.4 5.14-5.93 1.34.94-5.81 8.38z" />
+                                            </g>
+                                        </svg>
+                                    @else
+                                        <svg class="w-6 h-6 text-red-500" viewBox="0 0 20 20" fill="currentColor"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="0" fill="none" width="20" height="20" />
+                                            <g>
+                                                <path
+                                                    d="M10 2c4.42 0 8 3.58 8 8s-3.58 8-8 8-8-3.58-8-8 3.58-8 8-8zm5 11l-3-3 3-3-2-2-3 3-3-3-2 2 3 3-3 3 2 2 3-3 3 3z" />
+                                            </g>
+                                        </svg>
+                                    @endif
+                                </div>
                             </td>
                             <td class="px-4 py-2 border">
                                 <div class="flex justify-center space-x-2">
