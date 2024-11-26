@@ -7,7 +7,6 @@
     <title>@yield('title', 'HES Vault Dashboard')</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
     <style>
         /* Sidebar Styles */
         #sidebar {
@@ -70,6 +69,7 @@
             display: block;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 </head>
 
 <body class="bg-gray-100 flex flex-col min-h-screen" x-data="{

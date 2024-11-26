@@ -45,11 +45,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
 
     //    Routes for product
+    Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
     Route::get('/reg/items', [ProductController::class, 'user_dashboard'])->name('dashboard-reg-items');
     Route::get('/admin/items', [ProductController::class, 'admin_dashboard'])->name('dashboard-admin-items');
     Route::get('/products/{id}', [ProductController::class, 'showByID'])->name('products.showByID');
     Route::get('/product/image/{uuid}', [ProductController::class, 'getImage'])->name('product.image');
-    Route::resource('/products', ProductController::class);
 
     Route::post('/reg/notifications/mark-all-read', [NotificationController::class, 'readAllReg'])
         ->name('notifications.readAllReg');

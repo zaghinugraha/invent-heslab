@@ -65,8 +65,22 @@
 @endsection
 
 @section('modals')
-    <div x-show="newItem" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50"
-        x-init="$watch('newItem', value => document.body.classList.toggle('overflow-hidden', value))">
+    <div x-show="newItem" x-data="{
+        itemName: '',
+        searchResults: [],
+        searchSimilarItems() {
+            if (this.itemName.length > 2) {
+                fetch(`{{ route('products.search') }}?q=${encodeURIComponent(this.itemName)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.searchResults = data;
+                    });
+            } else {
+                this.searchResults = [];
+            }
+        },
+    }"
+        class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
         <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 mb-8 max-h-full overflow-y-auto">
             <h2 class="text-xl font-bold gradient-text mb-4">Add New Item</h2>
             <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
@@ -74,8 +88,25 @@
                 <!-- Item Name -->
                 <div class="mb-4">
                     <label class="block text-gray-700">Item Name</label>
-                    <input type="text" name="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none"
-                        required />
+                    <input type="text" name="name" x-model="itemName" @input.debounce="searchSimilarItems"
+                        class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
+
+                    <!-- Similar Items -->
+                    <div x-show="searchResults.length > 0" class="mt-2 border rounded-lg p-2 bg-gray-100">
+                        <p class="text-gray-700 font-semibold">Similar items found:</p>
+                        <ul>
+                            <template x-for="item in searchResults" :key="item.id">
+                                <li class="p-2 border-b flex justify-between items-center">
+                                    <span x-text="item.name"></span>
+                                    <button
+                                        class="text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
+                                        @click="editItem = true; newItem = false; selectedProduct = item">
+                                        Edit
+                                    </button>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
                 </div>
                 <!-- Category -->
                 <div class="mb-4">
@@ -530,7 +561,8 @@ $maxQuantity = $products->max('quantity');
                 </tbody>
             </table>
         </div>
-
-        <!-- Pagination -->
-        {{ $products->links() }}
-    @endsection
+    </div>
+    <!-- Pagination -->
+    {{ $products->links() }}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+@endsection

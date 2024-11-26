@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\Unit;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Http\Request;
+use Log;
 use Picqer\Barcode\BarcodeGeneratorHTML;
 use Str;
 
@@ -31,6 +32,19 @@ class ProductController extends Controller
         $product = Product::findOrFail($id); // Ambil produk berdasarkan ID
 
         return view('item-detail', compact('product')); // Kirim data ke view
+    }
+
+    public function search(Request $request)
+    {
+        // Get the search query from the request
+        $query = $request->input('q');
+
+        $products = Product::where('name', 'LIKE', "%{$query}%")
+            ->orWhere('brand', 'LIKE', "%{$query}%")
+            ->select('id', 'uuid', 'name', 'price', 'quantity', 'quantity_alert', 'brand', 'source', 'dateArrival', 'notes', 'specification')
+            ->get();
+
+        return response()->json($products, 200);
     }
 
     public function admin_dashboard(Request $request)
