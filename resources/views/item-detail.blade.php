@@ -172,6 +172,12 @@
                                 <div class="mt-4 md:mt-0 md:ml-4 flex-1">
                                     <p class="text-gray-700 dark:text-gray-300">
                                         {!! nl2br(e($maintenance->notes)) !!}
+                                        {{-- if user is admin, they can see who made the maintenance --}}
+                                        @if (auth()->user()->hasType('Admin'))
+                                            <span class="text-gray-500 dark:text-gray-400">
+                                                (by: {{ $maintenance->user->name }})
+                                            </span>
+                                        @endif
                                     </p>
                                 </div>
 
