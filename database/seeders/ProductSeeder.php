@@ -25,9 +25,10 @@ class ProductSeeder extends Seeder
                 'category_id' => 1,
                 'user_id' => 1,
                 'uuid' => Str::uuid(),
-                'source' => collect(['private', 'university'])->random(),'source' => collect(['private', 'university'])->random(),
+                'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/esp32.jpg')),
             ],
             [
                 'name' => 'Light Sensor',
@@ -43,7 +44,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/lightsensor.jpg')),
             ],
             [
                 'name' => 'Temperature Sensor',
@@ -59,7 +61,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/temperaturesensor.jpg')),
             ],
             [
                 'name' => 'Arduino Uno R3',
@@ -75,7 +78,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/arduino.jpg')),
             ],
             [
                 'name' => 'Cable',
@@ -91,7 +95,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/cable.jpg')),
             ],
             [
                 'name' => 'Raspberry Pi 4',
@@ -107,7 +112,7 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random()
             ],
             [
                 'name' => 'Gyroscope Sensor',
@@ -123,7 +128,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/gyroscope.jpg')),
             ],
             [
                 'name' => 'Ultrasonic Sensor',
@@ -139,7 +145,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/ultrasonic.jpg')),
             ],
             [
                 'name' => 'Jumper Wires',
@@ -155,7 +162,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/jumper.jpg')),
             ],
             [
                 'name' => 'NodeMCU ESP8266',
@@ -171,7 +179,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/esp8266.jpg')),
             ],
             [
                 'name' => 'Humidity Sensor',
@@ -187,7 +196,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/humidity.jpg')),
             ],
             [
                 'name' => 'Breadboard',
@@ -203,7 +213,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/breadboard.jpg')),
             ],
             [
                 'name' => 'Micro USB Cable',
@@ -219,7 +230,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/microusb.jpg')),
             ],
             [
                 'name' => 'DHT11 Temperature and Humidity Sensor',
@@ -235,7 +247,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/dht11.jpg')),
             ],
             [
                 'name' => 'Ethernet Shield for Arduino',
@@ -251,7 +264,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path(path: 'images/ethernetshield.jpg')),
             ],
             [
                 'name' => 'MQ-2 Gas Sensor',
@@ -267,7 +281,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/mq2.jpg')),
             ],
             [
                 'name' => 'DC Motor',
@@ -283,7 +298,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path(path: 'images/dcmotor.jpg')),
             ],
             [
                 'name' => 'USB to Serial Adapter',
@@ -299,7 +315,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/usbtoserial.jpg')),
             ],
             [
                 'name' => 'LDR (Light Dependent Resistor)',
@@ -315,7 +332,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/ldr.jpg')),
             ],
             [
                 'name' => 'Relay Module 5V',
@@ -331,7 +349,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/relay.jpg')),
             ],
             [
                 'name' => 'Jumper Cables',
@@ -347,7 +366,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/jumpercable.jpg')),
             ],
             [
                 'name' => 'Bluetooth Module HC-05',
@@ -363,7 +383,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/hc05.jpg')),
             ],
             [
                 'name' => 'Software IDE for Arduino',
@@ -379,7 +400,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/arduinoide.jpg')),
             ],
             [
                 'name' => 'USB Cable for Arduino',
@@ -395,7 +417,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/arduinocable.jpg')),
             ],
             [
                 'name' => 'FTDI Module',
@@ -411,7 +434,8 @@ class ProductSeeder extends Seeder
                 'uuid' => Str::uuid(),
                 'source' => collect(['private', 'university'])->random(),
                 'dateArrival' => now()->subDays(rand(1, 365)),
-                'brand' => collect(['Arduino','DF Robot','Okdo', 'Seeeed', 'Futura Group'])->random()
+                'brand' => collect(['Arduino', 'DF Robot', 'Okdo', 'Seeeed', 'Futura Group'])->random(),
+                'product_image' => file_get_contents(public_path('images/ftdi.jpg')),
             ]
         ]);
 

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Str;
 
@@ -12,40 +13,25 @@ class UserSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run()
     {
-        $users = collect([
+        $users = [
             [
-                'name' => 'Admin',
-                'email' => 'admin@admin.com',
-                'email_verified_at' => now(),
+                'name' => 'Admin User',
+                'email' => 'admin@example.com',
                 'password' => bcrypt('password'),
-                'created_at' => now(),
-                'uuid' => Str::uuid(),
-                'photo' => 'admin.jpg'
+                'current_team_id' => 1,
             ],
             [
-                'name' => 'quest',
-                'email' => 'quest@quest.com',
-                'email_verified_at' => now(),
+                'name' => 'Regular User',
+                'email' => 'user@example.com',
                 'password' => bcrypt('password'),
-                'created_at' => now(),
-                'uuid' => Str::uuid(),
-                'photo' => 'admin.jpg'
+                'current_team_id' => 2,
             ],
-            [
-                'name' => 'user',
-                'email' => 'user@user.com',
-                'email_verified_at' => now(),
-                'password' => bcrypt('password'),
-                'created_at' => now(),
-                'uuid' => Str::uuid(),
-                'photo' => 'admin.jpg'
-            ]
-        ]);
+        ];
 
-        $users->each(function ($user) {
-            User::insert($user);
-        });
+        foreach ($users as $user) {
+            User::create($user);
+        }
     }
 }
