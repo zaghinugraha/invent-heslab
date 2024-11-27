@@ -530,14 +530,30 @@ $maxQuantity = $products->max('quantity');
                             </td>
                             <td class="px-4 py-2 border">{{ $product['source'] }}</td>
                             <td class="px-4 py-2 border">{{ $product['dateArrival'] }}</td>
-                            <td class="px-4 py-2 border">
-                                @php
-                                    $lastMaintenance = $product->maintenance->sortByDesc('created_at')->first();
-                                @endphp
+                            @php
+                                $lastMaintenance = $product->maintenance->sortByDesc('created_at')->first();
+                                $needsMaintenance = false;
+
+                                if ($lastMaintenance) {
+                                    $maintenanceDueDate = \Carbon\Carbon::parse(
+                                        $lastMaintenance->created_at,
+                                    )->addWeek();
+                                    $needsMaintenance = \Carbon\Carbon::now()->greaterThanOrEqualTo(
+                                        $maintenanceDueDate,
+                                    );
+                                } else {
+                                    //need maintenance 1 week after arrival date
+                                    $maintenanceDueDate = \Carbon\Carbon::parse($product->dateArrival)->addWeek();
+                                    $needsMaintenance = \Carbon\Carbon::now()->greaterThanOrEqualTo(
+                                        $maintenanceDueDate,
+                                    );
+                                }
+                            @endphp
+                            <td class="px-4 py-2 border {{ $needsMaintenance ? 'text-red-500' : '' }}">
                                 @if ($lastMaintenance)
-                                    {{ $lastMaintenance->created_at->format('Y-m-d') }}
+                                    {{ \Carbon\Carbon::parse($lastMaintenance->created_at)->diffForHumans() }}
                                 @else
-                                    N/A
+                                    {{ \Carbon\Carbon::parse($product->dateArrival)->diffForHumans() }}
                                 @endif
                             </td>
                             <td class="px-4 py-2 border">

@@ -47,8 +47,10 @@ class ProductController extends Controller
         return response()->json($products, 200);
     }
 
-    public function admin_dashboard(Request $request)
-    {
+    public function
+        admin_dashboard(
+        Request $request
+    ) {
         $query = Product::query();
 
         if ($request->has('search')) {
@@ -69,11 +71,8 @@ class ProductController extends Controller
 
         $needMaintenanceCount = $productsWithMaintenance->filter(function ($product) {
             $lastMaintenance = $product->maintenance->sortByDesc('created_at')->first();
-            $referenceDate = $lastMaintenance ? $lastMaintenance->created_at : $product->date_arrived;
-            if (!$referenceDate) {
-                return false;
-            }
-            return now()->greaterThanOrEqualTo($referenceDate->copy()->addWeek());
+            $referenceDate = $lastMaintenance ? \Carbon\Carbon::parse($lastMaintenance->created_at) : \Carbon\Carbon::parse($product->dateArrival);
+            return $referenceDate->diffInDays(now()) >= 7;
         })->count();
 
         $categories = Category::where("user_id", auth()->id())->get(['id', 'name']);
