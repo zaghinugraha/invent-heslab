@@ -42,8 +42,8 @@ class RentController extends Controller
             'nim_nip' => 'required|string|max:20',
             'phone' => 'required|string|max:15',
             'ktm_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:8192',
-            'start_date' => 'required|date|after_or_equal:today',
-            'end_date' => 'required|date|after_or_equal:start_date',
+            'start_date' => 'required|date|after:today',
+            'end_date' => 'required|date|after:start_date',
             'payment_method' => 'required|string',
             'notes' => 'nullable|string',
         ]);

@@ -221,7 +221,7 @@
                         <div class="w-1/2">
                             <label class="block text-gray-700 font-medium mb-2">Rent Date</label>
                             <input type="date" name="start_date" id="start_date" value="{{ old('start_date') }}"
-                                required min="{{ date('Y-m-d') }}"
+                                required min="{{ \Carbon\Carbon::now()->addDays(2)->format('Y-m-d') }}"
                                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                         </div>
                         <div class="w-1/2">
@@ -341,6 +341,7 @@
         // Initialize min attributes on page load
         (function initializeDates() {
             const today = new Date();
+            today.setDate(today.getDate() + 2); // Set to tomorrow
             today.setHours(0, 0, 0, 0);
             startDateInput.setAttribute('min', today.toISOString().split('T')[0]);
 
