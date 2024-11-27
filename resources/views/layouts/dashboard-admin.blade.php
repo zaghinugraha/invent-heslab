@@ -88,7 +88,7 @@
 }">
     <!-- Notifications Modal -->
     <div x-show="showNotifications" @click.away="showNotifications = false" class="fixed right-10 top-20 z-20">
-        <div class="bg-white p-6 rounded-lg shadow-lg sm:w-1/2 md:w-full mb-8">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full mb-8">
             <div class="flex justify-between items-center mb-4 gap-3">
                 <h2 class="md:text-xl sm:text-sm font-bold gradient-text">Notifications</h2>
                 <form method="POST" action="{{ route('notifications.readAllAdmin') }}">

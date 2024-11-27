@@ -9,7 +9,7 @@
     untuk menemukan barang tertentu, atau menavigasi halaman untuk melihat lebih banyak barang.')
 
 @section('sidebar')
-    <aside id="sidebar" class="transition-width w-64 h-full fixed top-16 bottom-16 lg:relative lg:h-screen p-2">
+    <aside id="sidebar" class="transition-width w-64 h-full fixed top-16 bottom-16 lg:relative lg:h-screen p-2 z-50">
         <div class="bg-white rounded p-2">
             <nav class="space-y-2 bg-white rounded p-2">
                 <a href="{{ route('dashboard-admin-items') }}"
@@ -460,7 +460,7 @@
 
         <!-- Table -->
         <div class="overflow-x-auto rounded-lg">
-            <table class="min-w-full table-auto border">
+            <table class="min-w table-auto border">
                 <thead>
                     <tr class="bg-blue-600 text-white">
                         <th class="px-4 py-2 border">ID</th>
@@ -522,10 +522,12 @@ $maxQuantity = $products->max('quantity');
                                         d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8"
                                         stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" />
                                 </svg>
-                                <div
-                                    class="hidden group-hover:block absolute z-10 bg-white border border-gray-300 p-1 rounded preview-image w-max">
-                                    <img src="{{ route('product.image', $product->uuid) }}" alt="{{ $product['name'] }}"
-                                        class="w-32 h-32 object-cover rounded">
+                                <div class="relative group" onclick="togglePreview(this)">
+                                    <div
+                                        class="hidden group-hover:block absolute z-10 bg-white border border-gray-300 p-1 rounded preview-image w-max">
+                                        <img src="{{ route('product.image', $product->uuid) }}"
+                                            alt="{{ $product['name'] }}" class="w-32 h-32 object-cover rounded">
+                                    </div>
                                 </div>
                             </td>
                             <td class="px-4 py-2 border">{{ $product['source'] }}</td>
@@ -614,4 +616,16 @@ $maxQuantity = $products->max('quantity');
     <!-- Pagination -->
     {{ $products->links() }}
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        function togglePreview(element) {
+            const preview = element.querySelector('.preview-image');
+            if (preview.classList.contains('hidden')) {
+                preview.classList.remove('hidden');
+                preview.classList.add('block');
+            } else {
+                preview.classList.remove('block');
+                preview.classList.add('hidden');
+            }
+        }
+    </script>
 @endsection

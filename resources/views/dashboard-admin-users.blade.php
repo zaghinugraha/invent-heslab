@@ -124,7 +124,7 @@
                                     @csrf
                                     @method('PUT')
                                     <select name="role"
-                                        class="role-select border rounded p-2 focus:outline-none w-full text-center"
+                                        class="role-select border rounded p-2 focus:outline-none min-w-fit text-center"
                                         data-original-value="{{ $user->currentTeam->name ?? 'Regular' }}">
                                         @foreach (['Admin', 'Dosen', 'Koordinator', 'Research Group', 'Study Group', 'Regular'] as $role)
                                             <option value="{{ $role }}"

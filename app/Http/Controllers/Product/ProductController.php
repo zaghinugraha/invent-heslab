@@ -109,9 +109,12 @@ class ProductController extends Controller
 
         if ($request->has('availability') && $request->availability != 'all') {
             if ($request->availability == 'available') {
-                $query->where('quantity', '>', 0);
+                $query->where('is_rentable', true)->where('quantity', '>', 0);
             } elseif ($request->availability == 'unavailable') {
-                $query->where('quantity', '<=', 0);
+                $query->where(function ($q) {
+                    $q->where('is_rentable', false)
+                        ->orWhere('quantity', '<=', 0);
+                });
             }
         }
 
