@@ -1,15 +1,14 @@
 @extends('layouts.dashboard-admin')
 
-@section('title', 'Item List')
+@section('title', 'Daftar Barang')
 
-@section('heading', 'Item List')
-@section('headingDesc', 'Item List')
-@section('description',
-    'Ini adalah daftar barang yang tersedia untuk disewa. Anda dapat menggunakan bilah pencarian
-    untuk menemukan barang tertentu, atau menavigasi halaman untuk melihat lebih banyak barang.')
+@section('heading', 'Daftar Barang')
+@section('headingDesc', 'Daftar Barang')
+@section('description', 'Halaman ini berisi daftar barang yang tersedia di sistem. Anda dapat menambahkan barang baru,
+    mengedit barang yang sudah ada, atau menghapus barang yang sudah tidak digunakan.')
 
 @section('sidebar')
-    <aside id="sidebar" class="transition-width w-64 h-full fixed top-16 bottom-16 lg:relative lg:h-screen p-2 z-50">
+    <aside id="sidebar" class="transition-width w-64 h-full fixed top-16 bottom-16 lg:relative lg:h-screen p-2">
         <div class="bg-white rounded p-2">
             <nav class="space-y-2 bg-white rounded p-2">
                 <a href="{{ route('dashboard-admin-items') }}"
@@ -22,7 +21,7 @@
                         <line x1="5" y1="17" x2="19" y2="17" stroke="#000000" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Item List</span>
+                    <span class="sidebar-text">Daftar Barang</span>
                 </a>
                 <a href="{{ route('dashboard-admin-rent') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -37,7 +36,7 @@
                         <path d="M9 14H10" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Rent Request</span>
+                    <span class="sidebar-text">Status Peminjaman</span>
                 </a>
                 <a href="{{ route('dashboard-admin-history') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -47,7 +46,7 @@
                         <path d="M12 6V12L16 16" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text ml-3">History</span>
+                    <span class="sidebar-text ml-3">Riwayat</span>
                 </a>
                 <a href="{{ route('users.index') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -57,7 +56,7 @@
                         <path d="M4 21V17C4 15.8954 4.89543 15 6 15H18C19.1046 15 20 15.8954 20 17V21" stroke="#000000"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text ml-3">Manage Users</span>
+                    <span class="sidebar-text ml-3">Kelola User</span>
                 </a>
             </nav>
         </div>
@@ -82,18 +81,18 @@
     }"
         class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
         <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 mb-8 max-h-full overflow-y-auto">
-            <h2 class="text-xl font-bold gradient-text mb-4">Add New Item</h2>
+            <h2 class="text-xl font-bold gradient-text mb-4">Tambah Barang Baru</h2>
             <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <!-- Item Name -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Item Name</label>
+                    <label class="block text-gray-700">Nama Barang</label>
                     <input type="text" name="name" x-model="itemName" @input.debounce="searchSimilarItems"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
 
                     <!-- Similar Items -->
                     <div x-show="searchResults.length > 0" class="mt-2 border rounded-lg p-2 bg-gray-100">
-                        <p class="text-gray-700 font-semibold">Similar items found:</p>
+                        <p class="text-gray-700 font-semibold">Barang yang sama ketemu:</p>
                         <ul>
                             <template x-for="item in searchResults" :key="item.id">
                                 <li class="p-2 border-b flex justify-between items-center">
@@ -110,9 +109,9 @@
                 </div>
                 <!-- Category -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Category</label>
+                    <label class="block text-gray-700">Kategori</label>
                     <select name="category_id" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required>
-                        <option value="">Select Category</option>
+                        <option value="">Pilih Kategori</option>
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
@@ -120,62 +119,62 @@
                 </div>
                 <!-- Brand -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Brand</label>
+                    <label class="block text-gray-700">Merek</label>
                     <input type="text" name="brand" class="w-full px-4 py-2 border rounded-lg focus:outline-none"
                         required />
                 </div>
 
                 <!-- Date Arrived -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Date Arrived</label>
+                    <label class="block text-gray-700">Tanggal Masuk</label>
                     <input type="date" name="dateArrival"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
                 </div>
                 <!-- Price -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Price</label>
+                    <label class="block text-gray-700">Harga</label>
                     <input type="number" name="price" class="w-full px-4 py-2 border rounded-lg focus:outline-none"
                         required />
                 </div>
                 <!-- Quantity -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Quantity</label>
+                    <label class="block text-gray-700">Jumlah</label>
                     <input type="number" name="quantity" class="w-full px-4 py-2 border rounded-lg focus:outline-none"
                         required />
                 </div>
                 <!-- Alert Quantity -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Alert Quantity</label>
+                    <label class="block text-gray-700">Jumlah Minimal</label>
                     <input type="number" name="quantity_alert"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
                 </div>
                 <!-- Source -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Source</label>
+                    <label class="block text-gray-700">Sumber</label>
                     <input type="text" name="source" class="w-full px-4 py-2 border rounded-lg focus:outline-none"
                         required />
                 </div>
                 <!-- Specification -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Specification</label>
+                    <label class="block text-gray-700">Spesifikasi</label>
                     <textarea name="specification" class="w-full px-4 py-2 border rounded-lg focus:outline-none"></textarea>
                 </div>
                 <!-- Notes -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Notes</label>
+                    <label class="block text-gray-700">Deskripsi</label>
                     <textarea name="notes" class="w-full px-4 py-2 border rounded-lg focus:outline-none"></textarea>
                 </div>
                 <!-- Product Image -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Product Image</label>
+                    <label class="block text-gray-700">Gambar Barang</label>
                     <input type="file" name="product_image"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
                 </div>
                 <!-- Form Buttons -->
                 <div class="flex justify-end">
                     <button type="button" @click="newItem = false"
-                        class="mr-2 bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Add Item</button>
+                        class="mr-2 bg-gray-500 text-white px-4 py-2 rounded">Batal</button>
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Tambah Barang</button>
                 </div>
             </form>
         </div>
@@ -183,22 +182,22 @@
     <div x-show="editItem" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50"
         x-init="$watch('editItem', value => document.body.classList.toggle('overflow-hidden', value))">
         <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 mb-8 max-h-full overflow-y-auto">
-            <h2 class="text-xl font-bold gradient-text mb-4">Edit Item</h2>
+            <h2 class="text-xl font-bold gradient-text mb-4">Edit Barang</h2>
             <form :action="'/products/' + selectedProduct.uuid" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('put')
                 <!-- get all informasi item masukin ke dalam inputannya -->
                 <!-- Item Name -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Item Name</label>
+                    <label class="block text-gray-700">Nama Barang</label>
                     <input type="text" name="name" x-model="selectedProduct.name"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
                 </div>
                 <!-- Category -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Category</label>
+                    <label class="block text-gray-700">Kategori</label>
                     <select name="category_id" class="w-full px-4 py-2 border rounded-lg focus:outline-none" required>
-                        <option value="">Select Category</option>
+                        <option value="">Pilih Kategori</option>
                         @foreach ($categories as $category)
                             <option :value="{{ $category->id }}"
                                 x-bind:selected="selectedProduct.category_id == {{ $category->id }}">
@@ -209,84 +208,84 @@
                 </div>
                 <!-- Brand -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Brand</label>
+                    <label class="block text-gray-700">Merek</label>
                     <input type="text" name="brand" x-model="selectedProduct.brand"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
                 </div>
 
                 <!-- Date Arrived -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Date Arrived</label>
+                    <label class="block text-gray-700">Tanggal Masuk</label>
                     <input type="date" name="dateArrival" x-model="selectedProduct.dateArrival"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
                 </div>
                 <!-- Price -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Price</label>
+                    <label class="block text-gray-700">Harga</label>
                     <input type="number" name="price" x-model="selectedProduct.price"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
                 </div>
                 {{-- Is Rentable --}}
                 <div class="mb-4">
-                    <label class="block text-gray-700">Rentable?</label>
+                    <label class="block text-gray-700">Dapat Disewakan?</label>
                     <select name="is_rentable" x-model="selectedProduct.is_rentable"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" required>
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
+                        <option value="1">Ya</option>
+                        <option value="0">Tidak</option>
                     </select>
                 </div>
                 <!-- Quantity -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Quantity</label>
+                    <label class="block text-gray-700">Jumlah</label>
                     <input type="number" name="quantity" x-model="selectedProduct.quantity"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
                 </div>
                 <!-- Alert Quantity -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Alert Quantity</label>
+                    <label class="block text-gray-700">Jumlah Minimal</label>
                     <input type="number" name="quantity_alert" x-model="selectedProduct.quantity_alert"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
                 </div>
                 <!-- Source -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Source</label>
+                    <label class="block text-gray-700">Sumber</label>
                     <input type="text" name="source" x-model="selectedProduct.source"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" required />
                 </div>
                 <!-- Specification -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Specification</label>
+                    <label class="block text-gray-700">Spesifikasi</label>
                     <textarea name="specification" x-model="selectedProduct.specification_plain"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none"></textarea>
                 </div>
                 <!-- Notes -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Notes</label>
+                    <label class="block text-gray-700">Deskripsi</label>
                     <textarea name="notes" x-model="selectedProduct.notes"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none"></textarea>
                 </div>
                 <!-- Product Image -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Product Image</label>
+                    <label class="block text-gray-700">Gambar Barang</label>
                     <input type="file" name="product_image"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
                 </div>
                 <!-- Maintenance Notes (Optional) -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Maintenance Notes (Optional)</label>
+                    <label class="block text-gray-700">Catatan Pemeliharaan (Opsional)</label>
                     <textarea name="maintenance_notes" class="w-full px-4 py-2 border rounded-lg focus:outline-none"></textarea>
                 </div>
                 <!-- Maintenance Picture (Optional) -->
                 <div class="mb-4">
-                    <label class="block text-gray-700">Maintenance Picture (Optional)</label>
+                    <label class="block text-gray-700">Catatan Pemeliharaan (Opsional)</label>
                     <input type="file" name="maintenance_picture"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" />
                 </div>
                 <!-- Form Buttons -->
                 <div class="flex justify-end">
                     <button type="button" @click="editItem = false"
-                        class="mr-2 bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Update Item</button>
+                        class="mr-2 bg-gray-500 text-white px-4 py-2 rounded">Batal</button>
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Perbarui Barang</button>
                 </div>
             </form>
         </div>
@@ -295,13 +294,13 @@
     <div x-show="manageCategory" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50"
         x-init="$watch('manageCategory', value => document.body.classList.toggle('overflow-hidden', value))" x-cloak>
         <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-2/3 max-h-full overflow-y-auto">
-            <h2 class="text-xl font-bold gradient-text mb-4">Manage Categories</h2>
+            <h2 class="text-xl font-bold gradient-text mb-4">Kelola Kategori</h2>
             <table class="min-w-full table-auto border mb-4">
                 <thead class="border">
                     <tr class="bg-blue-600 text-white">
                         <th class="px-4 py-2">ID</th>
-                        <th class="px-4 py-2">Name</th>
-                        <th class="px-4 py-2">Actions</th>
+                        <th class="px-4 py-2">Nama</th>
+                        <th class="px-4 py-2">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -316,7 +315,7 @@
                                 </button>
                                 <button @click='selectedCategory = @json($category); deleteCategory = true;'
                                     class="bg-red-500 text-white px-3 py-1 rounded">
-                                    Delete
+                                    Hapus
                                 </button>
                             </td>
                         </tr>
@@ -325,10 +324,10 @@
             </table>
             <div class="flex justify-end">
                 <button @click="manageCategory = false" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">
-                    Close
+                    Tutup
                 </button>
                 <button @click="addCategory = true;" class="bg-green-500 text-white px-4 py-2 rounded">
-                    Add New Category
+                    Tambah Kategori
                 </button>
             </div>
         </div>
@@ -337,24 +336,24 @@
     <div x-show="addCategory" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50"
         x-init="$watch('addCategory', value => document.body.classList.toggle('overflow-hidden', value))" x-cloak>
         <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 max-h-full overflow-y-auto">
-            <h2 class="text-xl font-bold gradient-text mb-4">Add New Category</h2>
+            <h2 class="text-xl font-bold gradient-text mb-4">Tambah Kategori</h2>
             <form action="{{ route('categories.store') }}" method="POST">
                 @csrf
                 <!-- Category Name -->
                 <div class="mb-4">
-                    <label for="name" class="block text-gray-700">Category Name</label>
+                    <label for="name" class="block text-gray-700">Nama</label>
                     <input type="text" name="name" id="name"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" required
-                        placeholder="Enter category name" />
+                        placeholder="Masukkan nama kategori" />
                 </div>
                 <!-- Form Buttons -->
                 <div class="flex justify-end">
                     <button type="button" @click="addCategory = false"
                         class="bg-gray-500 text-white px-4 py-2 rounded mr-2">
-                        Cancel
+                        Batal
                     </button>
                     <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">
-                        Add Category
+                        Tambah
                     </button>
                 </div>
             </form>
@@ -364,8 +363,8 @@
     <div x-show="deleteCategory" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50"
         x-init="$watch('deleteCategory', value => document.body.classList.toggle('overflow-hidden', value))" x-cloak>
         <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
-            <h2 class="text-xl font-bold mb-4">Delete Category</h2>
-            <p class="mb-4">Are you sure you want to delete <span class="font-bold"
+            <h2 class="text-xl font-bold mb-4">Hapus Kategori</h2>
+            <p class="mb-4">Apakah anda yakin ingin menghapus kategori <span class="font-bold"
                     x-text="selectedCategory.name"></span>?</p>
             <form :action="'/categories/' + selectedCategory.id" method="POST">
                 @csrf
@@ -373,10 +372,10 @@
                 <div class="flex justify-end">
                     <button type="button" @click="deleteCategory = false"
                         class="bg-gray-500 text-white px-4 py-2 rounded mr-2">
-                        Cancel
+                        Batal
                     </button>
                     <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">
-                        Delete
+                        Hapus
                     </button>
                 </div>
             </form>
@@ -386,25 +385,25 @@
     <div x-show="editCategory" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50"
         x-init="$watch('editCategory', value => document.body.classList.toggle('overflow-hidden', value))" x-cloak>
         <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 max-h-full overflow-y-auto">
-            <h2 class="text-xl font-bold gradient-text mb-4">Edit Category</h2>
+            <h2 class="text-xl font-bold gradient-text mb-4">Edit Kategori</h2>
             <form method="POST" :action="'/categories/' + selectedCategory.id">
                 @csrf
                 @method('put')
                 <!-- Category Name -->
                 <div class="mb-4">
-                    <label for="edit-name" class="block text-gray-700">Category Name</label>
+                    <label for="edit-name" class="block text-gray-700">Nama Kategori</label>
                     <input type="text" name="name" id="edit-name"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none" x-model="selectedCategory.name"
-                        required placeholder="Enter category name" />
+                        required placeholder="Masukkan nama kategori" />
                 </div>
                 <!-- Form Buttons -->
                 <div class="flex justify-end">
                     <button type="button" @click="editCategory = false"
                         class="bg-gray-500 text-white px-4 py-2 rounded mr-2">
-                        Cancel
+                        Batal
                     </button>
                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
-                        Update Category
+                        Perbarui Kategori
                     </button>
                 </div>
             </form>
@@ -419,13 +418,13 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 w-full mx-auto">
             <!-- Maintenance Card -->
             <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-                <div class="bg-red-500 text-white font-semibold py-2">Need Maintenance</div>
+                <div class="bg-red-500 text-white font-semibold py-2">Butuh Pemeliharaan</div>
                 <div class="bg-white py-4 text-2xl font-bold text-black">{{ $needMaintenanceCount }}</div>
             </div>
 
             <!-- Low on Stock Card -->
             <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-                <div class="bg-yellow-600 text-white font-semibold py-2">Low on Stock</div>
+                <div class="bg-yellow-600 text-white font-semibold py-2">Persediaan Rendah</div>
                 <div class="bg-white py-4 text-2xl font-bold text-black">{{ $lowStockCount }}</div>
             </div>
         </div>
@@ -435,13 +434,13 @@
             <!-- Left Side: Add Category Button -->
             <button @click="manageCategory = true"
                 class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-                Manage Category
+                Kelola Kategori
             </button>
 
             <!-- Right Side: Search Form and Add Item Button -->
             <div class="flex items-center space-x-2">
                 <form action="{{ route('dashboard-admin-items') }}" method="GET" class="flex">
-                    <input type="text" name="search" placeholder="Search"
+                    <input type="text" name="search" placeholder="Cari"
                         class="w-full px-4 py-2 border rounded-l-lg focus:outline-none"
                         value="{{ request()->query('search') }}" />
                     <button type="submit" class="bg-gray-300 px-4 py-2 rounded-r-lg">
@@ -453,7 +452,7 @@
                     </button>
                 </form>
                 <button @click="newItem = true" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-                    Add Item
+                    Tambah Barang
                 </button>
             </div>
         </div>
@@ -464,17 +463,17 @@
                 <thead>
                     <tr class="bg-blue-600 text-white">
                         <th class="px-4 py-2 border">ID</th>
-                        <th class="px-4 py-2 border">Name</th>
-                        <th class="px-4 py-2 border">Brand</th>
-                        <th class="px-4 py-2 border">Category</th>
-                        <th class="px-4 py-2 border">Price</th>
-                        <th class="px-4 py-2 border">Stock</th>
-                        <th class="px-4 py-2 border">Picture</th>
-                        <th class="px-4 py-2 border">Source</th>
-                        <th class="px-4 py-2 border">Date Arrived</th>
-                        <th class="px-4 py-2 border">Last Maintained</th>
-                        <th class="px-4 py-2 border">Rentable?</th>
-                        <th class="px-4 py-2 border">Action</th>
+                        <th class="px-4 py-2 border">Nama</th>
+                        <th class="px-4 py-2 border">Merek</th>
+                        <th class="px-4 py-2 border">Kategori</th>
+                        <th class="px-4 py-2 border">Harga</th>
+                        <th class="px-4 py-2 border">Persediaan</th>
+                        <th class="px-4 py-2 border">Gambar</th>
+                        <th class="px-4 py-2 border">Sumber</th>
+                        <th class="px-4 py-2 border">Tanggal Masuk</th>
+                        <th class="px-4 py-2 border">Terakhir Dipelihara</th>
+                        <th class="px-4 py-2 border">Bisa Dipinjam?</th>
+                        <th class="px-4 py-2 border">Aksi</th>
                     </tr>
                 </thead>
                 @forelse ($products as $product)
@@ -601,7 +600,7 @@ $maxQuantity = $products->max('quantity');
                                         @method('delete')
                                         <button
                                             class="w-24 text-center bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                                            onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
+                                            onclick="return confirm('Apakah anda yakin ingin menghapus barang ini?')">Hapus</button>
                                     </form>
                                 </div>
                             </td>

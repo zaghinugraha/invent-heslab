@@ -64,7 +64,7 @@
         <div class="w-full lg:w-1/3">
             <div class="rounded-lg overflow-hidden mb-4">
                 <img src="{{ route('product.image', $product->uuid) }}" alt="{{ $product->name }}"
-                    class="w-72 h-72 object-cover rounded-md mb-4">
+                    class="object-cover rounded-md mb-4">
             </div>
         </div>
         <div class="w-full lg:w-2/3">
@@ -80,7 +80,7 @@
                 @if (!auth()->user()->hasType('Regular'))
                     Free
                 @else
-                    Rp{{ number_format($product['price'], 0, ',', '.') }},-
+                    Rp {{ number_format($product['price'], 0, ',', '.') }} / Minggu
                 @endif
             </p>
 

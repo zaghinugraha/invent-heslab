@@ -1,8 +1,8 @@
 @extends('layouts.dashboard-reg')
 
-@section('title', 'Rent Form')
+@section('title', 'Keranjang Peminjaman')
 
-@section('heading', 'Rent Form')
+@section('heading', 'Keranjang Peminjaman')
 @section('sidebar')
     <aside id="sidebar" class="transition-width w-64 h-full fixed top-16 bottom-16 lg:relative lg:h-screen p-2">
         <div class="bg-white rounded p-2">
@@ -17,7 +17,7 @@
                         <line x1="5" y1="17" x2="19" y2="17" stroke="#000000" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Item List</span>
+                    <span class="sidebar-text">Daftar Barang</span>
                 </a>
                 <a href="{{ route('dashboard-reg-rent') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -32,7 +32,7 @@
                         <path d="M9 14H10" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Rent Status</span>
+                    <span class="sidebar-text">Status Peminjaman</span>
                 </a>
                 <a href="{{ route('dashboard-reg-history') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -42,7 +42,7 @@
                         <path d="M12 6V12L16 16" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text ml-3">History</span>
+                    <span class="sidebar-text ml-3">Riwayat</span>
                 </a>
             </nav>
         </div>
@@ -51,9 +51,9 @@
 
 @section('breadcrumb')
     <ol class="flex text-sm text-gray-500">
-        <li><a href="{{ route('dashboard-reg-items') }}" class="hover:underline">Item List</a></li>
+        <li><a href="{{ route('dashboard-reg-items') }}" class="hover:underline">Daftar Barang</a></li>
         <li class="mx-2">/</li>
-        <li class="font-bold">Confirm Rent</li>
+        <li class="font-bold">Keranjang Peminjaman</li>
     </ol>
 @endsection
 
@@ -140,9 +140,9 @@
                                     <!-- Price -->
                                     <p class="text-sm text-gray-400 font-semibold">
                                         @if (!auth()->user()->hasType('Regular'))
-                                            Free
+                                            Gratis
                                         @else
-                                            Rp {{ number_format($item->price, 0, ',', '.') }}/item
+                                            Rp {{ number_format($item->price, 0, ',', '.') }} / Minggu
                                         @endif
                                     </p>
                                 </div>
@@ -156,7 +156,7 @@
                                 <span>Total :</span>
                                 <span class="text-blue-700" id="total-price">
                                     @if (!auth()->user()->hasType('Regular'))
-                                        Free
+                                        Gratis
                                     @else
                                         Rp {{ Cart::instance('cart')->subtotal(0, ',', '.') }}
                                     @endif
@@ -169,7 +169,7 @@
                             @csrf
                             <button type="submit"
                                 class="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600">
-                                Clear Cart
+                                Bersihkan Keranjang
                             </button>
                         </form>
                     </div>
@@ -177,7 +177,7 @@
                     <div class="border-2 border-blue-300 bg-blue-50 rounded p-4 shadow-lg">
                         <div class="flex items-center justify-center h-1/2">
                             <div>
-                                <h3 class="text-xl font-semibold text-blue-700">Your cart is empty.</h3>
+                                <h3 class="text-xl font-semibold text-blue-700">Keranjang mu kosong.</h3>
                             </div>
                         </div>
                     </div>
@@ -199,7 +199,7 @@
 
                 <form action="{{ route('rent.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <h1 class="block text-gray-700 text-xl gradient-text font-bold mb-2">Fill in the Form</h1>
+                    <h1 class="block text-gray-700 text-xl gradient-text font-bold mb-2">Isi formulir di bawah</h1>
                     <hr class="mb-4">
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">NIM/NIP</label>
@@ -212,20 +212,20 @@
                             class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                     </div>
                     <div class="mb-6">
-                        <label class="block text-gray-700 font-medium mb-2">Upload KTM Image</label>
+                        <label class="block text-gray-700 font-medium mb-2">Upload Foto KTM</label>
                         <input type="file" name="ktm_image"
                             class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
                             required />
                     </div>
                     <div class="flex gap-4 mb-6">
                         <div class="w-1/2">
-                            <label class="block text-gray-700 font-medium mb-2">Rent Date</label>
+                            <label class="block text-gray-700 font-medium mb-2">Tanggal Mulai Pinjam</label>
                             <input type="date" name="start_date" id="start_date" value="{{ old('start_date') }}"
                                 required min="{{ \Carbon\Carbon::now()->addDays(2)->format('Y-m-d') }}"
                                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                         </div>
                         <div class="w-1/2">
-                            <label class="block text-gray-700 font-medium mb-2">Return Date</label>
+                            <label class="block text-gray-700 font-medium mb-2">Tanggal Pengembalian</label>
                             <input type="date" name="end_date" id="end_date" value="{{ old('end_date') }}" required
                                 min="{{ date('Y-m-d', strtotime('+1 week')) }}"
                                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
@@ -233,21 +233,21 @@
                     </div>
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">
-                            Payment Method
+                            Metode Pembayaran
                         </label>
                         <select name="payment_method" required
                             class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                             @if (auth()->user()->hasType('Regular'))
-                                <option value="credit_card">Credit Card</option>
-                                <option value="bank_transfer">Bank Transfer</option>
+                                <option value="credit_card">Kartu Kredit</option>
+                                <option value="bank_transfer">Transfer Bank</option>
                                 <option value="e_wallet">E-Wallet</option>
                             @else
-                                <option value="free">Free</option>
+                                <option value="free">Gratis</option>
                             @endif
                         </select>
                     </div>
                     <div class="mb-6">
-                        <label class="block text-gray-700 font-medium mb-2">Notes</label>
+                        <label class="block text-gray-700 font-medium mb-2">Catatan</label>
                         <textarea name="notes"
                             class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">{{ old('notes') }}</textarea>
                     </div>
@@ -255,7 +255,7 @@
                     <!-- Submit Button -->
                     <button type="submit"
                         class="mt-6 w-full bg-blue-600 text-white font-semibold py-3 rounded hover:bg-blue-700 focus:outline-none">
-                        Rent Now
+                        Pinjam Sekarang
                     </button>
                 </form>
             </div>
