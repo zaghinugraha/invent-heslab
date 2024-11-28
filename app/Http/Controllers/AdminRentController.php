@@ -61,7 +61,7 @@ class AdminRentController extends Controller
         $startDate = Carbon::parse($rent->start_date);
         $currentDate = Carbon::now();
 
-        if ($rent->user->hasType('Admin')) {
+        if (!$rent->user->hasType('Regular')) {
             $rent->payment_status = 'paid';
             if ($currentDate->gte($startDate)) {
                 $rent->order_status = 'active';

@@ -140,7 +140,7 @@
                                     <!-- Price -->
                                     <p class="text-sm text-gray-400 font-semibold">
                                         @if (!auth()->user()->hasType('Regular'))
-                                            Free because you are {{ auth()->user()->teams->first()->name }}
+                                            Free
                                         @else
                                             Rp {{ number_format($item->price, 0, ',', '.') }}/item
                                         @endif
