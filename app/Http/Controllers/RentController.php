@@ -44,7 +44,6 @@ class RentController extends Controller
             'ktm_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:8192',
             'start_date' => 'required|date|after:today',
             'end_date' => 'required|date|after:start_date',
-            'payment_method' => 'required|string',
             'notes' => 'nullable|string',
         ]);
 
@@ -93,7 +92,6 @@ class RentController extends Controller
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'total_cost' => $totalCost,
-                'payment_method' => $request->payment_method,
                 'payment_status' => 'unpaid',
                 'order_status' => 'waiting',
                 'notes' => $request->notes,

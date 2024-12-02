@@ -231,7 +231,7 @@
                                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                         </div>
                     </div>
-                    <div class="mb-6">
+                    {{-- <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">
                             Metode Pembayaran
                         </label>
@@ -245,7 +245,7 @@
                                 <option value="free">Gratis</option>
                             @endif
                         </select>
-                    </div>
+                    </div> --}}
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">Catatan</label>
                         <textarea name="notes"
