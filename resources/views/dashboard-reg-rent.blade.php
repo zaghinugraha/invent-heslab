@@ -155,26 +155,26 @@
                                         <!-- Button Greyed Out - Already Paid -->
                                         <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
                                             title="Already paid" disabled>
-                                            Bayar Sekarang
+                                            Bayar
                                         </button>
                                     @else
                                         @if ($rent->order_status == 'waiting')
                                             <!-- Button Greyed Out - Not Approved Yet -->
                                             <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
                                                 title="Not approved yet" disabled>
-                                                Bayar Sekarang
+                                                Bayar
                                             </button>
                                         @elseif ($rent->order_status == 'approved')
                                             <!-- Active Button - Redirects to Payment Gateway -->
                                             <a href="#"
                                                 class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                                                Bayar Sekarang
+                                                Bayar
                                             </a>
                                         @else
                                             <!-- Default State -->
                                             <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
                                                 disabled>
-                                                Bayar Sekarang
+                                                Bayar
                                             </button>
                                         @endif
                                     @endif
