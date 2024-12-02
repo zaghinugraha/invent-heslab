@@ -199,7 +199,7 @@ class ProductController extends Controller
             'slug' => Str::slug($request->name, '-'),
             'uuid' => Str::uuid()
         ]);
-        return to_route('dashboard-admin-items')->with('success', 'Product has been created!');
+        return to_route('dashboard-admin-items')->with('success', 'Product has been added!');
     }
 
     public function show($uuid)

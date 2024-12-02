@@ -1,8 +1,8 @@
 @extends('layouts.dashboard-admin')
 
-@section('title', 'Rent Details')
+@section('title', 'Rincian Peminjaman')
 
-@section('heading', 'Rent Details')
+@section('heading', 'Rincian Peminjaman')
 @section('sidebar')
     <aside id="sidebar" class="transition-width w-64 h-max fixed top-16 bottom-16 lg:relative p-2">
         <div class="bg-white rounded p-2">
@@ -17,7 +17,7 @@
                         <line x1="5" y1="17" x2="19" y2="17" stroke="#000000" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Item List</span>
+                    <span class="sidebar-text">Daftar Barang</span>
                 </a>
                 <a href="{{ route('dashboard-admin-rent') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -32,7 +32,7 @@
                         <path d="M9 14H10" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Rent Status</span>
+                    <span class="sidebar-text">Status Peminjaman</span>
                 </a>
                 <a href="{{ route('dashboard-admin-history') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -42,7 +42,7 @@
                         <path d="M12 6V12L16 16" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text ml-3">History</span>
+                    <span class="sidebar-text ml-3">Riwayat</span>
                 </a>
                 <a href="{{ route('users.index') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -52,7 +52,7 @@
                         <path d="M4 21V17C4 15.8954 4.89543 15 6 15H18C19.1046 15 20 15.8954 20 17V21" stroke="#000000"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text ml-3">Manage Users</span>
+                    <span class="sidebar-text ml-3">Kelola Pengguna</span>
                 </a>
             </nav>
         </div>
@@ -61,7 +61,7 @@
 
 @section('breadcrumb')
     <ol class="flex text-sm text-gray-500">
-        <li><a href="{{ route('dashboard-admin-rent') }}" class="hover:underline">Rent Requests</a></li>
+        <li><a href="{{ route('dashboard-admin-rent') }}" class="hover:underline">Status Peminjaman</a></li>
         <li class="mx-2">/</li>
         <li class="font-bold">
             {{ $rent->id }}
@@ -72,7 +72,7 @@
 @section('content')
     <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg my-8">
         <h2 class="text-2xl font-bold text-gray-800 mb-6">
-            {{ $rent->user->name }}'s Rent Details
+            Rincian Peminjaman #{{ $rent->id }} oleh {{ $rent->user->name }}
         </h2>
         <!-- Rent Information -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -87,29 +87,29 @@
                     <span class="w-2/3">{{ $rent->nim_nip }}</span>
                 </div>
                 <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">Phone:</span>
+                    <span class="w-1/3 font-semibold">No. WA:</span>
                     <span class="w-2/3">{{ $rent->phone }}</span>
                 </div>
                 <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">Order Date:</span>
+                    <span class="w-1/3 font-semibold">Tanggal Pemesanan:</span>
                     <span class="w-2/3">{{ $rent->order_date }}</span>
                 </div>
                 <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">Start Date:</span>
+                    <span class="w-1/3 font-semibold">Tanggal Mulai:</span>
                     <span class="w-2/3">{{ $rent->start_date }}</span>
                 </div>
                 <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">End Date:</span>
+                    <span class="w-1/3 font-semibold">Tanggal Selesai:</span>
                     <span class="w-2/3">{{ $rent->end_date }}</span>
                 </div>
                 @if ($rent->returned_date)
                     <div class="flex items-center">
-                        <span class="w-1/3 font-semibold">Returned Date:</span>
+                        <span class="w-1/3 font-semibold">Tanggal Pengembalian:</span>
                         <span class="w-2/3">{{ $rent->returned_date }}</span>
                     </div>
                 @endif
                 <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">Total Days:</span>
+                    <span class="w-1/3 font-semibold">Total Hari:</span>
                     <span class="w-2/3">
                         @php
                             $start = new DateTime($rent->start_date);
@@ -120,7 +120,7 @@
                     </span>
                 </div>
                 <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">Total Cost:</span>
+                    <span class="w-1/3 font-semibold">Total Harga:</span>
                     <span class="w-2/3">
                         @if (!$rent->user->hasType('Regular'))
                             Free
@@ -131,18 +131,18 @@
                 </div>
                 @if ($rent->user->hasType('Regular'))
                     <div class="flex items-center">
-                        <span class="w-1/3 font-semibold">Payment Status:</span>
+                        <span class="w-1/3 font-semibold">Status Pembayaran:</span>
                         <span class="w-2/3">
                             @if ($rent->payment_status == 'paid')
-                                <span class="bg-green-500 text-white px-2 py-1 rounded-lg">Paid</span>
+                                <span class="bg-green-500 text-white px-2 py-1 rounded-lg">Sudah dibayar</span>
                             @else
-                                <span class="bg-red-500 text-white px-2 py-1 rounded-lg">Unpaid</span>
+                                <span class="bg-red-500 text-white px-2 py-1 rounded-lg">Belum dibayar</span>
                             @endif
                         </span>
                     </div>
                 @endif
                 <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">Rent Status:</span>
+                    <span class="w-1/3 font-semibold">Status Peminjaman:</span>
                     <span class="w-2/3">
                         <span
                             class="inline-block px-2 py-1 text-white rounded-lg
@@ -159,7 +159,7 @@
                 </div>
             </div>
             <div>
-                <p class="font-bold mb-2">Items:</p>
+                <p class="font-bold mb-2">Barang:</p>
                 <ul class="list-disc list-inside text-gray-700">
                     @foreach ($rent->items as $item)
                         @if ($rent->user->hasType('Regular'))
@@ -173,7 +173,7 @@
                     @endforeach
                 </ul>
                 <div class="mt-4">
-                    <p class="font-bold">Notes:</p>
+                    <p class="font-bold">Catatan:</p>
                     <p class="text-gray-700">{{ $rent->notes }}</p>
                 </div>
             </div>
@@ -183,20 +183,24 @@
         <div
             class="grid grid-cols-1 md:grid-cols-{{ $rent->before_documentation && $rent->after_documentation ? '3' : '2' }} gap-6 mt-8">
             <div class="text-center">
-                <p class="font-semibold mb-2">KTM Image:</p>
+                <p class="font-semibold mb-2">Foto KTM:</p>
                 <img src="{{ url('/admin/rent/' . $rent->id . '/ktm-image') }}" alt="KTM Image"
                     class="w-full h-auto rounded-lg shadow">
             </div>
             @if ($rent->before_documentation)
                 <div class="text-center">
-                    <p class="font-semibold mb-2">Before-rent Documentation:</p>
+                    <p class="font-semibold mb-2">
+                        Dokumentasi Sebelum Peminjaman:
+                    </p>
                     <img src="{{ url('/admin/rent/' . $rent->id . '/before-documentation') }}" alt="Before Documentation"
                         class="w-full h-auto rounded-lg shadow">
                 </div>
             @endif
             @if ($rent->after_documentation)
                 <div class="text-center">
-                    <p class="font-semibold mb-2">After-rent Documentation:</p>
+                    <p class="font-semibold mb-2">
+                        Dokumentasi Setelah Peminjaman:
+                    </p>
                     <img src="{{ url('/admin/rent/' . $rent->id . '/after-documentation') }}" alt="After Documentation"
                         class="w-full h-auto rounded-lg shadow">
                 </div>
@@ -210,14 +214,14 @@
                     @csrf
                     <button type="submit"
                         class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
-                        Approve
+                        Terima
                     </button>
                 </form>
                 <form action="{{ route('rent.reject', $rent) }}" method="POST">
                     @csrf
                     <button type="submit"
                         class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
-                        Reject
+                        Tolak
                     </button>
                 </form>
             </div>

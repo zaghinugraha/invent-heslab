@@ -19,7 +19,7 @@
                         <line x1="5" y1="17" x2="19" y2="17" stroke="#000000" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Item List</span>
+                    <span class="sidebar-text">Daftar Barang</span>
                 </a>
                 <a href="{{ route('dashboard-reg-rent') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -34,7 +34,7 @@
                         <path d="M9 14H10" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Rent Status</span>
+                    <span class="sidebar-text">Status Peminjaman</span>
                 </a>
                 <a href="{{ route('dashboard-reg-history') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -44,7 +44,7 @@
                         <path d="M12 6V12L16 16" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text ml-3">History</span>
+                    <span class="sidebar-text ml-3">Riwayat</span>
                 </a>
             </nav>
         </div>
@@ -53,7 +53,7 @@
 
 @section('breadcrumb')
     <ol class="flex text-sm text-gray-500">
-        <li><a href="{{ route('dashboard-reg-items') }}" class="hover:underline">Item List</a></li>
+        <li><a href="{{ route('dashboard-reg-items') }}" class="hover:underline">Daftar Barang</a></li>
         <li class="mx-2">/</li>
         <li class="font-bold">{{ $product['name'] }}</li>
     </ol>
@@ -71,14 +71,14 @@
             <!-- Product Title and Stock -->
             <div class="flex flex-col sm:flex-row justify-between items-start">
                 <h1 class="text-2xl font-bold text-gray-800">{{ $product['name'] }}</h1>
-                <span class="text-sm text-gray-500 mt-2 sm:mt-0">Stock: <span
+                <span class="text-sm text-gray-500 mt-2 sm:mt-0">Persediaan: <span
                         class="font-semibold text-gray-800">{{ $product->quantity }}</span></span>
             </div>
 
             <!-- Price -->
             <p class="text-xl text-gray-700 font-semibold mt-2">
                 @if (!auth()->user()->hasType('Regular'))
-                    Free
+                    Gratis
                 @else
                     Rp {{ number_format($product['price'], 0, ',', '.') }} / Minggu
                 @endif
@@ -101,22 +101,18 @@
                         @if (!$product->is_rentable)
                             <button class="bg-gray-300 text-gray-600 px-4 py-2 rounded cursor-not-allowed" disabled
                                 title="Not Rentable">
-                                Add to Cart
+                                Tambahkan ke Keranjang
                             </button>
                         @else
                             <button onclick="addToCart({{ $product->id }})"
                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                Add to Cart
+                                Tambahkan ke Keranjang
                             </button>
                         @endif
                     @else
                         <button class="bg-gray-300 text-gray-600 px-4 py-2 rounded cursor-not-allowed" disabled
                             title="Out of Stock">
-                            Add to Cart
-                        </button>
-                        <button class="border border-gray-300 text-gray-600 px-4 py-2 rounded cursor-not-allowed" disabled
-                            title="Out of Stock">
-                            Rent Now
+                            Tambahkan ke Keranjang
                         </button>
                     @endif
                 </div>
@@ -126,11 +122,11 @@
             <div class="flex gap-4 mt-6 border-b border-gray-200">
                 <button onclick="showTab('specification')" id="specification-tab"
                     class="text-blue-600 font-semibold pb-2 border-b-2 border-blue-600">
-                    Specification
+                    Spesifikasi
                 </button>
                 <button onclick="showTab('maintenance')" id="maintenance-tab"
                     class="text-gray-500 hover:text-gray-700 pb-2">
-                    Maintenance
+                    Pemeliharaan
                 </button>
             </div>
 
@@ -186,7 +182,9 @@
                             </div>
                         </li>
                     @empty
-                        <li class="text-center text-gray-500 dark:text-gray-400">No maintenance records available.</li>
+                        <li class="text-center text-gray-500 dark:text-gray-400">
+                            Tidak ada catatan pemeliharaan untuk barang ini.
+                        </li>
                     @endforelse
                 </ul>
             </div>

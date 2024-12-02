@@ -43,7 +43,7 @@ class RentRejectedNotification extends Notification
             'rent_id' => $this->rent->id,
             'user_id' => $this->rent->user_id,
             'user_name' => $this->rent->user->name,
-            'message' => 'Your rent request has been rejected.',
+            'message' => 'Peminjaman telah ditolak.',
             'created_at' => now()->toDateTimeString(),
         ];
     }

@@ -4,7 +4,8 @@
 
 @section('heading', 'Daftar Barang')
 @section('headingDesc', 'Daftar Barang')
-@section('description', 'Halaman ini berisi daftar barang yang tersedia di sistem. Anda dapat menambahkan barang baru,
+@section('description',
+    'Halaman ini berisi daftar barang yang tersedia di sistem. Anda dapat menambahkan barang baru,
     mengedit barang yang sudah ada, atau menghapus barang yang sudah tidak digunakan.')
 
 @section('sidebar')
@@ -482,7 +483,7 @@
                             <td class="px-4 py-2 border">{{ $product['id'] }}</td>
                             <td class="px-4 py-2 border">{{ $product['name'] }}</td>
                             <td class="px-4 py-2 border">{{ $product['brand'] }}</td>
-                            <td class="px-4 py-2 border">{{ $product->category->name ?? 'No Category' }}</td>
+                            <td class="px-4 py-2 border">{{ $product->category->name ?? 'Tidak Ada Kategori' }}</td>
                             <td class="px-4 py-2 border oldstyle-nums">
                                 {{ number_format($product['price'], 0, ',', '.') }}
                             </td>
@@ -605,7 +606,7 @@ $maxQuantity = $products->max('quantity');
                                 </div>
                             </td>
                         @empty
-                            <td class="px-4 py-2 border text-center" colspan="11">No items found.</td>
+                            <td class="px-4 py-2 border text-center" colspan="11">Tidak ada barang yang tersedia.</td>
                         </tr>
                 @endforelse
                 </tbody>

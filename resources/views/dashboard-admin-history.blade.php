@@ -4,7 +4,8 @@
 
 @section('heading', 'Riwayat')
 @section('headingDesc', 'Riwayat')
-@section('description', 'Ini adalah daftar barang-barang yang sudah dipinjam oleh pengguna. Gunakan kolom pencarian
+@section('description',
+    'Ini adalah daftar barang-barang yang sudah dipinjam oleh pengguna. Gunakan kolom pencarian
     untuk menemukan catatan tertentu, atau navigasikan halaman untuk melihat riwayat lebih lanjut.')
 
 @section('sidebar')
@@ -153,7 +154,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center py-4">No history data available.</td>
+                        <td colspan="7" class="text-center py-4">Tidak ada data riwayat yang tersedia</td>
                     </tr>
                 @endforelse
             </tbody>

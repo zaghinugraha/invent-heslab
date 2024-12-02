@@ -2,21 +2,22 @@
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-@section('title', 'Rent Status')
+@section('title', 'Status Peminjaman')
 
-@section('heading', 'Rent Status')
-@section('headingDesc', 'Rent Status')
+@section('heading', 'Status Peminjaman')
+@section('headingDesc', 'Status Peminjaman')
 @section('description',
     '
-    This is a list of items that you have rented. Use the search column to find a specific record, or navigate the page to
-    view more history.
+    Pada halaman ini, Anda dapat melihat status peminjaman barang yang sedang Anda lakukan. Anda juga dapat melihat status
+    peminjaman barang Anda.
     ')
 @section('warnings')
     @if ($overdueCount > 0)
         <div class="bg-red-100 border border-red-400 text-red-500 px-4 py-3 rounded relative" role="alert">
             <span class="block sm:inline">
-                You have {{ $overdueCount }} overdue rent(s). Please return the item(s)
-                immediately.</span>
+                Kamu memiliki {{ $overdueCount }} peminjaman barang yang sudah lewat tanggal pengembalian. Segera kembalikan
+                barang tersebut.
+            </span>
             </span>
         </div>
     @endif
@@ -24,8 +25,9 @@
     @if ($approvedAndUnpaidCount > 0)
         <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
             <span class="block sm:inline">
-                You have {{ $approvedAndUnpaidCount }} unpaid rent(s). Please pay the rent(s)
-                immediately.</span>
+                Kamu memiliki {{ $approvedAndUnpaidCount }} peminjaman barang yang sudah disetujui namun belum melakukan
+                pembayaran. Segera lakukan pembayaran agar peminjaman barang dapat diproses.
+            </span>
             </span>
         </div>
     @endif
@@ -45,7 +47,7 @@
                         <line x1="5" y1="17" x2="19" y2="17" stroke="#000000" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Item List</span>
+                    <span class="sidebar-text">Daftar Barang</span>
                 </a>
                 <a href="{{ route('dashboard-reg-rent') }}"
                     class="flex items-center space-x-2 text-white bg-gradient-to-r from-blue-500 to-purple-500 p-2 rounded">
@@ -60,7 +62,7 @@
                         <path d="M9 14H10" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Rent Status</span>
+                    <span class="sidebar-text">Status Peminjaman</span>
                 </a>
                 <a href="{{ route('dashboard-reg-history') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -70,7 +72,7 @@
                         <path d="M12 6V12L16 16" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text ml-3">History</span>
+                    <span class="sidebar-text ml-3">Riwayat</span>
                 </a>
             </nav>
         </div>
@@ -89,8 +91,9 @@
                 <input type="hidden" name="rent_id" :value="rentId">
                 <input type="hidden" name="documentation_type" :value="documentationType">
                 <div class="mb-4">
-                    <label for="documentation" class="block text-sm font-medium text-gray-700">Upload Documentation
-                        Picture</label>
+                    <label for="documentation" class="block text-sm font-medium text-gray-700">
+                        Unggah Dokumentasi (Foto)
+                    </label>
                     <input type="file" name="documentation" id="documentation" accept="image/*" required
                         class="mt-1 block w-full border-gray-300 rounded-md">
                     @error('documentation')
@@ -100,10 +103,10 @@
                 <div class="flex justify-end">
                     <button type="button" @click="documentationModal = false"
                         class="bg-gray-500 text-white px-4 py-2 rounded mr-2">
-                        Cancel
+                        Batal
                     </button>
                     <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                        Submit
+                        Kirim
                     </button>
                 </div>
             </form>
@@ -120,16 +123,16 @@
                 <thead>
                     <tr class="bg-blue-600 text-white">
                         <th class="px-4 py-2 border">No</th>
-                        <th class="px-4 py-2 border">Item(s)</th>
-                        <th class="px-4 py-2 border">Total Price</th>
-                        <th class="px-4 py-2 border">Rent Date</th>
-                        <th class="px-4 py-2 border">Return Date</th>
+                        <th class="px-4 py-2 border">Barang</th>
+                        <th class="px-4 py-2 border">Total Harga</th>
+                        <th class="px-4 py-2 border">Tanggal Mulai</th>
+                        <th class="px-4 py-2 border">Tanggal Dikembalikan</th>
                         @if (auth()->user()->hasType('Regular'))
-                            <th class="px-4 py-2 border">Payment</th>
+                            <th class="px-4 py-2 border">Pembayaran</th>
                         @endif
                         <th class="px-4 py-2 border">Status</th>
-                        <th class="px-4 py-2 border">Documentation Status</th>
-                        <th class="px-4 py-2 border">Actions</th>
+                        <th class="px-4 py-2 border">Status Dokumentasi</th>
+                        <th class="px-4 py-2 border">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -152,26 +155,26 @@
                                         <!-- Button Greyed Out - Already Paid -->
                                         <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
                                             title="Already paid" disabled>
-                                            Pay Now
+                                            Bayar Sekarang
                                         </button>
                                     @else
                                         @if ($rent->order_status == 'waiting')
                                             <!-- Button Greyed Out - Not Approved Yet -->
                                             <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
                                                 title="Not approved yet" disabled>
-                                                Pay Now
+                                                Bayar Sekarang
                                             </button>
                                         @elseif ($rent->order_status == 'approved')
                                             <!-- Active Button - Redirects to Payment Gateway -->
                                             <a href="#"
                                                 class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                                                Pay Now
+                                                Bayar Sekarang
                                             </a>
                                         @else
                                             <!-- Default State -->
                                             <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
                                                 disabled>
-                                                Pay Now
+                                                Bayar Sekarang
                                             </button>
                                         @endif
                                     @endif
@@ -192,25 +195,25 @@
                             <td class="px-4 py-2 border text-left text-sm">
                                 @if ($rent->before_documentation)
                                     <p>
-                                        <span>Before: </span>
-                                        <span class="text-green-600 font-bold">Submitted</span>
+                                        <span>Sebelum: </span>
+                                        <span class="text-green-600 font-bold">Terkirim</span>
                                     </p>
                                 @else
                                     <p>
-                                        <span>Before: </span>
-                                        <span class="text-red-600 font-bold">Not Submitted</span>
+                                        <span>Sebelum: </span>
+                                        <span class="text-red-600 font-bold">Belum Terkirim</span>
                                     </p>
                                 @endif
 
                                 @if ($rent->after_documentation)
                                     <p>
-                                        <span>After: </span>
-                                        <span class="text-green-600 font-bold">Submitted</span>
+                                        <span>Sesudah: </span>
+                                        <span class="text-green-600 font-bold">Terkirim</span>
                                     </p>
                                 @else
                                     <p>
-                                        <span>After: </span>
-                                        <span class="text-red-600 font-bold">Not Submitted</span>
+                                        <span>Sesudah: </span>
+                                        <span class="text-red-600 font-bold">Belum Terkirim</span>
                                     </p>
                                 @endif
                             </td>
@@ -227,18 +230,19 @@
                                     @if (!$rent->before_documentation && $today >= $startDate && $today <= $endDate)
                                         <button class="bg-green-500 hover:bg-green-600 text-white px-2 py-2 rounded"
                                             @click="documentationModal = true; rentId = {{ $rent->id }}; documentationType = 'before';">
-                                            Before-rent Documentation
+                                            Dokumentasi Sebelum Peminjaman
                                         </button>
                                     @elseif ($rent->before_documentation && !$rent->after_documentation && $today >= $startDate && $today <= $endDate)
                                         <button class="bg-green-500 hover:bg-green-600 text-white px-2 py-2 rounded"
                                             @click="documentationModal = true; rentId = {{ $rent->id }}; documentationType = 'after';">
-                                            After-rent Documentation
+                                            Dokumentasi Setelah Peminjaman
                                         </button>
                                     @elseif ($rent->before_documentation && $rent->after_documentation)
-                                        <span class="text-green-600 font-semibold">All Documentation
-                                            Submitted</span>
+                                        <span class="text-green-600 font-semibold">
+                                            Dokumentasi Sudah Lengkap
+                                        </span>
                                     @else
-                                        <span class="text-gray-600 font-semibold">Unavailable</span>
+                                        <span class="text-gray-600 font-semibold">Tidak Tersedia</span>
                                     @endif
                                 @else
                                     <!-- Cancel Button -->
@@ -249,7 +253,7 @@
                                             <button type="submit"
                                                 class="bg-red-500 hover:bg-red-600 text-white px-2 py-2 rounded"
                                                 onclick="return confirm('Are you sure you want to cancel this rent?');">
-                                                Cancel
+                                                Batal
                                             </button>
                                         </form>
                                     @endif
@@ -258,7 +262,9 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center py-4">No rent data available.</td>
+                            <td colspan="7" class="text-center py-4">
+                                Tidak ada data peminjaman yang tersedia.
+                            </td>
                         </tr>
                     @endforelse
                 </tbody>

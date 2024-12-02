@@ -157,7 +157,7 @@
                     @empty
                         <tr>
                             <td colspan="9"
-                                    class="text-center py-4">There are no rental bookings available.
+                                    class="text-center py-4">Tidak ada data yang tersedia.
                             </td>
                         </tr>
                     @endforelse
