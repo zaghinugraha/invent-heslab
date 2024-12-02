@@ -410,85 +410,140 @@
             </form>
         </div>
     </div>
-@endsection
-
-@section('content')
-
-    <div class="space-y-4 mb-8 w-full mx-auto">
-        <!-- Status Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 w-full mx-auto">
-            <!-- Maintenance Card -->
-            <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-                <div class="bg-red-500 text-white font-semibold py-2">Butuh Pemeliharaan</div>
-                <div class="bg-white py-4 text-2xl font-bold text-black">{{ $needMaintenanceCount }}</div>
-            </div>
-
-            <!-- Low on Stock Card -->
-            <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-                <div class="bg-yellow-600 text-white font-semibold py-2">Persediaan Rendah</div>
-                <div class="bg-white py-4 text-2xl font-bold text-black">{{ $lowStockCount }}</div>
-            </div>
-        </div>
-
-        <!-- Search Bar and Add Item Button -->
-        <div class="flex justify-between items-center mb-4">
-            <!-- Left Side: Add Category Button -->
-            <button @click="manageCategory = true"
-                class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-                Kelola Kategori
-            </button>
-
-            <!-- Right Side: Search Form and Add Item Button -->
-            <div class="flex items-center space-x-2">
-                <form action="{{ route('dashboard-admin-items') }}" method="GET" class="flex">
-                    <input type="text" name="search" placeholder="Cari"
-                        class="w-full px-4 py-2 border rounded-l-lg focus:outline-none"
-                        value="{{ request()->query('search') }}" />
-                    <button type="submit" class="bg-gray-300 px-4 py-2 rounded-r-lg">
-                        <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M21.707 20.293l-6.388-6.388A7.455 7.455 0 0018 10.5a7.5 7.5 0 10-7.5 7.5c1.8 0 3.464-.63 4.904-1.681l6.388 6.388a1 1 0 001.415-1.414zM10.5 16a5.5 5.5 0 110-11 5.5 5.5 0 010 11z">
-                            </path>
-                        </svg>
+    <!-- Import Excel Modal -->
+    <div x-show="importExcel" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50"
+        x-init="$watch('importExcel', value => document.body.classList.toggle('overflow-hidden', value))" x-cloak>
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 max-h-full overflow-y-auto">
+            <h2 class="text-xl font-bold gradient-text mb-4">Import Barang dari Excel</h2>
+            <form action="{{ route('products.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <!-- Excel File -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">File Excel</label>
+                    <input type="file" name="excel_file" class="w-full px-4 py-2 border rounded-lg focus:outline-none"
+                        required />
+                </div>
+                <!-- Download Template Link -->
+                <div class="mb-4">
+                    <a href="{{ asset('templates/products_import_template.xlsx') }}" download
+                        class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                        Download Template
+                    </a>
+                </div>
+                <!-- Form Buttons -->
+                <div class="flex justify-end">
+                    <button type="button" @click="importExcel = false"
+                        class="bg-gray-500 text-white px-4 py-2 rounded mr-2">
+                        Batal
                     </button>
-                </form>
-                <button @click="newItem = true" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-                    Tambah Barang
-                </button>
-            </div>
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">
+                        Import Barang
+                    </button>
+                </div>
+            </form>
         </div>
+    @endsection
 
-        <!-- Table -->
-        <div class="overflow-x-auto rounded-lg">
-            <table class="min-w table-auto border">
-                <thead>
-                    <tr class="bg-blue-600 text-white">
-                        <th class="px-4 py-2 border">ID</th>
-                        <th class="px-4 py-2 border">Nama</th>
-                        <th class="px-4 py-2 border">Merek</th>
-                        <th class="px-4 py-2 border">Kategori</th>
-                        <th class="px-4 py-2 border">Harga</th>
-                        <th class="px-4 py-2 border">Persediaan</th>
-                        <th class="px-4 py-2 border">Gambar</th>
-                        <th class="px-4 py-2 border">Sumber</th>
-                        <th class="px-4 py-2 border">Tanggal Masuk</th>
-                        <th class="px-4 py-2 border">Terakhir Dipelihara</th>
-                        <th class="px-4 py-2 border">Bisa Dipinjam?</th>
-                        <th class="px-4 py-2 border">Aksi</th>
-                    </tr>
-                </thead>
-                @forelse ($products as $product)
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr class="hover:bg-gray-50 text-center">
-                            <td class="px-4 py-2 border">{{ $product['id'] }}</td>
-                            <td class="px-4 py-2 border">{{ $product['name'] }}</td>
-                            <td class="px-4 py-2 border">{{ $product['brand'] }}</td>
-                            <td class="px-4 py-2 border">{{ $product->category->name ?? 'Tidak Ada Kategori' }}</td>
-                            <td class="px-4 py-2 border oldstyle-nums">
-                                {{ number_format($product['price'], 0, ',', '.') }}
-                            </td>
-                            <td class="px-4 py-2 border text-center diagonal-fractions"
-                                style="
+    @section('content')
+        @if (session('success'))
+            <div class="bg-green-100 text-green-800 p-4 rounded mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="bg-red-100 text-red-800 p-4 rounded mb-4">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        <div class="space-y-4 mb-8 w-full mx-auto">
+            <!-- Status Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 w-full mx-auto">
+                <!-- Maintenance Card -->
+                <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
+                    <div class="bg-red-500 text-white font-semibold py-2">Butuh Pemeliharaan</div>
+                    <div class="bg-white py-4 text-2xl font-bold text-black">{{ $needMaintenanceCount }}</div>
+                </div>
+
+                <!-- Low on Stock Card -->
+                <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
+                    <div class="bg-yellow-600 text-white font-semibold py-2">Persediaan Rendah</div>
+                    <div class="bg-white py-4 text-2xl font-bold text-black">{{ $lowStockCount }}</div>
+                </div>
+            </div>
+
+            <!-- Search Bar and Add Item Button -->
+            <div class="flex justify-between items-center mb-4">
+                <!-- Left Side: Add Category Button -->
+                <button @click="manageCategory = true"
+                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                    Kelola Kategori
+                </button>
+
+                <!-- Right Side: Search Form and Add Item Button -->
+                <div class="flex items-center space-x-2">
+                    <form action="{{ route('dashboard-admin-items') }}" method="GET" class="flex">
+                        <input type="text" name="search" placeholder="Cari"
+                            class="w-full px-4 py-2 border rounded-l-lg focus:outline-none"
+                            value="{{ request()->query('search') }}" />
+                        <button type="submit" class="bg-gray-300 px-4 py-2 rounded-r-lg">
+                            <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M21.707 20.293l-6.388-6.388A7.455 7.455 0 0018 10.5a7.5 7.5 0 10-7.5 7.5c1.8 0 3.464-.63 4.904-1.681l6.388 6.388a1 1 0 001.415-1.414zM10.5 16a5.5 5.5 0 110-11 5.5 5.5 0 010 11z">
+                                </path>
+                            </svg>
+                        </button>
+                    </form>
+                    <button @click="newItem = true"
+                        class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                        Tambah Barang
+                    </button>
+                    <button @click="importExcel = true"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                        Import from Excel
+                    </button>
+                    <a href="{{ route('products.export') }}"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                        Export to Excel
+                    </a>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto rounded-lg">
+                <table class="min-w table-auto border">
+                    <thead>
+                        <tr class="bg-blue-600 text-white">
+                            <th class="px-4 py-2 border">ID</th>
+                            <th class="px-4 py-2 border">Nama</th>
+                            <th class="px-4 py-2 border">Merek</th>
+                            <th class="px-4 py-2 border">Kategori</th>
+                            <th class="px-4 py-2 border">Harga</th>
+                            <th class="px-4 py-2 border">Persediaan</th>
+                            <th class="px-4 py-2 border">Gambar</th>
+                            <th class="px-4 py-2 border">Sumber</th>
+                            <th class="px-4 py-2 border">Tanggal Masuk</th>
+                            <th class="px-4 py-2 border">Terakhir Dipelihara</th>
+                            <th class="px-4 py-2 border">Bisa Dipinjam?</th>
+                            <th class="px-4 py-2 border">Aksi</th>
+                        </tr>
+                    </thead>
+                    @forelse ($products as $product)
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr class="hover:bg-gray-50 text-center">
+                                <td class="px-4 py-2 border">{{ $product['id'] }}</td>
+                                <td class="px-4 py-2 border">{{ $product['name'] }}</td>
+                                <td class="px-4 py-2 border">{{ $product['brand'] }}</td>
+                                <td class="px-4 py-2 border">{{ $product->category->name ?? 'Tidak Ada Kategori' }}</td>
+                                <td class="px-4 py-2 border oldstyle-nums">
+                                    {{ number_format($product['price'], 0, ',', '.') }}
+                                </td>
+                                <td class="px-4 py-2 border text-center diagonal-fractions"
+                                    style="
                 @php
 $maxQuantity = $products->max('quantity');
                     $minQuantity = $products->min('quantity');
@@ -509,123 +564,125 @@ $maxQuantity = $products->max('quantity');
                     $color = 'hsl(' . $hue . ', 90%, 50%)'; @endphp
                 background-color: {{ $color }};
             ">
-                                {{ $product->quantity }}/{{ $product->quantity_alert }}
-                            </td>
-                            <td class="px-4 py-2 border relative group justify-center items-center">
-                                <svg class="w-7 h-7 m-auto" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="16" cy="8" r="2" stroke="#1C274C" stroke-width="1.5" />
-                                    <path
-                                        d="M2 12.5001L3.75159 10.9675C4.66286 10.1702 6.03628 10.2159 6.89249 11.0721L11.1822 15.3618C11.8694 16.0491 12.9512 16.1428 13.7464 15.5839L14.0446 15.3744C15.1888 14.5702 16.7369 14.6634 17.7765 15.599L21 18.5001"
-                                        stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" />
-                                    <path
-                                        d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8"
-                                        stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" />
-                                </svg>
-                                <div class="relative group" onclick="togglePreview(this)">
-                                    <div
-                                        class="hidden group-hover:block absolute z-10 bg-white border border-gray-300 p-1 rounded preview-image w-max">
-                                        <img src="{{ route('product.image', $product->uuid) }}"
-                                            alt="{{ $product['name'] }}" class="w-32 h-32 object-cover rounded">
+                                    {{ $product->quantity }}/{{ $product->quantity_alert }}
+                                </td>
+                                <td class="px-4 py-2 border relative group justify-center items-center">
+                                    <svg class="w-7 h-7 m-auto" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="16" cy="8" r="2" stroke="#1C274C"
+                                            stroke-width="1.5" />
+                                        <path
+                                            d="M2 12.5001L3.75159 10.9675C4.66286 10.1702 6.03628 10.2159 6.89249 11.0721L11.1822 15.3618C11.8694 16.0491 12.9512 16.1428 13.7464 15.5839L14.0446 15.3744C15.1888 14.5702 16.7369 14.6634 17.7765 15.599L21 18.5001"
+                                            stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" />
+                                        <path
+                                            d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8"
+                                            stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" />
+                                    </svg>
+                                    <div class="relative group" onclick="togglePreview(this)">
+                                        <div
+                                            class="hidden group-hover:block absolute z-10 bg-white border border-gray-300 p-1 rounded preview-image w-max">
+                                            <img src="{{ route('product.image', $product->uuid) }}"
+                                                alt="{{ $product['name'] }}" class="w-32 h-32 object-cover rounded">
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="px-4 py-2 border">{{ $product['source'] }}</td>
-                            <td class="px-4 py-2 border">{{ $product['dateArrival'] }}</td>
-                            @php
-                                $lastMaintenance = $product->maintenance->sortByDesc('created_at')->first();
-                                $needsMaintenance = false;
+                                </td>
+                                <td class="px-4 py-2 border">{{ $product['source'] }}</td>
+                                <td class="px-4 py-2 border">{{ $product['dateArrival'] }}</td>
+                                @php
+                                    $lastMaintenance = $product->maintenance->sortByDesc('created_at')->first();
+                                    $needsMaintenance = false;
 
-                                if ($lastMaintenance) {
-                                    $maintenanceDueDate = \Carbon\Carbon::parse(
-                                        $lastMaintenance->created_at,
-                                    )->addWeek();
-                                    $needsMaintenance = \Carbon\Carbon::now()->greaterThanOrEqualTo(
-                                        $maintenanceDueDate,
-                                    );
-                                } else {
-                                    //need maintenance 1 week after arrival date
-                                    $maintenanceDueDate = \Carbon\Carbon::parse($product->dateArrival)->addWeek();
-                                    $needsMaintenance = \Carbon\Carbon::now()->greaterThanOrEqualTo(
-                                        $maintenanceDueDate,
-                                    );
-                                }
-                            @endphp
-                            <td class="px-4 py-2 border {{ $needsMaintenance ? 'text-red-500' : '' }}">
-                                @if ($lastMaintenance)
-                                    {{ \Carbon\Carbon::parse($lastMaintenance->created_at)->diffForHumans() }}
-                                @else
-                                    {{ \Carbon\Carbon::parse($product->dateArrival)->diffForHumans() }}
-                                @endif
-                            </td>
-                            <td class="px-4 py-2 border">
-                                <div class="flex justify-center">
-                                    @if ($product->is_rentable)
-                                        <svg class="w-6 h-6 text-green-500" viewBox="0 0 20 20" fill="currentColor"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="0" fill="none" width="20" height="20" />
-                                            <g>
-                                                <path
-                                                    d="M10 2c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm-.615 12.66h-1.34l-3.24-4.54 1.34-1.25 2.57 2.4 5.14-5.93 1.34.94-5.81 8.38z" />
-                                            </g>
-                                        </svg>
+                                    if ($lastMaintenance) {
+                                        $maintenanceDueDate = \Carbon\Carbon::parse(
+                                            $lastMaintenance->created_at,
+                                        )->addWeek();
+                                        $needsMaintenance = \Carbon\Carbon::now()->greaterThanOrEqualTo(
+                                            $maintenanceDueDate,
+                                        );
+                                    } else {
+                                        //need maintenance 1 week after arrival date
+                                        $maintenanceDueDate = \Carbon\Carbon::parse($product->dateArrival)->addWeek();
+                                        $needsMaintenance = \Carbon\Carbon::now()->greaterThanOrEqualTo(
+                                            $maintenanceDueDate,
+                                        );
+                                    }
+                                @endphp
+                                <td class="px-4 py-2 border {{ $needsMaintenance ? 'text-red-500' : '' }}">
+                                    @if ($lastMaintenance)
+                                        {{ \Carbon\Carbon::parse($lastMaintenance->created_at)->diffForHumans() }}
                                     @else
-                                        <svg class="w-6 h-6 text-red-500" viewBox="0 0 20 20" fill="currentColor"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="0" fill="none" width="20" height="20" />
-                                            <g>
-                                                <path
-                                                    d="M10 2c4.42 0 8 3.58 8 8s-3.58 8-8 8-8-3.58-8-8 3.58-8 8-8zm5 11l-3-3 3-3-2-2-3 3-3-3-2 2 3 3-3 3 2 2 3-3 3 3z" />
-                                            </g>
-                                        </svg>
+                                        {{ \Carbon\Carbon::parse($product->dateArrival)->diffForHumans() }}
                                     @endif
-                                </div>
-                            </td>
-                            <td class="px-4 py-2 border">
-                                <div class="flex justify-center space-x-2">
-                                    @php
-                                        $productData = $product->toArray();
-                                        array_walk_recursive($productData, function (&$item) {
-                                            if (is_string($item)) {
-                                                $item = mb_convert_encoding($item, 'UTF-8', 'UTF-8');
-                                            }
-                                        });
-                                        $productJson = json_encode($productData);
-                                    @endphp
-                                    <button
-                                        class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
-                                        @click="editItem = true; selectedProduct = JSON.parse(atob('{{ base64_encode($productJson) }}'))">Edit</button>
-                                    <form action="{{ route('products.destroy', $product->uuid) }}" method="POST"
-                                        style="display: inline;">
-                                        @csrf
-                                        @method('delete')
+                                </td>
+                                <td class="px-4 py-2 border">
+                                    <div class="flex justify-center">
+                                        @if ($product->is_rentable)
+                                            <svg class="w-6 h-6 text-green-500" viewBox="0 0 20 20" fill="currentColor"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <rect x="0" fill="none" width="20" height="20" />
+                                                <g>
+                                                    <path
+                                                        d="M10 2c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm-.615 12.66h-1.34l-3.24-4.54 1.34-1.25 2.57 2.4 5.14-5.93 1.34.94-5.81 8.38z" />
+                                                </g>
+                                            </svg>
+                                        @else
+                                            <svg class="w-6 h-6 text-red-500" viewBox="0 0 20 20" fill="currentColor"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <rect x="0" fill="none" width="20" height="20" />
+                                                <g>
+                                                    <path
+                                                        d="M10 2c4.42 0 8 3.58 8 8s-3.58 8-8 8-8-3.58-8-8 3.58-8 8-8zm5 11l-3-3 3-3-2-2-3 3-3-3-2 2 3 3-3 3 2 2 3-3 3 3z" />
+                                                </g>
+                                            </svg>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2 border">
+                                    <div class="flex justify-center space-x-2">
+                                        @php
+                                            $productData = $product->toArray();
+                                            array_walk_recursive($productData, function (&$item) {
+                                                if (is_string($item)) {
+                                                    $item = mb_convert_encoding($item, 'UTF-8', 'UTF-8');
+                                                }
+                                            });
+                                            $productJson = json_encode($productData);
+                                        @endphp
                                         <button
-                                            class="w-24 text-center bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                                            onclick="return confirm('Apakah anda yakin ingin menghapus barang ini?')">Hapus</button>
-                                    </form>
-                                </div>
-                            </td>
-                        @empty
-                            <td class="px-4 py-2 border text-center" colspan="11">Tidak ada barang yang tersedia.</td>
-                        </tr>
-                @endforelse
-                </tbody>
-            </table>
+                                            class="w-24 text-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
+                                            @click="editItem = true; selectedProduct = JSON.parse(atob('{{ base64_encode($productJson) }}'))">Edit</button>
+                                        <form action="{{ route('products.destroy', $product->uuid) }}" method="POST"
+                                            style="display: inline;">
+                                            @csrf
+                                            @method('delete')
+                                            <button
+                                                class="w-24 text-center bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                                                onclick="return confirm('Apakah anda yakin ingin menghapus barang ini?')">Hapus</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            @empty
+                                <td class="px-4 py-2 border text-center" colspan="11">Tidak ada barang yang tersedia.
+                                </td>
+                            </tr>
+                    @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-    <!-- Pagination -->
-    {{ $products->links() }}
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script>
-        function togglePreview(element) {
-            const preview = element.querySelector('.preview-image');
-            if (preview.classList.contains('hidden')) {
-                preview.classList.remove('hidden');
-                preview.classList.add('block');
-            } else {
-                preview.classList.remove('block');
-                preview.classList.add('hidden');
+        <!-- Pagination -->
+        {{ $products->links() }}
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script>
+            function togglePreview(element) {
+                const preview = element.querySelector('.preview-image');
+                if (preview.classList.contains('hidden')) {
+                    preview.classList.remove('hidden');
+                    preview.classList.add('block');
+                } else {
+                    preview.classList.remove('block');
+                    preview.classList.add('hidden');
+                }
             }
-        }
-    </script>
-@endsection
+        </script>
+    @endsection

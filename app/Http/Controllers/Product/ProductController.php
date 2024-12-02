@@ -5,15 +5,19 @@ namespace App\Http\Controllers\Product;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
+use Maatwebsite\Excel\Validators\ValidationException;
 use App\Models\Category;
 use App\Models\Maintenance;
 use App\Models\Product;
 use App\Models\Unit;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProductsExport;
 use Log;
 use Picqer\Barcode\BarcodeGeneratorHTML;
 use Str;
+use App\Imports\ProductsImport;
 
 class ProductController extends Controller
 {
@@ -371,5 +375,41 @@ class ProductController extends Controller
             // If there's no image, you can return a placeholder or a 404
             abort(404);
         }
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx',
+        ]);
+
+        $import = new ProductsImport;
+
+        try {
+            Excel::import($import, $request->file('excel_file'));
+
+            $ignoredProducts = $import->ignoredProducts;
+
+            $message = 'Barang berhasil diimpor.';
+
+            if (!empty($ignoredProducts)) {
+                $ignoredNames = implode(', ', $ignoredProducts);
+                $message .= ' Barang yang diabaikan: ' . $ignoredNames;
+            }
+
+            return redirect()->back()->with('success', $message);
+        } catch (ValidationException $e) {
+            $failures = $e->failures();
+            // Handle validation failures
+            return redirect()->back()->withErrors(['excel_file' => 'Terjadi kesalahan validasi pada file Excel.']);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['excel_file' => $e->getMessage()]);
+        }
+    }
+    public function export()
+    {
+        // rename the file with current date
+        $filename = 'products-' . now()->format('Y-m-d') . '.xlsx';
+        return Excel::download(new ProductsExport, $filename);
     }
 }

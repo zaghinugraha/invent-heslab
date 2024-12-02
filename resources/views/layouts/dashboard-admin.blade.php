@@ -85,6 +85,7 @@
     editCategory: false,
     selectedCategory: {},
     deleteCategory: false,
+    importExcel: false,
 }">
     <!-- Notifications Modal -->
     <div x-show="showNotifications" @click.away="showNotifications = false" class="fixed right-10 top-20 z-20">
