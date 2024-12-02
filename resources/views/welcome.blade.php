@@ -19,8 +19,9 @@
                 url('{{ asset('images/Ellipse 118.png') }}'),
                 url('{{ asset('images/Rectangle 231.png') }}');
             background-size: 20%, 20%, 30%, cover;
-            background-position: {{ rand(0, 100) }}% {{ rand(0, 100) }}%, {{ rand(0, 100) }}% {{ rand(0, 100) }}%, {{ rand(0, 100) }}% {{ rand(0, 100) }}%;
             background-repeat: no-repeat, no-repeat, no-repeat;
+            background-position: 0% 0%, 50% 50%, 100% 100%;
+            transition: background-position 20s ease-in-out;
         }
 
         .bg-cover::before {
@@ -55,6 +56,26 @@
                 class="px-4 py-2 bg-blue-500 text-white rounded w-32 hover:bg-blue-600">Daftar</a>
         </div>
     </div>
+    <script>
+        function getRandomPosition() {
+            return Math.floor(Math.random() * 100) + '% ' + Math.floor(Math.random() * 100) + '%';
+        }
+
+        function updateBackground() {
+            var bgCover = document.querySelector('.bg-cover');
+            var pos1 = getRandomPosition();
+            var pos2 = getRandomPosition();
+            var pos3 = getRandomPosition();
+            var pos4 = getRandomPosition();
+
+            bgCover.style.backgroundPosition = pos1 + ', ' + pos2 + ', ' + pos3 + ', ' + pos4;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBackground();
+            setInterval(updateBackground, 10000);
+        });
+    </script>
 </body>
 
 </html>
