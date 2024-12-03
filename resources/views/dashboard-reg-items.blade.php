@@ -108,7 +108,18 @@
 @endsection
 
 @section('content')
+    <!-- Flash Messages -->
+    @if (session('success'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4">
+            {{ session('success') }}
+        </div>
+    @endif
 
+    @if (session('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-4">
+            {{ session('error') }}
+        </div>
+    @endif
     <div class="space-y-4 mb-8 w-full mx-auto">
         <!-- Search Bar and Filter Button -->
         <div class="w-full flex justify-end space-x-2">

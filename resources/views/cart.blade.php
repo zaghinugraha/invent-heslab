@@ -203,13 +203,18 @@
                     <hr class="mb-4">
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">NIM/NIP</label>
-                        <input type="text" name="nim_nip" value="{{ old('nim_nip') }}" required
+                        <input type="number" name="nim_nip" value="{{ old('nim_nip') }}" required
                             class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
                     </div>
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">Nomor WhatsApp Aktif</label>
-                        <input type="text" name="phone" value="{{ old('phone') }}" required
-                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
+                        <div class="flex items-center">
+                            <span class="inline-block bg-gray-200 border border-gray-300 rounded-l px-3 py-2">+62</span>
+                            <input type="tel" name="phone" value="{{ old('phone') }}" required
+                                class="w-full border border-gray-300 rounded-r px-3 py-2 focus:outline-none focus:border-blue-500"
+                                placeholder="8XXXXXXXXXX" pattern="[0-9]{9,13}"
+                                title="Phone number must be 9 to 13 digits long">
+                        </div>
                     </div>
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">Upload Foto KTM</label>
