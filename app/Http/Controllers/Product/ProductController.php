@@ -403,7 +403,7 @@ class ProductController extends Controller
             // Handle validation failures
             return redirect()->back()->withErrors(['excel_file' => 'Terjadi kesalahan validasi pada file Excel.']);
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['excel_file' => $e->getMessage()]);
+            return redirect()->back()->withErrors(['excel_file' => 'Terjadi kesalahan saat mengimpor file Excel.']);
         }
     }
     public function export()

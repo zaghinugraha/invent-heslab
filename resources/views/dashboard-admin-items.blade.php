@@ -424,11 +424,15 @@
                         required />
                 </div>
                 <!-- Download Template Link -->
+
                 <div class="mb-4">
-                    <a href="{{ asset('templates/products_import_template.xlsx') }}" download
-                        class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-                        Download Template
-                    </a>
+                    <label class="block text-gray-700">Template (Wajib):</label>
+                    <div class="flex justify-center">
+                        <a href="{{ asset('templates/products_import_template.xlsx') }}" download
+                            class="w-full font-bold text-center inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                            Download Template Disini
+                        </a>
+                    </div>
                 </div>
                 <!-- Form Buttons -->
                 <div class="flex justify-end">
@@ -479,10 +483,32 @@
             <!-- Search Bar and Add Item Button -->
             <div class="flex justify-between items-center mb-4">
                 <!-- Left Side: Add Category Button -->
-                <button @click="manageCategory = true"
-                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-                    Kelola Kategori
-                </button>
+                <div class="flex items-center space-x-2">
+                    <button @click="manageCategory = true"
+                        class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                        Kelola Kategori
+                    </button>
+                    <button @click="importExcel = true"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
+                        <svg fill="currentColor" class="w-6 h-6 mr-2" viewBox="0 0 1920 1920"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="m807.186 686.592 272.864 272.864H0v112.94h1080.05l-272.864 272.978 79.736 79.849 409.296-409.183-409.296-409.184-79.736 79.736ZM1870.419 434.69l-329.221-329.11C1509.688 74.07 1465.979 56 1421.48 56H451.773v730.612h112.94V168.941h790.584v451.762h451.762v1129.405H564.714v-508.233h-112.94v621.173H1920V554.52c0-45.176-17.619-87.754-49.58-119.83Zm-402.181-242.37 315.443 315.442h-315.443V192.319Z"
+                                fill-rule="evenodd" />
+                        </svg>
+                        <span>Import from Excel</span>
+                    </button>
+                    <a href="{{ route('products.export') }}"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
+                        <svg fill="currentColor" class="w-6 h-6 mr-2" viewBox="0 0 1920 1920"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="m0 1016.081 409.186 409.073 79.85-79.736-272.867-272.979h1136.415V959.611H216.169l272.866-272.866-79.85-79.85L0 1016.082ZM1465.592 305.32l315.445 315.445h-315.445V305.32Zm402.184 242.372-329.224-329.11C1507.042 187.07 1463.334 169 1418.835 169h-743.83v677.647h112.94V281.941h564.706v451.765h451.765v903.53H787.946V1185.47H675.003v564.705h1242.353V667.522c0-44.498-18.07-88.207-49.581-119.83Z"
+                                fill-rule="evenodd" />
+                        </svg>
+                        Export to Excel
+                    </a>
+                </div>
 
                 <!-- Right Side: Search Form and Add Item Button -->
                 <div class="flex items-center space-x-2">
@@ -502,14 +528,6 @@
                         class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
                         Tambah Barang
                     </button>
-                    <button @click="importExcel = true"
-                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-                        Import from Excel
-                    </button>
-                    <a href="{{ route('products.export') }}"
-                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-                        Export to Excel
-                    </a>
                 </div>
             </div>
 
