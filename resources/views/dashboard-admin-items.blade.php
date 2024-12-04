@@ -540,7 +540,6 @@
                             <th class="px-4 py-2 border">Persediaan</th>
                             <th class="px-4 py-2 border">Gambar</th>
                             <th class="px-4 py-2 border">Sumber</th>
-                            <th class="px-4 py-2 border">Tanggal Masuk</th>
                             <th class="px-4 py-2 border">Terakhir Dipelihara</th>
                             <th class="px-4 py-2 border">Bisa Dipinjam?</th>
                             <th class="px-4 py-2 border">Aksi</th>
@@ -601,7 +600,6 @@ $maxQuantity = $products->max('quantity');
                                     </div>
                                 </td>
                                 <td class="px-4 py-2 border">{{ $product['source'] }}</td>
-                                <td class="px-4 py-2 border">{{ $product['dateArrival'] }}</td>
                                 @php
                                     $lastMaintenance = $product->maintenance->sortByDesc('created_at')->first();
                                     $needsMaintenance = false;

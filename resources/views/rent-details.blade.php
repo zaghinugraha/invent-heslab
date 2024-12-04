@@ -82,24 +82,24 @@
             {{ session('error') }}
         </div>
     @endif
-    <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg my-8">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">
+    <div class="max-w-4xl mx-auto bg-white p-4 md:p-8 rounded-lg shadow-lg my-8">
+        <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-6">
             Rincian Peminjaman #{{ $rent->id }} oleh {{ $rent->user->name }}
         </h2>
         <!-- Rent Information -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
             <div class="space-y-4">
                 <!-- Display rent details -->
-                <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">ID:</span>
-                    <span class="w-2/3">{{ $rent->user_id }}</span>
+                <div class="flex flex-col md:flex-row items-start md:items-center">
+                    <span class="w-full md:w-1/3 font-semibold">ID:</span>
+                    <span class="w-full md:w-2/3">{{ $rent->user_id }}</span>
                 </div>
-                <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">NIM/NIP:</span>
-                    <span class="w-2/3">{{ $rent->nim_nip }}</span>
+                <div class="flex flex-col md:flex-row items-start md:items-center">
+                    <span class="w-full md:w-1/3 font-semibold">NIM/NIP:</span>
+                    <span class="w-full md:w-2/3">{{ $rent->nim_nip }}</span>
                 </div>
-                <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">No. WA:</span>
+                <div class="flex flex-col md:flex-row items-start md:items-center">
+                    <span class="w-full md:w-1/3 font-semibold">No. WA:</span>
                     <span class="w-fit">
                         <a href="https://wa.me/62{{ $rent->phone }}">
                             <div class="flex items-center border p-2 rounded-md">
@@ -130,27 +130,27 @@
                         </a>
                     </span>
                 </div>
-                <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">Tanggal Pemesanan:</span>
-                    <span class="w-2/3">{{ $rent->order_date }}</span>
+                <div class="flex flex-col md:flex-row items-start md:items-center">
+                    <span class="w-full md:w-1/3 font-semibold">Tanggal Pemesanan:</span>
+                    <span class="w-full md:w-2/3">{{ $rent->order_date }}</span>
                 </div>
-                <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">Tanggal Mulai:</span>
-                    <span class="w-2/3">{{ $rent->start_date }}</span>
+                <div class="flex flex-col md:flex-row items-start md:items-center">
+                    <span class="w-full md:w-1/3 font-semibold">Tanggal Mulai:</span>
+                    <span class="w-full md:w-2/3">{{ $rent->start_date }}</span>
                 </div>
-                <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">Tanggal Selesai:</span>
-                    <span class="w-2/3">{{ $rent->end_date }}</span>
+                <div class="flex flex-col md:flex-row items-start md:items-center">
+                    <span class="w-full md:w-1/3 font-semibold">Tanggal Selesai:</span>
+                    <span class="w-full md:w-2/3">{{ $rent->end_date }}</span>
                 </div>
                 @if ($rent->returned_date)
-                    <div class="flex items-center">
-                        <span class="w-1/3 font-semibold">Tanggal Pengembalian:</span>
-                        <span class="w-2/3">{{ $rent->returned_date }}</span>
+                    <div class="flex flex-col md:flex-row items-start md:items-center">
+                        <span class="w-full md:w-1/3 font-semibold">Tanggal Pengembalian:</span>
+                        <span class="w-full md:w-2/3">{{ $rent->returned_date }}</span>
                     </div>
                 @endif
-                <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">Total Hari:</span>
-                    <span class="w-2/3">
+                <div class="flex flex-col md:flex-row items-start md:items-center">
+                    <span class="w-full md:w-1/3 font-semibold">Total Hari:</span>
+                    <span class="w-full md:w-2/3">
                         @php
                             $start = new DateTime($rent->start_date);
                             $end = new DateTime($rent->end_date);
@@ -159,9 +159,9 @@
                         @endphp
                     </span>
                 </div>
-                <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">Total Harga:</span>
-                    <span class="w-2/3">
+                <div class="flex flex-col md:flex-row items-start md:items-center">
+                    <span class="w-full md:w-1/3 font-semibold">Total Harga:</span>
+                    <span class="w-full md:w-2/3">
                         @if (!$rent->user->hasType('Regular'))
                             Free
                         @else
@@ -170,9 +170,9 @@
                     </span>
                 </div>
                 @if ($rent->user->hasType('Regular'))
-                    <div class="flex items-center">
-                        <span class="w-1/3 font-semibold">Status Pembayaran:</span>
-                        <span class="w-2/3">
+                    <div class="flex flex-col md:flex-row items-start md:items-center">
+                        <span class="w-full md:w-1/3 font-semibold">Status Pembayaran:</span>
+                        <span class="w-full md:w-2/3">
                             @if ($rent->payment_status == 'paid')
                                 <span class="bg-green-500 text-white px-2 py-1 rounded-lg">Sudah dibayar</span>
                             @else
@@ -181,9 +181,9 @@
                         </span>
                     </div>
                 @endif
-                <div class="flex items-center">
-                    <span class="w-1/3 font-semibold">Status Peminjaman:</span>
-                    <span class="w-2/3">
+                <div class="flex flex-col md:flex-row items-start md:items-center">
+                    <span class="w-full md:w-1/3 font-semibold">Status Peminjaman:</span>
+                    <span class="w-full md:w-2/3">
                         <span
                             class="inline-block px-2 py-1 text-white rounded-lg
                             @if ($rent->order_status == 'cancelled') bg-gray-500
@@ -249,18 +249,18 @@
 
         @if ($rent->order_status == 'waiting')
             <!-- Approve and Reject Buttons -->
-            <div class="flex justify-end space-x-4 mt-8">
+            <div class="flex flex-col md:flex-row justify-end space-y-4 md:space-y-0 md:space-x-4 mt-8">
                 <form action="{{ route('rent.approve', $rent) }}" method="POST">
                     @csrf
                     <button type="submit"
-                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
+                        class="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
                         Terima
                     </button>
                 </form>
                 <form action="{{ route('rent.reject', $rent) }}" method="POST">
                     @csrf
                     <button type="submit"
-                        class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
+                        class="w-full md:w-auto bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
                         Tolak
                     </button>
                 </form>
@@ -270,11 +270,11 @@
                 $rent->before_documentation_url &&
                 $rent->after_documentation_url)
             <!-- Return Button -->
-            <div class="flex justify-end space-x-4 mt-8">
+            <div class="flex flex-col md:flex-row justify-end space-y-4 md:space-y-0 md:space-x-4 mt-8">
                 <form action="{{ route('rent.return', $rent) }}" method="POST">
                     @csrf
                     <button type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
+                        class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
                         User ini telah mengembalikan barang
                     </button>
                 </form>
@@ -282,9 +282,10 @@
                 <form action="{{ route('rent.invalid', $rent) }}" method="POST">
                     @csrf
                     <button type="submit"
-                        class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
+                        class="w-full md:w-auto bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
                         Dokumentasi tidak valid
                     </button>
+                </form>
             </div>
         @endif
     </div>

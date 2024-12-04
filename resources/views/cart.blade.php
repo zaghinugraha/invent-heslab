@@ -212,7 +212,7 @@
                             <span class="inline-block bg-gray-200 border border-gray-300 rounded-l px-3 py-2">+62</span>
                             <input type="tel" name="phone" value="{{ old('phone') }}" required
                                 class="w-full border border-gray-300 rounded-r px-3 py-2 focus:outline-none focus:border-blue-500"
-                                placeholder="8XXXXXXXXXX" pattern="[0-9]{9,13}"
+                                placeholder="8XXXXXXXXXX" pattern = "[0-9]{9,13}"
                                 title="Phone number must be 9 to 13 digits long">
                         </div>
                     </div>
