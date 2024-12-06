@@ -32,7 +32,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/rent/{id}', [RentController::class, 'show'])->name('rent.show');
     Route::post('/rent/documentation', [RentController::class, 'submitDocumentation'])->name('rent.documentation');
     Route::delete('/rent/{rent}/cancel', [RentController::class, 'cancel'])->name('rent.cancel');
-
+    Route::get('/rent/success/{rent}', [RentController::class, 'success'])->name('rent.success');
 
 
     //  Route for Cart
