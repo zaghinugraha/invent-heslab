@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->date('end_date');
             $table->date('return_date')->nullable();
             $table->decimal('total_cost', 10, 2);
+            $table->string('payment_method');
             $table->string('payment_status');
             $table->string('order_status');
             $table->text('notes')->nullable();

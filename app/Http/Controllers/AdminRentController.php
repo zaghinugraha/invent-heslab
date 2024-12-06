@@ -61,7 +61,7 @@ class AdminRentController extends Controller
         $startDate = Carbon::parse($rent->start_date);
         $currentDate = Carbon::now();
 
-        if (!$rent->user->hasType('Regular')) {
+        if ($rent->user->hasType('Admin')) {
             $rent->payment_status = 'paid';
             if ($currentDate->gte($startDate)) {
                 $rent->order_status = 'active';
@@ -71,7 +71,7 @@ class AdminRentController extends Controller
 
         $rent->user->notify(new RentApprovedNotification($rent));
 
-        return redirect()->back()->with('success', 'Peminjaman berhasil disetujui.');
+        return redirect()->back()->with('success', 'Rent request approved successfully.');
     }
 
     public function reject(Rent $rent)
@@ -82,7 +82,7 @@ class AdminRentController extends Controller
 
         $rent->user->notify(new RentRejectedNotification($rent));
 
-        return redirect()->back()->with('success', 'Peminjaman berhasil ditolak.');
+        return redirect()->back()->with('success', 'Rent request rejected successfully.');
     }
 
     public function returned(Rent $rent)
@@ -92,7 +92,7 @@ class AdminRentController extends Controller
         $rent->return_date = Carbon::now();
         $rent->save();
 
-        return redirect()->back()->with('success', 'Peminjaman berhasil dikembalikan.');
+        return redirect()->back()->with('success', 'Rent marked as returned successfully.');
     }
 
     public function invalid(Rent $rent)
@@ -102,7 +102,7 @@ class AdminRentController extends Controller
         $rent->after_documentation = null;
         $rent->save();
 
-        return redirect()->back()->with('success', 'Dokumentasi peminjaman berhasil direset.');
+        return redirect()->back()->with('success', 'Rent documentation marked as invalid successfully.');
     }
 
     public function getKtmImage($id)

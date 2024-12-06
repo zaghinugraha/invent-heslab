@@ -85,17 +85,16 @@
     editCategory: false,
     selectedCategory: {},
     deleteCategory: false,
-    importExcel: false,
 }">
     <!-- Notifications Modal -->
     <div x-show="showNotifications" @click.away="showNotifications = false" class="fixed right-10 top-20 z-20">
         <div class="bg-white p-6 rounded-lg shadow-lg w-full mb-8">
             <div class="flex justify-between items-center mb-4 gap-3">
-                <h2 class="md:text-xl sm:text-sm font-bold gradient-text">Notifikasi</h2>
+                <h2 class="md:text-xl sm:text-sm font-bold gradient-text">Notifications</h2>
                 <form method="POST" action="{{ route('notifications.readAllAdmin') }}">
                     @csrf
                     <button type="submit" class="text-blue-600 hover:underline sm:text-xs md:text-sm">
-                        Tandai semua sudah dibaca
+                        Mark all as read
                     </button>
                 </form>
             </div>
@@ -126,9 +125,7 @@
                         </li>
                     @endif
                 @empty
-                    <li class="mb-2 text-center">
-                        Tidak ada notifikasi baru
-                    </li>
+                    <li class="mb-2 text-center">No new notifications.</li>
                 @endforelse
             </ul>
         </div>
@@ -137,16 +134,14 @@
     <!-- Logout Confirmation Modal -->
     <div x-show="confirmLogout" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
         <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
-            <h2 class="text-xl font-bold mb-4">Konfirmasi Logout</h2>
-            <p class="mb-4">
-                Apakah Anda yakin ingin logout?
-            </p>
+            <h2 class="text-xl font-bold mb-4">Confirm Logout</h2>
+            <p class="mb-4">Are you sure you want to log out?</p>
             <div class="flex justify-end">
                 <button type="button" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded"
-                    @click="confirmLogout = false">Batal</button>
+                    @click="confirmLogout = false">Cancel</button>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Keluar</button>
+                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Log Out</button>
                 </form>
             </div>
         </div>
@@ -185,7 +180,7 @@
                     <div x-show="propil" @click.away="propil = false"
                         class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20">
                         <a href="#" @click.prevent="confirmLogout = true, propil = false"
-                            class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Keluar</a>
+                            class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Log Out</a>
                     </div>
                 </div>
             </div>

@@ -2,10 +2,10 @@
 
 @extends('layouts.dashboard-reg')
 
-@section('title', 'Daftar Barang')
+@section('title', 'Item List')
 
-@section('heading', 'Daftar Barang')
-@section('headingDesc', 'Daftar Barang')
+@section('heading', 'Item List')
+@section('headingDesc', 'Item List')
 @section('description',
     'Ini adalah daftar barang yang tersedia untuk disewa. Anda dapat menggunakan bilah pencarian
     untuk menemukan barang tertentu, atau menavigasi halaman untuk melihat lebih banyak barang.')
@@ -70,7 +70,7 @@
                     <div>
                         <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
                         <select name="category" id="category" class="mt-1 block w-full px-3 py-2 border rounded-md">
-                            <option value="all" {{ ($selectedCategory ?? 'all') == 'all' ? 'selected' : '' }}>Semua
+                            <option value="all" {{ ($selectedCategory ?? 'all') == 'all' ? 'selected' : '' }}>All
                             </option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}"
@@ -82,15 +82,14 @@
                     </div>
                     <!-- Availability Filter -->
                     <div>
-                        <label for="availability" class="block text-sm font-medium text-gray-700">Ketersediaan</label>
+                        <label for="availability" class="block text-sm font-medium text-gray-700">Availability</label>
                         <select name="availability" id="availability" class="mt-1 block w-full px-3 py-2 border rounded-md">
                             <option value="all" {{ ($selectedAvailability ?? 'all') == 'all' ? 'selected' : '' }}>All
                             </option>
                             <option value="available" {{ ($selectedAvailability ?? '') == 'available' ? 'selected' : '' }}>
-                                Tersedia</option>
+                                Available</option>
                             <option value="unavailable"
-                                {{ ($selectedAvailability ?? '') == 'unavailable' ? 'selected' : '' }}>Tidak Tersedia
-                            </option>
+                                {{ ($selectedAvailability ?? '') == 'unavailable' ? 'selected' : '' }}>Unavailable</option>
                         </select>
                     </div>
                     <!-- Form Buttons -->
@@ -99,7 +98,7 @@
                             class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Apply</button>
                         <button type="button"
                             class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg ml-2 hover:bg-gray-400"
-                            @click="showFilter = false">Batal</button>
+                            @click="showFilter = false">Cancel</button>
                     </div>
                 </div>
             </form>
@@ -108,23 +107,12 @@
 @endsection
 
 @section('content')
-    <!-- Flash Messages -->
-    @if (session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4">
-            {{ session('success') }}
-        </div>
-    @endif
 
-    @if (session('error'))
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-4">
-            {{ session('error') }}
-        </div>
-    @endif
     <div class="space-y-4 mb-8 w-full mx-auto">
         <!-- Search Bar and Filter Button -->
         <div class="w-full flex justify-end space-x-2">
             <form class="flex w-full" action="{{ route('dashboard-reg-items') }}" method="GET">
-                <input type="text" name="search" placeholder="Cari"
+                <input type="text" name="search" placeholder="Search"
                     class="w-full px-4 py-2 border rounded-l-lg focus:outline-none"
                     value="{{ request()->query('search') }}" />
                 <button type="submit" class="bg-gray-300 px-4 py-2 rounded-r-lg">
@@ -157,22 +145,22 @@
                         <h3 class="text-gray-800 font-semibold">{{ $product->name }}</h3>
 
                         @if ($product->quantity <= 0 || !$product->is_rentable)
-                            <span class="bg-red-100 text-red-600 text-xs font-semibold px-2 py-1 rounded-full">Tidak
-                                Tersedia</span>
+                            <span
+                                class="bg-red-100 text-red-600 text-xs font-semibold px-2 py-1 rounded-full">Unavailable</span>
                         @else
                             <span
-                                class="bg-green-100 text-green-600 text-xs font-semibold px-2 py-1 rounded-full">Tersedia</span>
+                                class="bg-green-100 text-green-600 text-xs font-semibold px-2 py-1 rounded-full">Available</span>
                         @endif
                     </div>
                     @if (!auth()->user()->hasType('Regular'))
-                        <p class="text-gray-600">Gratis</p>
+                        <p class="text-gray-600">Free</p>
                     @else
-                        <p class="text-gray-600">Rp {{ number_format($product['price'], 0, ',', '.') }} / Minggu</p>
+                        <p class="text-gray-600">Rp{{ number_format($product['price'], 0, ',', '.') }} / Minggu</p>
                     @endif
                 </div>
             </a>
         @empty
-            <p class="text-gray-600">Tidak ada barang yang ditemukan.</p>
+            <p class="text-gray-600">No items found.</p>
         @endforelse
     </div>
 

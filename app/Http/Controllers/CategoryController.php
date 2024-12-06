@@ -28,22 +28,23 @@ class CategoryController extends Controller
         return redirect()->route("dashboard-admin-items")->with("success", "Category has been created!");
     }
 
-    public function update(UpdateCategoryRequest $request, $id)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
+
         $request->validated();
 
-        $category = Category::findOrFail($id);
         $category->update([
             "name" => $request->name,
             "slug" => Str::slug($request->name)
         ]);
 
-        return redirect()->route("dashboard-admin-items")->with("success", "Category has been updated!");
+        return redirect()
+            ->route("dashboard-admin-items")
+            ->with('success', 'Category has been updated!');
     }
 
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        $category = Category::findOrFail($id);
         $category->delete();
 
         return redirect()

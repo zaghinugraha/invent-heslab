@@ -1,12 +1,12 @@
 @extends('layouts.dashboard-reg')
 
-@section('title', 'Riwayat')
+@section('title', 'History')
 
-@section('heading', 'Riwayat')
-@section('headingDesc', 'Riwayat')
+@section('heading', 'History')
+@section('headingDesc', 'History')
 @section('description',
-    'Pada halaman ini, Anda dapat melihat riwayat peminjaman barang yang pernah Anda lakukan. Anda
-    juga dapat melihat status peminjaman barang Anda.')
+    'Ini adalah daftar barang-barang yang sudah kamu pinjam. Gunakan kolom pencarian untuk menemukan
+    catatan tertentu, atau navigasikan halaman untuk melihat riwayat lebih lanjut.')
 
 @section('sidebar')
     <aside id="sidebar" class="transition-width w-64 h-full fixed top-16 bottom-16 lg:relative lg:h-screen p-2">
@@ -22,7 +22,7 @@
                         <line x1="5" y1="17" x2="19" y2="17" stroke="#000000" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Daftar Barang</span>
+                    <span class="sidebar-text">Item List</span>
                 </a>
                 <a href="{{ route('dashboard-reg-rent') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -37,7 +37,7 @@
                         <path d="M9 14H10" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Status Peminjaman</span>
+                    <span class="sidebar-text">Rent Request</span>
                 </a>
                 <a href="{{ route('dashboard-reg-history') }}"
                     class="flex items-center space-x-2 text-white bg-gradient-to-r from-blue-500 to-purple-500 p-2 rounded">
@@ -47,7 +47,7 @@
                         <path d="M12 6V12L16 16" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text ml-3">Riwayat</span>
+                    <span class="sidebar-text ml-3">History</span>
                 </a>
             </nav>
         </div>
@@ -55,18 +55,7 @@
 @endsection
 
 @section('content')
-    <!-- Flash Messages -->
-    @if (session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4">
-            {{ session('success') }}
-        </div>
-    @endif
 
-    @if (session('error'))
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-4">
-            {{ session('error') }}
-        </div>
-    @endif
     <div class="space-y-4 w-full mx-auto">
 
         <!-- Table -->
@@ -75,12 +64,12 @@
                 <thead>
                     <tr class="bg-blue-600 text-white">
                         <th class="px-4 py-2 border">No</th>
-                        <th class="px-4 py-2 border">Barang</th>
+                        <th class="px-4 py-2 border">Item</th>
                         @if (auth()->user()->hasType('Regular'))
-                            <th class="px-4 py-2 border">Harga</th>
+                            <th class="px-4 py-2 border">Price</th>
                         @endif
-                        <th class="px-4 py-2 border">Tanggal Mulai</th>
-                        <th class="px-4 py-2 border">Tanggal Selesai</th>
+                        <th class="px-4 py-2 border">Rent Date</th>
+                        <th class="px-4 py-2 border">Return Date</th>
                         <th class="px-4 py-2 border">Status</th>
                     </tr>
                 </thead>
@@ -112,7 +101,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center py-4">Tidak ada data riwayat yang tersedia.</td>
+                            <td colspan="6" class="text-center py-4">No history data available.</td>
                         </tr>
                     @endforelse
                 </tbody>

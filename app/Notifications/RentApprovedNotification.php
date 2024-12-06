@@ -43,7 +43,7 @@ class RentApprovedNotification extends Notification
             'rent_id' => $this->rent->id,
             'user_id' => $this->rent->user_id,
             'user_name' => $this->rent->user->name,
-            'message' => 'Peminjaman telah disetujui.',
+            'message' => 'Your rent request has been approved.',
             'created_at' => now()->toDateTimeString(),
         ];
     }

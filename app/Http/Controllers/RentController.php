@@ -44,6 +44,7 @@ class RentController extends Controller
             'ktm_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:8192',
             'start_date' => 'required|date|after:today',
             'end_date' => 'required|date|after:start_date',
+            'payment_method' => 'required|string',
             'notes' => 'nullable|string',
         ]);
 

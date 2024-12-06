@@ -1,12 +1,10 @@
 @extends('layouts.dashboard-admin')
 
-@section('title', 'Status Peminjaman')
+@section('title', 'Rent Request')
 
-@section('heading', 'Status Peminjaman')
-@section('headingDesc', 'Status Peminjaman')
-@section('description',
-    'Ini adalah daftar barang-barang yang sedang dipinjam oleh pengguna. Anda dapat menyetujui atau
-    menolak permintaan peminjaman barang melalui halaman ini.')
+@section('heading', 'Rent Request')
+@section('headingDesc', 'Rent Request')
+@section('description', 'ACC PEMINJAMAN BWANG!')
 
 @section('sidebar')
     <aside id="sidebar" class="transition-width w-64 h-full fixed top-16 bottom-16 lg:relative lg:h-screen p-2">
@@ -22,7 +20,7 @@
                         <line x1="5" y1="17" x2="19" y2="17" stroke="#000000" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Daftar Barang</span>
+                    <span class="sidebar-text">Item List</span>
                 </a>
                 <a href="{{ route('dashboard-admin-rent') }}"
                     class="flex items-center space-x-2 text-white bg-gradient-to-r from-blue-500 to-purple-500 p-2 rounded">
@@ -37,7 +35,7 @@
                         <path d="M9 14H10" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text">Status Peminjaman</span>
+                    <span class="sidebar-text">Rent Request</span>
                 </a>
                 <a href="{{ route('dashboard-admin-history') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -47,7 +45,7 @@
                         <path d="M12 6V12L16 16" stroke="#000000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text ml-3">Riwayat</span>
+                    <span class="sidebar-text ml-3">History</span>
                 </a>
                 <a href="{{ route('users.index') }}"
                     class="flex items-center space-x-2 text-gray-700 rounded hover:bg-gray-100 p-2">
@@ -57,7 +55,7 @@
                         <path d="M4 21V17C4 15.8954 4.89543 15 6 15H18C19.1046 15 20 15.8954 20 17V21" stroke="#000000"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span class="sidebar-text ml-3">Kelola Pengguna</span>
+                    <span class="sidebar-text ml-3">Manage Users</span>
                 </a>
             </nav>
         </div>
@@ -71,31 +69,31 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 w-full mx-auto">
                 <!-- Approved Card -->
                 <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-                    <div class="bg-green-500 text-white font-semibold py-2">Disetujui</div>
+                    <div class="bg-green-500 text-white font-semibold py-2">Approved</div>
                     <div class="bg-white py-4 text-2xl font-bold text-black">{{ $approvedCount }}</div>
                 </div>
 
                 <!-- On loan Card -->
                 <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-                    <div class="bg-blue-500 text-white font-semibold py-2">Sedang Dipinjam</div>
+                    <div class="bg-blue-500 text-white font-semibold py-2">On Rent</div>
                     <div class="bg-white py-4 text-2xl font-bold text-black">{{ $onRentCount }}</div>
                 </div>
 
                 <!-- Overdue Card -->
                 <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-                    <div class="bg-red-500 text-white font-semibold py-2">Jatuh Tempo</div>
+                    <div class="bg-red-500 text-white font-semibold py-2">Overdue</div>
                     <div class="bg-white py-4 text-2xl font-bold text-black">{{ $overdueCount }}</div>
                 </div>
 
                 <!-- Waiting Card -->
                 <div class="w-full text-center rounded-lg shadow-lg overflow-hidden">
-                    <div class="bg-yellow-500 text-white font-semibold py-2">Menunggu</div>
+                    <div class="bg-yellow-500 text-white font-semibold py-2">Waiting</div>
                     <div class="bg-white py-4 text-2xl font-bold text-black">{{ $waitingCount }}</div>
                 </div>
             </div>
             <div class="w-full flex justify-end">
                 <form action="{{ route('dashboard-admin-rent') }}" method="GET" class="flex w-1/2">
-                    <input type="text" name="search" placeholder="Cari"
+                    <input type="text" name="search" placeholder="Search"
                         class="w-full px-4 py-2 border rounded-l-lg focus:outline-none"
                         value="{{ request()->query('search') }}" />
                     <button type="submit" class="bg-gray-300 px-4 rounded-r-lg">
@@ -115,11 +113,11 @@
                 <thead>
                     <tr class="bg-blue-600 text-white">
                         <th class="px-4 py-2 border">ID</th>
-                        <th class="px-4 py-2 border">Nama</th>
+                        <th class="px-4 py-2 border">Name</th>
                         <th class="px-4 py-2 border">NIM/NIP</th>
-                        <th class="px-4 py-2 border">Barang</th>
-                        <th class="px-4 py-2 border">Harga</th>
-                        <th class="px-4 py-2 border">Rincian</th>
+                        <th class="px-4 py-2 border">Item</th>
+                        <th class="px-4 py-2 border">Price</th>
+                        <th class="px-4 py-2 border">Details</th>
                         <th class="px-4 py-2 border">Status</th>
                     </tr>
                 </thead>
@@ -141,24 +139,26 @@
                                 <div class="flex justify-center space-x-2">
                                     <a href="{{ route('rent.details', $rent->id) }}"
                                         class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                                        Rincian
+                                        Details
                                     </a>
                                 </div>
                             </td>
                             <td class="px-4 py-2 border">
                                 <span
                                     class="inline-block px-2 py-1 text-white rounded
-                                @if ($rent->order_status == 'active') bg-blue-500"> Dipinjam </span>
-                                @elseif($rent->order_status == 'waiting') bg-yellow-500"> Menunggu </span>
-                                @elseif($rent->order_status == 'overdue') bg-red-500"> Jatuh Tempo </span>
-                                @elseif($rent->order_status == 'approved')bg-green-500"> Disetujui </span> @endif
+                                @if ($rent->order_status == 'active') bg-blue-500
+                                @elseif($rent->order_status == 'waiting')
+                                bg-yellow-500
+                                @elseif($rent->order_status == 'overdue')
+                                bg-red-500
+                                @elseif($rent->order_status == 'approved')
+                                bg-green-500 @endif
+                            ">{{ ucfirst($rent->order_status) }}</span>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9"
-                                    class="text-center py-4">Tidak ada data yang tersedia.
-                            </td>
+                            <td colspan="9" class="text-center py-4">No rent requests available.</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -15,6 +15,6 @@ class UpdateRentStatus extends Command
     public function handle(RentStatusUpdater $updater)
     {
         $updater->updateStatuses();
-        $this->info('Status Pembaruan berhasil');
+        $this->info('Rent statuses updated successfully.');
     }
 }
