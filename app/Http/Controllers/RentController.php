@@ -92,6 +92,7 @@ class RentController extends Controller
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'total_cost' => $totalCost,
+                'payment_method' => $request->payment_method,
                 'payment_status' => 'unpaid',
                 'order_status' => 'waiting',
                 'notes' => $request->notes,
@@ -99,6 +100,27 @@ class RentController extends Controller
                 'phone' => $request->phone,
                 'ktm_image' => $ktmImageContent,
             ]);
+
+            \Midtrans\Config::$serverKey = 'SB-Mid-server-ChXNKON6dQePAcvm3id6EeQP';
+            \Midtrans\Config::$isProduction = false;
+            \Midtrans\Config::$isSanitized = true;
+            \Midtrans\Config::$is3ds = true;
+
+            $params = array(
+                'transaction_details' => array(
+                    'order_id' => rand(),
+                    'gross_amount' => Cart::instance('cart')->total(0, '', ''),
+                ),
+                'customer_details' => array(
+                    'first_name' => auth()->user()->name,
+                    'email' => auth()->user()->email,
+                )
+            );
+
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+            $rent->snap_token = $snapToken;
+            $rent->save();
 
             // Simpan setiap item di keranjang ke tabel rent_items
             foreach ($cartItems as $item) {
@@ -265,5 +287,12 @@ class RentController extends Controller
 
 
         return view('dashboard-reg-history', compact('rents'));
+    }
+
+    public function success(Rent $rent)
+    {
+        $rent->order_status = 'success';
+        $rent->save();
+        return view('success', compact('rent'));
     }
 }
