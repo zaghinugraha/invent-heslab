@@ -74,6 +74,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/admin/rent/{id}/details', [RentController::class, 'show'])->name('rent.details');
 
         Route::get('/admin/items', [ProductController::class, 'admin_dashboard'])->name('dashboard-admin-items');
+        Route::get('admin/items/export', [ProductController::class, 'export'])->name('products.export');
+        Route::post('admin/items/import', [ProductController::class, 'import'])->name('products.import');
         Route::resource('/products', ProductController::class);
 
         Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
