@@ -19,7 +19,7 @@
             background-size: 20%, 20%, 30%, cover;
             background-repeat: no-repeat, no-repeat, no-repeat;
             background-position: 0% 0%, 50% 50%, 100% 100%;
-            transition: background-position 20s ease-in-out;
+            transition: background-position 10s ease-in-out;
         }
 
         .gradient-text {

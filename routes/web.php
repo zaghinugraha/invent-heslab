@@ -79,8 +79,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::resource('/products', ProductController::class);
 
         Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
-        Route::post('categories/update/{category}', [CategoryController::class, 'update'])->name('categories.update');
-        Route::delete('categories/delete/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+        Route::post('categories/update/{id}', [CategoryController::class, 'update'])->name('categories.update');
+        Route::delete('categories/delete/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
         Route::resource('/categories', CategoryController::class);
 
         Route::get('/admin/users', [UserController::class, 'index'])->name('users.index');

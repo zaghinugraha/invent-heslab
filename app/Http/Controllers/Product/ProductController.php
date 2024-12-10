@@ -203,7 +203,7 @@ class ProductController extends Controller
             'slug' => Str::slug($request->name, '-'),
             'uuid' => Str::uuid()
         ]);
-        return to_route('dashboard-admin-items')->with('success', 'Product has been added!');
+        return to_route('dashboard-admin-items')->with('success', 'Barang telah ditambahkan');
     }
 
     public function show($uuid)
@@ -287,19 +287,19 @@ class ProductController extends Controller
                 // Strip HTML tags from both original and new values
                 $originalSpec = strip_tags($originalValue);
                 $newSpec = strip_tags($value);
-                $changes[] = "Changed {$attribute} from '{$originalSpec}' to '{$newSpec}'";
+                $changes[] = "Spesifikasi telah diganti dari '{$originalSpec}' menjadi '{$newSpec}'";
             } else if ($attribute === 'product_image') {
-                $changes[] = "Changed {$attribute}";
+                $changes[] = "Gambar produk telah diubah";
             } else if ($attribute === "category_id") {
                 $originalCategory = Category::find($originalValue);
                 $newCategory = Category::find($value);
                 $originalCategoryName = $originalCategory ? $originalCategory->name : 'Unknown';
                 $newCategoryName = $newCategory ? $newCategory->name : 'Unknown';
-                $changes[] = "Changed category from '{$originalCategoryName}' to '{$newCategoryName}'";
+                $changes[] = "Kategori produk telah diganti dari '{$originalCategoryName}' menjadi '{$newCategoryName}'";
             } else if ($attribute === "is_rentable") {
-                $changes[] = $value ? "Product is now rentable" : "Product is no longer rentable";
+                $changes[] = $value ? "Produk sekarang dapat disewakan" : "Produk sekarang tidak dapat disewakan";
             } else {
-                $changes[] = "Changed {$attribute} from '{$originalValue}' to '{$value}'";
+                $changes[] = "{$attribute} telah diganti dari '{$originalValue}' menjadi '{$value}'";
             }
         }
 
@@ -325,38 +325,26 @@ class ProductController extends Controller
             try {
                 $maintenance->save();
             } catch (\Exception $e) {
-                // Log the error for debugging
-                \Log::error('Failed to save maintenance record: ' . $e->getMessage());
                 return redirect()
-                    ->back()
-                    ->withErrors('Failed to save maintenance record. Please check the logs for more details.');
+                    ->route('dashboard-admin-items')
+                    ->withErrors('Terjadi kesalahan saat menyimpan catatan pemeliharaan.');
             }
         }
 
         return redirect()
             ->route('dashboard-admin-items')
-            ->with('success', 'Product has been updated!');
+            ->with('success', 'Barang telah diperbarui!');
     }
 
     public function destroy($uuid)
     {
         $product = Product::where("uuid", $uuid)->firstOrFail();
-        /**
-         * Delete photo if exists.
-         */
-        if ($product->product_image) {
-            // check if image exists in our file system
-            if ($product->product_image && file_exists(public_path('storage/' . $product->product_image))) {
-                unlink(public_path('storage/' . $product->product_image));
-            }
-
-        }
 
         $product->delete();
 
         return redirect()
             ->route('dashboard-admin-items')
-            ->with('success', 'Product has been deleted!');
+            ->with('success', 'Barang telah dihapus!');
     }
 
     public function getImage($uuid)
