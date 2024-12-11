@@ -178,7 +178,10 @@
                                             </button>
                                         @elseif ($rent->order_status == 'approved')
                                             <!-- Active Button - Redirects to Payment Gateway -->
-                                            <button type="button" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" id="pay-button">
+                                            <button type="button"
+                                                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded pay-button"
+                                                data-rent-id="{{ $rent->id }}"
+                                                data-snap-token="{{ $rent->snap_token }}">
                                                 Bayar
                                             </button>
                                         @else
@@ -288,27 +291,56 @@
         </div>
     </div>
 @endsection
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}">
+</script>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        const payButtons = document.querySelectorAll('.pay-button');
 
-@section('scripts')
-    </script>
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
-    <script type="text/javascript">
-        document.getElementById('pay-button').onclick = function(){
-            // SnapToken acquired from previous step
-            snap.pay('{{ $rent->snap_token }}', {
-                // Optional
-                onSuccess: function(result){
-                    window.location.href = '{{ route('success', $rent['id']) }}';
-                },
-                // Optional
-                onPending: function(result){
-                    /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-                },
-                // Optional
-                onError: function(result){
-                    /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-                }
+        payButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const rentId = this.getAttribute('data-rent-id');
+                const snapToken = this.getAttribute('data-snap-token');
+
+                snap.pay(snapToken, {
+                    onSuccess: function(result) {
+                        updatePaymentStatus(rentId, 'paid', result);
+                    },
+                    onPending: function(result) {
+                        updatePaymentStatus(rentId, 'pending', result);
+                    },
+                    onError: function(result) {
+                        window.location.href =
+                            '{{ route('dashboard-reg-rent') }}?status=error';
+                    }
+                });
             });
-        };
-    </script>
-@endsection
+        });
+
+        function updatePaymentStatus(rentId, status, result) {
+            fetch('{{ route('rent.updatePaymentStatus') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                    body: JSON.stringify({
+                        rent_id: rentId,
+                        payment_status: status,
+                        result: result,
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '{{ route('dashboard-reg-rent') }}?status=' + status;
+                    } else {
+                        alert('Error updating payment status: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    });
+</script>

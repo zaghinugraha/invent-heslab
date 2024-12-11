@@ -25,6 +25,7 @@ return new class extends Migration {
             $table->string('payment_status');
             $table->string('order_status');
             $table->text('notes')->nullable();
+            $table->string('snap_token')->nullable();
             $table->timestamps();
         });
 

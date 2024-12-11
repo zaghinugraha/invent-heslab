@@ -13,6 +13,7 @@ use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AdminRentController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,6 +34,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::post('/rent/documentation', [RentController::class, 'submitDocumentation'])->name('rent.documentation');
     Route::delete('/rent/{rent}/cancel', [RentController::class, 'cancel'])->name('rent.cancel');
     Route::get('/rent/success/{rent}', [RentController::class, 'success'])->name('rent.success');
+    Route::post('/rent/update-payment-status', [RentController::class, 'updatePaymentStatus'])->name('rent.updatePaymentStatus');
+
+    Route::post('/midtrans/notification', [PaymentController::class, 'receiveNotification']);
 
 
     //  Route for Cart

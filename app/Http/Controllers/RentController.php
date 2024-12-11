@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Storage;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use App\Services\RentStatusUpdater;
 use Carbon\Carbon;
+use Midtrans\Config;
+use Midtrans\Snap;
 
 class RentController extends Controller
 {
@@ -44,7 +46,6 @@ class RentController extends Controller
             'ktm_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:8192',
             'start_date' => 'required|date|after:today',
             'end_date' => 'required|date|after:start_date',
-            'payment_method' => 'required|string',
             'notes' => 'nullable|string',
         ]);
 
@@ -93,7 +94,7 @@ class RentController extends Controller
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'total_cost' => $totalCost,
-                'payment_method' => $request->payment_method,
+                'payment_method' => null,
                 'payment_status' => 'unpaid',
                 'order_status' => 'waiting',
                 'notes' => $request->notes,
@@ -102,11 +103,11 @@ class RentController extends Controller
                 'ktm_image' => $ktmImageContent,
             ]);
 
-            \Midtrans\Config::$serverKey = 'SB-Mid-server-ChXNKON6dQePAcvm3id6EeQP';
-            \Midtrans\Config::$isProduction = false;
-            \Midtrans\Config::$isSanitized = true;
-            \Midtrans\Config::$is3ds = true;
-
+            // Configure Midtrans
+            Config::$serverKey = config('midtrans.server_key');
+            Config::$isProduction = config('midtrans.isProduction');
+            Config::$isSanitized = config('midtrans.isSanitized');
+            Config::$is3ds = config('midtrans.is3ds');
             $params = array(
                 'transaction_details' => array(
                     'order_id' => rand(),
@@ -118,8 +119,7 @@ class RentController extends Controller
                 )
             );
 
-            $snapToken = \Midtrans\Snap::getSnapToken($params);
-
+            $snapToken = Snap::getSnapToken($params);
             $rent->snap_token = $snapToken;
             $rent->save();
 
@@ -169,10 +169,21 @@ class RentController extends Controller
 
         return view('rent-details', compact('rent'));
     }
-    public function fetch()
+    public function fetch(Request $request)
     {
 
         $this->rentStatusUpdater->updateStatuses();
+
+        if ($request->has('status')) {
+            $status = $request->query('status');
+            if ($status == 'paid') {
+                session()->flash('success', 'Payment was successful.');
+            } elseif ($status == 'pending') {
+                session()->flash('warning', 'Payment is pending. Your transaction is on hold.');
+            } elseif ($status == 'error') {
+                session()->flash('error', 'Payment failed. Please try again.');
+            }
+        }
 
         // Fetch rent orders for the authenticated user
         $rents = Rent::with('items.product')
@@ -295,5 +306,21 @@ class RentController extends Controller
         $rent->order_status = 'success';
         $rent->save();
         return view('success', compact('rent'));
+    }
+
+    public function updatePaymentStatus(Request $request)
+    {
+        $rent = Rent::find($request->rent_id);
+
+        // Ensure the authenticated user owns the rent
+        if (!$rent || $rent->user_id !== Auth::id()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+        }
+
+        // Update the payment_status in the database
+        $rent->payment_status = $request->payment_status;
+        $rent->save();
+
+        return response()->json(['success' => true]);
     }
 }
