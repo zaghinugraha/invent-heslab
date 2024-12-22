@@ -94,7 +94,6 @@ class RentController extends Controller
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'total_cost' => $totalCost,
-                'payment_method' => null,
                 'payment_status' => 'unpaid',
                 'order_status' => 'waiting',
                 'notes' => $request->notes,
@@ -110,8 +109,8 @@ class RentController extends Controller
             Config::$is3ds = config('midtrans.is3ds');
             $params = array(
                 'transaction_details' => array(
-                    'order_id' => rand(),
-                    'gross_amount' => Cart::instance('cart')->total(0, '', ''),
+                    'order_id' => 'RENT-' . $rent->id . '-' . time(), // Using rent ID + timestamp
+                    'gross_amount' => (int) Cart::instance('cart')->total(0, '', ''),
                 ),
                 'customer_details' => array(
                     'first_name' => auth()->user()->name,
@@ -121,6 +120,7 @@ class RentController extends Controller
 
             $snapToken = Snap::getSnapToken($params);
             $rent->snap_token = $snapToken;
+            $rent->order_id = $params['transaction_details']['order_id']; // Store the order ID
             $rent->save();
 
             // Simpan setiap item di keranjang ke tabel rent_items

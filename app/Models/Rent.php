@@ -18,6 +18,7 @@ class Rent extends Model
         'end_date',
         'return_date',
         'total_cost',
+        'snap_token',
         'payment_status',
         'order_status',
         'notes',

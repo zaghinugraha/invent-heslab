@@ -22,6 +22,13 @@
         </div>
     @endif
 
+    @if ($waitingCount > 0)
+        <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">
+                Kamu memiliki {{ $waitingCount }} peminjaman barang yang sedang menunggu persetujuan. Silahkan hubungi admin jika peminjaman barang kamu belum diproses hingga 1x24 jam.
+            </span>
+        </div>
+    @endif
     @if ($approvedAndUnpaidCount > 0)
         <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
             <span class="block sm:inline">
@@ -291,7 +298,7 @@
         </div>
     </div>
 @endsection
-<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}">
+<script src="https://app.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}">
 </script>
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {

@@ -13,6 +13,7 @@ return new class extends Migration {
         // Migration untuk tabel rent
         Schema::create('rent', function (Blueprint $table) {
             $table->id();
+            $table->string('order_id')->nullable();
             $table->string('nim_nip');
             $table->string('phone');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
@@ -21,8 +22,7 @@ return new class extends Migration {
             $table->date('end_date');
             $table->date('return_date')->nullable();
             $table->decimal('total_cost', 10, 2);
-            $table->string('payment_method');
-            $table->string('payment_status');
+            $table->string('payment_status')->default('unpaid');
             $table->string('order_status');
             $table->text('notes')->nullable();
             $table->string('snap_token')->nullable();
