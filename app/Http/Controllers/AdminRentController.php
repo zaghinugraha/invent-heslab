@@ -98,7 +98,6 @@ class AdminRentController extends Controller
     public function invalid(Rent $rent)
     {
         // Reset Documentation Pictures
-        $rent->before_documentation = null;
         $rent->after_documentation = null;
         $rent->save();
 

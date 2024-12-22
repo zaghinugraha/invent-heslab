@@ -192,6 +192,11 @@ class RentController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
+        //Calculate waiting count
+        $waitingCount = Rent::where('user_id', Auth::id())
+            ->where('order_status', 'waiting')
+            ->count();
+
         // Calculate counts for overdue, and unpaid rents
         $overdueCount = Rent::where('user_id', Auth::id())
             ->where('order_status', 'overdue')
@@ -203,7 +208,7 @@ class RentController extends Controller
             ->count();
 
 
-        return view('dashboard-reg-rent', compact('rents', 'overdueCount', 'approvedAndUnpaidCount'));
+        return view('dashboard-reg-rent', compact('rents', 'overdueCount', 'approvedAndUnpaidCount', 'waitingCount'));
     }
 
     public function submitDocumentation(Request $request)
