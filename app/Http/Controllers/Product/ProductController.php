@@ -52,7 +52,7 @@ class ProductController extends Controller
     }
 
     public function
-    admin_dashboard(
+        admin_dashboard(
         Request $request
     ) {
         $query = Product::query();
@@ -79,7 +79,7 @@ class ProductController extends Controller
             return $referenceDate->diffInDays(now()) >= 7;
         })->count();
 
-        $categories = Category::where("user_id", auth()->id())->get(['id', 'name']);
+        $categories = Category::all();
 
         $lowStockCount = Product::whereColumn('quantity', '<', 'quantity_alert')->count();
 

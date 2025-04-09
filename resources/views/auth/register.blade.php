@@ -33,10 +33,9 @@
         }
     </style>
     <script>
-        function togglePasswordVisibility() {
-            const passwordInput = document.getElementById('password');
-            const eyeIcon = document.getElementById('eye-icon');
-            const eyeIconPath = eyeIcon.getAttribute('src');
+        function togglePasswordVisibility(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const eyeIcon = document.getElementById('eye-icon-' + inputId);
 
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';

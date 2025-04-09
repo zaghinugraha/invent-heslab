@@ -11,7 +11,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::where("user_id", auth()->id())->get();
+        $categories = Category::all();
         return view("dashboard-admin-items", compact("categories"));
     }
 
